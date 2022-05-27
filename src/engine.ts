@@ -331,8 +331,7 @@ export function getWeightedDailyActivities(data: WeightedDayTimes[]): WeightedDa
         if (
             x.type == "plates" ||
             x.type == "slides" ||
-            x.type == "broths" ||
-            x.type == "discs"
+            x.type == "broths"
         ) {
             const dayIndex = res.findIndex(
                 (d) => d.dayOfWeek == x.dayOfWeek && d.type == "wasp"
@@ -504,8 +503,8 @@ export function getPeakDayLineLoad(
     });
     
     const waspData = params.lines.map((x) => x.numberOfWasp);
-    const wasplabAirData = params.lines.map((x) => x.numberOfAirWaspLab);
-    const wasplabCO2Data = params.lines.map((x) => x.numberOfCO2WaspLab);
+    const wasplabAirData = params.lines.map((x) => x.numberOfO2Incubator);
+    const wasplabCO2Data = params.lines.map((x) => x.numberOfCO2Incubator);
     let totalNumberOfWasp = 0;
     if(waspData.length > 0) {
         totalNumberOfWasp = waspData.reduce((a, b) => a + b);
