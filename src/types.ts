@@ -115,7 +115,7 @@ export type SecondaryProtocol = {
 export type WeightedDayTimes = {
 	dayOfWeek: number;
 	timeInSeconds: number;
-	type: "plates" | "slides" | "broths" | "discs" | "loading_air" | "recording_air" | "unloading_air" | "loading_co2" | "recording_co2" | "unloading_co2";
+	type: "plates" | "slides" | "broths" | "loading_air" | "recording_air" | "unloading_air" | "loading_co2" | "recording_co2" | "unloading_co2";
 };
 
 export type WeightedDailyActivities = {
@@ -140,6 +140,20 @@ export type DailyLoad = {
 export type LineConfig = {
 	id: string;
 	numberOfWasp: number;
-	numberOfAirWaspLab: number;
-	numberOfCO2WaspLab: number;
+	numberOfO2Incubator: number;
+	numberOfCO2Incubator:number;
+	collaborativeStation: boolean;
+	radian: boolean;
+	phenomatrix: boolean;
+	protocols: {
+		name: string;
+		wasp1Percentage: number;
+		wasp2Percentage: number;
+		o2Incubator1Percentage: number;
+		o2Incubator2Percentage: number;
+		o2Incubator3Percentage: number;
+		co2Incubator1Percentage: number;
+		co2Incubator2Percentage: number;
+		co2Incubator3Percentage: number;
+	}[]
 }
