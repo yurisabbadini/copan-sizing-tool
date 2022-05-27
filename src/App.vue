@@ -23,13 +23,12 @@
       class="bg-grey-2"
     >
       <q-list>
-        <q-item-label header>Menu Header</q-item-label>
-        <q-item clickable tag="a" to="/report">
+        <q-item clickable tag="a" to="/settings">
           <q-item-section avatar>
-            <q-icon name="school" />
+            <q-icon name="settings" />
           </q-item-section>
           <q-item-section>
-            <q-item-label>Report</q-item-label>
+            <q-item-label>Settings</q-item-label>
           </q-item-section>
         </q-item>
       </q-list>
