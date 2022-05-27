@@ -17,6 +17,32 @@ export type IncubatorSettings = {
 	singleIncubator: boolean;
 }
 
+export type ColibriSettings = {
+	IDTimeInSeconds: number;
+	ASTTimeInSeconds: number;
+	ASTIDTimeInSeconds: number;
+	ASTIDPurityTimeInSeconds: number;
+	ASTPurityTimeInSeconds: number;
+}
+
+export type FlowSettings = {
+	platesPerSeconds: number;
+}
+
+export type FteSettings = {
+	manualStreakingSecondsPerPlate: number;
+	screeningSecondsPerPlate: number;
+	readingSecondsPerPlate: number;
+	pickingSecondsPerPlate: number;
+	productivitySecondsPerPlate: number;
+	phenomatrixSecondsPer30Plates: number;
+	waspMinutesPerHour: number;
+	wasplabMinutesPerIncubatorPerDay: number;
+	radianMinutesPerDay: number;
+	colibriMinutesPerDay: number;
+	flowMinutesPerWorkingHour: number;
+}
+
 export type Settings = {
 	plates: {
 		streakingPatterns: PlatesStreakingPattern[]
@@ -27,9 +53,8 @@ export type Settings = {
 	broths: {
 		timeInSeconds: number;
 	},
-	discs: {
-		timeInSeconds: number;
-	},
+	colibri: ColibriSettings;
+	flow: FlowSettings;
 	incubator: IncubatorSettings;
 }
 
@@ -45,10 +70,10 @@ export type GrowthTrends = {
 	growthTrends: number[];
 }
 
-export type Protocol = {
+export type PrimaryProtocol = {
 	name: string;
-	wasp: boolean;
-	waspLab: boolean;
+	hasWasp: boolean;
+	hasWasplab: boolean;
 	pictureT0: boolean;
 	samplesPerDayAvg: number;
 	waspData: {
@@ -56,9 +81,8 @@ export type Protocol = {
 		platesPerSample: number;
 		slidesPerSample: number;
 		brothsPerSample: number;
-		discsPerSample: number;
 	},
-	waspLabData: {
+	wasplabData: {
 		air: {
 			platesPerSample: number;
 			readHours: string;
@@ -66,14 +90,26 @@ export type Protocol = {
 		co2: {
 			platesPerSample: number;
 			readHours: string;
-		},
-		subculture: {
-			airPlates: number;
-			co2Plates: number;
-			streakedInWasp: boolean;
 		}
 	},
-	volumes: number[]
+	negativityRate: number;
+	hasID: number;
+	hasAST: number;
+	hasASTID: number;
+	purityPlatesPercentage: number;
+	subculturePercentage: number;
+	brothsPercentage: number;
+	volumes: [];
+}
+
+export type SecondaryProtocol = {
+	name: string;
+	from: number;
+	plates: number;
+	platesO2: number;
+	recordingO2: number;
+	platesCO2: number;
+	recordingCO2: number;
 }
 
 export type WeightedDayTimes = {

@@ -1,4 +1,4 @@
-import { GrowthTrends, LineConfig, PeakDay, Protocol, SamplePerDay, Settings, WeightedDailyActivities, WeightedDayTimes } from "./types";
+import { GrowthTrends, LineConfig, PeakDay, PrimaryProtocol, SamplePerDay, Settings, WeightedDailyActivities, WeightedDayTimes } from "./types";
 
 function getYearIncrement(data: GrowthTrends): number {
     const referenceIndex = data.yearOfReference - data.startYear;
@@ -14,7 +14,7 @@ function getYearIncrement(data: GrowthTrends): number {
 export function getWeightedDaysTimesInSeconds(
     params: {
         growthTrends: GrowthTrends;
-        protocols: Protocol[];
+        protocols: PrimaryProtocol[];
         samplesPerDay: SamplePerDay[];
         settings: Settings;
     }
@@ -25,7 +25,7 @@ export function getWeightedDaysTimesInSeconds(
 
     params.protocols.forEach((protocol) => {
         const airMaxReadHour = Math.max(
-            ...(protocol.waspLabData.air.readHours.split(",").map((x => Number(x))) || [])
+            ...(protocol.wasplabData.air.readHours.split(",").map((x => Number(x))) || [])
         );
         let dayOffset = 0;
         if (airMaxReadHour > 24) {
@@ -56,26 +56,26 @@ export function getWeightedDaysTimesInSeconds(
             }
         }
 
-        for (let dayOfWeek = 0; dayOfWeek < 7; dayOfWeek++) {
-            let previousDay = dayOfWeek - 1;
-            if (dayOfWeek == 0) {
-                previousDay = 7;
-            }
-            const previousDaySamples =
-                params.samplesPerDay.find((x) => x.dayOfWeek == previousDay)?.samples ||
-                0;
-            const samplesPerDayIndex = params.samplesPerDay.findIndex(
-                (x) => x.dayOfWeek == dayOfWeek
-            );
-            if (samplesPerDayIndex >= 0) {
-                params.samplesPerDay[samplesPerDayIndex].samples +=
-                    previousDaySamples *
-                    ((protocol.waspLabData.subculture.airPlates ||
-                        0) +
-                        (protocol.waspLabData.subculture.co2Plates ||
-                            0));
-            }
-        }
+        // for (let dayOfWeek = 0; dayOfWeek < 7; dayOfWeek++) {
+        //     let previousDay = dayOfWeek - 1;
+        //     if (dayOfWeek == 0) {
+        //         previousDay = 7;
+        //     }
+        //     const previousDaySamples =
+        //         params.samplesPerDay.find((x) => x.dayOfWeek == previousDay)?.samples ||
+        //         0;
+        //     const samplesPerDayIndex = params.samplesPerDay.findIndex(
+        //         (x) => x.dayOfWeek == dayOfWeek
+        //     );
+        //     if (samplesPerDayIndex >= 0) {
+        //         params.samplesPerDay[samplesPerDayIndex].samples +=
+        //             previousDaySamples *
+        //             ((protocol.wasplabData.subculture.airPlates ||
+        //                 0) +
+        //                 (protocol.wasplabData.subculture.co2Plates ||
+        //                     0));
+        //     }
+        // }
 
         for (let dayOfWeek = 0; dayOfWeek < 7; dayOfWeek++) {
             const dayWeight =
@@ -113,15 +113,8 @@ export function getWeightedDaysTimesInSeconds(
             const brothsTime = params.settings.broths.timeInSeconds;
             const totalBrothsTime = totalBroths * brothsTime;
 
-            const discs =
-                protocol.waspData.discsPerSample *
-                ((protocol.samplesPerDayAvg / totalSamples) * dayWeightYear);
-            const totalDiscs = Math.ceil(discs);
-            const discsTime = params.settings.discs.timeInSeconds;
-            const totalDiscsTime = totalDiscs * discsTime;
-
             const loadingAirPlates =
-                (protocol.waspLabData.air?.platesPerSample || 0) *
+                (protocol.wasplabData.air?.platesPerSample || 0) *
                 ((protocol.samplesPerDayAvg / totalSamples) * dayWeightYear);
             const totalLoadingAirPlates = Math.ceil(loadingAirPlates);
             const loadingAirPlatesSpeed = params.settings.incubator.loadingPlatesPerHour;
@@ -129,7 +122,7 @@ export function getWeightedDaysTimesInSeconds(
                 (totalLoadingAirPlates / loadingAirPlatesSpeed) * 3600;
 
             const loadingCO2Plates =
-                (protocol.waspLabData.co2?.platesPerSample || 0) *
+                (protocol.wasplabData.co2?.platesPerSample || 0) *
                 ((protocol.samplesPerDayAvg / totalSamples) * dayWeightYear);
             const totalLoadingCO2Plates = Math.ceil(loadingCO2Plates);
             const loadingCO2PlatesSpeed = params.settings.incubator.loadingPlatesPerHour;
@@ -137,7 +130,7 @@ export function getWeightedDaysTimesInSeconds(
                 (totalLoadingCO2Plates / loadingCO2PlatesSpeed) * 3600;
 
             const recordingAirPlates =
-                (protocol.waspLabData.air?.platesPerSample || 0) *
+                (protocol.wasplabData.air?.platesPerSample || 0) *
                 ((protocol.samplesPerDayAvg / totalSamples) * dayWeightYear);
             const totalRecordingAirPlates = Math.ceil(recordingAirPlates);
             const recordingAirPlatesSpeed = params.settings.incubator.recordingPlatesPerHour;
@@ -145,7 +138,7 @@ export function getWeightedDaysTimesInSeconds(
                 (totalRecordingAirPlates / recordingAirPlatesSpeed) * 3600;
 
             const recordingCO2Plates =
-                (protocol.waspLabData.co2?.platesPerSample || 0) *
+                (protocol.wasplabData.co2?.platesPerSample || 0) *
                 ((protocol.samplesPerDayAvg / totalSamples) * dayWeightYear);
             const totalRecordingCO2Plates = Math.ceil(recordingCO2Plates);
             const recordingCO2PlatesSpeed = params.settings.incubator.recordingPlatesPerHour;
@@ -157,7 +150,7 @@ export function getWeightedDaysTimesInSeconds(
                 unloadingSpeed = params.settings.incubator.unloadingSinglePlatesPerHour;
             }
             const unloadingAirPlates =
-                (protocol.waspLabData.air?.platesPerSample || 0) *
+                (protocol.wasplabData.air?.platesPerSample || 0) *
                 ((protocol.samplesPerDayAvg / totalSamples) * dayWeightYear);
             const totalUnloadingAirPlates = Math.ceil(unloadingAirPlates);
             const unloadingAirPlatesSpeed = unloadingSpeed;
@@ -165,7 +158,7 @@ export function getWeightedDaysTimesInSeconds(
                 (totalUnloadingAirPlates / unloadingAirPlatesSpeed) * 3600;
 
             const unloadingCO2Plates =
-                (protocol.waspLabData.co2?.platesPerSample || 0) *
+                (protocol.wasplabData.co2?.platesPerSample || 0) *
                 ((protocol.samplesPerDayAvg / totalSamples) * dayWeightYear);
             const totalUnloadingCO2Plates = Math.ceil(unloadingCO2Plates);
             const unloadingCO2PlatesSpeed = unloadingSpeed;
@@ -212,20 +205,6 @@ export function getWeightedDaysTimesInSeconds(
             } else {
                 weightedDaysTimesInSeconds[brothsIndex].timeInSeconds +=
                     totalBrothsTime;
-            }
-
-            const discsIndex = weightedDaysTimesInSeconds.findIndex(
-                (x) => x.type == "discs" && x.dayOfWeek == dayOfWeek
-            );
-            if (discsIndex < 0) {
-                weightedDaysTimesInSeconds.push({
-                    type: "discs",
-                    dayOfWeek: dayOfWeek,
-                    timeInSeconds: totalDiscsTime,
-                });
-            } else {
-                weightedDaysTimesInSeconds[discsIndex].timeInSeconds +=
-                    totalDiscsTime;
             }
 
             const loadingAirIndex = weightedDaysTimesInSeconds.findIndex(
