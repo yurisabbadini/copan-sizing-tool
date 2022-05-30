@@ -1,7 +1,7 @@
 <template>
   <q-card class="q-pa-sm q-mt-sm">
     <q-item-label class="q-mb-sm" overline>Primary protocols</q-item-label>
-    <q-table dense :columns="columns" :rows="primaryProtocols" row-key="name">
+    <q-table :columns="tableColumns"  :rows="primaryProtocols" row-key="name" dense>
       <template v-slot:body="props">
       <q-tr :props="props">
           <q-td key="name" :props="props">
@@ -90,106 +90,104 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import appStorage from '@/store';
-import { PrimaryProtocol } from '@/types';
+import { PrimaryProtocol, TableColumn } from '@/types';
 
 export default defineComponent({
   name: 'PrimaryProtocols',
-  data() {
-    return {
-      columns: [
-        { 
-          name: "name",
-          label: 'Name',
-          align: 'left',
-          field: (row: PrimaryProtocol) => row.name,
-        },
-        { 
-          name: "wasp",
-          label: 'WASP',
-          align: 'left',
-          field: (row: PrimaryProtocol) =>row.hasWasp,
-        },
-        { 
-          name: "waspLab",
-          label: 'WASPLAB',
-          align: 'left',
-          field: (row: PrimaryProtocol) =>row.hasWasplab,
-        },
-        { 
-          name: "pictureT0",
-          label: 'Picture t0',
-          align: 'left',
-          field: (row: PrimaryProtocol) =>row.pictureT0,
-        },
-        { 
-          name: "samplesPerDayAvg",
-          label: 'Samples per day',
-          align: 'left',
-          field: (row: PrimaryProtocol) =>row.samplesPerDayAvg,
-        },
-        { 
-          name: "waspData_streakingPattern",
-          label: 'WASP streaking pattern',
-          align: 'left',
-          field: (row: PrimaryProtocol) =>row.waspData.streakingPattern,
-        },
-        {
-          name: "waspData_platesPerSample",
-          label: 'WASP plates',
-          align: 'left',
-          field: (row: PrimaryProtocol) =>row.waspData.platesPerSample,
-        },
-        {
-          name: "waspData_slidesPerSample",
-          label: 'WASP slides',
-          align: 'left',
-          field: (row: PrimaryProtocol) =>row.waspData.slidesPerSample,
-        },
-        {
-          name: "waspData_brothsPerSample",
-          label: 'WASP broths',
-          align: 'left',
-          field: (row: PrimaryProtocol) =>row.waspData.brothsPerSample,
-        },
-        {
-          name: "wasplabData_air_platesPerSample",
-          label: 'WASPLAB air plates',
-          align: 'left',
-          field: (row: PrimaryProtocol) =>row.wasplabData.air.platesPerSample,
-        },
-        {
-          name: "wasplabData_air_readHours",
-          label: 'WASPLAB air read hours',
-          align: 'left',
-          field: (row: PrimaryProtocol) =>row.wasplabData.air.readHours,
-        },
-        {
-          name: "wasplabData_co2_platesPerSample",
-          label: 'WASPLAB co2 plates',
-          align: 'left',
-          field: (row: PrimaryProtocol) =>row.wasplabData.co2.platesPerSample,
-        },
-        {
-          name: "wasplabData_co2_readHours",
-          label: 'WASPLAB co2 read hours',
-          align: 'left',
-          field: (row: PrimaryProtocol) =>row.wasplabData.co2.readHours,
-        },
-        { 
-          name: "actions",
-          label: '',
-          align: 'left',
-          field: (row: PrimaryProtocol) =>row.name,
-        },
-      ]
-    }
-  },
   setup() {
+    const tableColumns: TableColumn<PrimaryProtocol>[] = [
+      { 
+        name: "name",
+        label: 'Name',
+        align: 'left',
+        field: (row: PrimaryProtocol) => row.name,
+      },
+      { 
+        name: "wasp",
+        label: 'WASP',
+        align: 'left',
+        field: (row: PrimaryProtocol) =>row.hasWasp,
+      },
+      { 
+        name: "waspLab",
+        label: 'WASPLAB',
+        align: 'left',
+        field: (row: PrimaryProtocol) =>row.hasWasplab,
+      },
+      { 
+        name: "pictureT0",
+        label: 'Picture t0',
+        align: 'left',
+        field: (row: PrimaryProtocol) =>row.pictureT0,
+      },
+      { 
+        name: "samplesPerDayAvg",
+        label: 'Samples per day',
+        align: 'left',
+        field: (row: PrimaryProtocol) =>row.samplesPerDayAvg,
+      },
+      { 
+        name: "waspData_streakingPattern",
+        label: 'WASP streaking pattern',
+        align: 'left',
+        field: (row: PrimaryProtocol) =>row.waspData.streakingPattern,
+      },
+      {
+        name: "waspData_platesPerSample",
+        label: 'WASP plates',
+        align: 'left',
+        field: (row: PrimaryProtocol) =>row.waspData.platesPerSample,
+      },
+      {
+        name: "waspData_slidesPerSample",
+        label: 'WASP slides',
+        align: 'left',
+        field: (row: PrimaryProtocol) =>row.waspData.slidesPerSample,
+      },
+      {
+        name: "waspData_brothsPerSample",
+        label: 'WASP broths',
+        align: 'left',
+        field: (row: PrimaryProtocol) =>row.waspData.brothsPerSample,
+      },
+      {
+        name: "wasplabData_air_platesPerSample",
+        label: 'WASPLAB air plates',
+        align: 'left',
+        field: (row: PrimaryProtocol) =>row.wasplabData.air.platesPerSample,
+      },
+      {
+        name: "wasplabData_air_readHours",
+        label: 'WASPLAB air read hours',
+        align: 'left',
+        field: (row: PrimaryProtocol) =>row.wasplabData.air.readHours,
+      },
+      {
+        name: "wasplabData_co2_platesPerSample",
+        label: 'WASPLAB CO2 plates',
+        align: 'left',
+        field: (row: PrimaryProtocol) =>row.wasplabData.co2.platesPerSample,
+      },
+      {
+        name: "wasplabData_co2_readHours",
+        label: 'WASPLAB CO2 read hours',
+        align: 'left',
+        field: (row: PrimaryProtocol) =>row.wasplabData.co2.readHours,
+      },
+      { 
+        name: "actions",
+        label: '',
+        align: 'left',
+        field: (row: PrimaryProtocol) =>row.name,
+      },
+    ];
+
     const {
       primaryProtocols
     } = appStorage();
 
     return {
+      tableColumns,
       primaryProtocols
     }
   },

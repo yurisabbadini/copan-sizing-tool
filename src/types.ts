@@ -1,3 +1,19 @@
+export type TableColumn<T> = {
+	name: string;
+	label: string;
+	field: string | ((row: T) => unknown);
+	required?: boolean;
+	align?: "left" | "right" | "center";
+	sortable?: boolean;
+	sort?: (a: unknown, b: unknown, rowA: T, rowB: T) => number;
+	sortOrder?: "ad" | "da";
+	format?: (val: unknown, row: T) => unknown;
+	style?: string | ((row: T) => string);
+	classes?: string | ((row: T) => string);
+	headerStyle?: string;
+	headerClasses?: string;
+  };
+
 export type PlatesStreakingPattern = {
 	pattern: string;
 	timeInSeconds: number;

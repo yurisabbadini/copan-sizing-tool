@@ -19,6 +19,11 @@
     <PrimaryProtocols />
   </div>
 </div>
+<div class="row">
+  <div class="col">
+    <PrimaryProtocolsDetails />
+  </div>
+</div>
 </template>
 
 <script lang="ts">
@@ -28,6 +33,7 @@ import SamplesPerDay from '@/components/input/SamplesPerDay.vue'
 import GrowthTrends from '@/components/input/GrowthTrends.vue'
 import FteHours from '@/components/input/FteHours.vue'
 import PrimaryProtocols from '@/components/input/PrimaryProtocols.vue'
+import PrimaryProtocolsDetails from '@/components/input/PrimaryProtocolsDetails.vue'
 
 export default defineComponent({
   name: 'InputView',
@@ -35,7 +41,8 @@ export default defineComponent({
     SamplesPerDay,
     GrowthTrends,
     FteHours,
-    PrimaryProtocols
+    PrimaryProtocols,
+    PrimaryProtocolsDetails
   },
 });
 </script>
