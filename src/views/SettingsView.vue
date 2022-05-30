@@ -43,7 +43,6 @@ import FteSettingsVue from '@/components/settings/FteSettings.vue';
 
 export default defineComponent({
   name: 'SettingsView',
-  emits: ["settingsChanged"],
   components: {
     PlatesSettingsVue,
     SlidesSettingsVue,
