@@ -4,6 +4,8 @@ module.exports = defineConfig({
     'quasar'
   ],
 
+  publicPath : "/copan-sizing-tool/",
+
   lintOnSave: false,
 
   pluginOptions: {
