@@ -1,12 +1,13 @@
 <template>
-    <q-item-label class="q-mt-lg q-mb-sm" overline>Broths</q-item-label>
+  <q-card class="q-pa-sm q-mt-sm">
+    <q-item-label class="q-mb-sm" overline>Broths</q-item-label>
     <div class="row q-gutter-xs">
         <div class="col">
         <q-input
             dense
             filled
             type="number"
-            v-model.number="timeInSeconds"
+            v-model.number="data.timeInSeconds"
             label="Time"
             hint="seconds"
             lazy-rules
@@ -16,6 +17,7 @@
         />
         </div>
     </div>
+  </q-card>
 </template>
 
 <style>
@@ -23,21 +25,28 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import { BrothSettings } from '@/types';
+
 export default defineComponent({
   name: 'BrothSettings',
   emits: ["dataChanged"],
   data() {
     return {
-      timeInSeconds: 70 as number
+      data: {
+        timeInSeconds: 70
+      } as BrothSettings
     }
   },
   watch: {
     timeInSeconds: {
-      handler: function (newVal: number) {
+      handler: function (newVal: BrothSettings) {
         this.$emit("dataChanged", newVal);
       },
       deep: true
     }
+  },
+  mounted() {
+    this.$emit("dataChanged", this.data);
   }
 });
 </script>

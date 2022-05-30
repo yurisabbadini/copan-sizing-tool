@@ -8,6 +8,10 @@ export type SlidesStreakingPattern = {
 	timeInSeconds: number;
 }
 
+export type BrothSettings = {
+	timeInSeconds: number;
+}
+
 export type IncubatorSettings = {
 	loadingPlatesPerHour: number;
 	recordingPlatesPerHour: number;
@@ -26,7 +30,7 @@ export type ColibriSettings = {
 }
 
 export type FlowSettings = {
-	platesPerSeconds: number;
+	platesPerHour: number;
 }
 
 export type FteSettings = {
@@ -50,12 +54,11 @@ export type Settings = {
 	slides: {
 		streakingPatterns: SlidesStreakingPattern[]
 	},
-	broths: {
-		timeInSeconds: number;
-	},
+	broths: BrothSettings,
 	colibri: ColibriSettings;
 	flow: FlowSettings;
 	incubator: IncubatorSettings;
+	fte: FteSettings;
 }
 
 export type SamplePerDay = {

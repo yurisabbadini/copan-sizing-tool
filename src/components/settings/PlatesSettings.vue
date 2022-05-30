@@ -1,5 +1,6 @@
 <template>
-    <q-item-label class="q-mt-lg q-mb-sm" overline>Plates</q-item-label>
+  <q-card class="q-pa-sm q-mt-sm">
+    <q-item-label class="q-mb-sm" overline>Plates</q-item-label>
     <div class="row q-gutter-xs">
         <div class="col">
         <q-input
@@ -7,7 +8,7 @@
             filled
             type="number"
             v-model.number="streakingPatterns[0].timeInSeconds"
-            label="Pattern 1"
+            label="Pattern 1 (radian)"
             hint="seconds"
             lazy-rules
             :rules="[
@@ -58,6 +59,7 @@
         />
         </div>
     </div>
+  </q-card>
 </template>
 
 <style>
@@ -69,7 +71,7 @@ import { defineComponent } from 'vue';
 import { PlatesStreakingPattern } from '@/types';
 
 export default defineComponent({
-  name: 'PlatesSettingsData',
+  name: 'PlatesSettings',
   emits: ["dataChanged"],
   data() {
     return {
@@ -100,6 +102,9 @@ export default defineComponent({
       },
       deep: true
     }
+  },
+  mounted() {
+    this.$emit("dataChanged", this.streakingPatterns);
   }
 });
 </script>

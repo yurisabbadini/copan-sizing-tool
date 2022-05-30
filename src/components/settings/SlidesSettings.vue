@@ -1,5 +1,6 @@
 <template>
-    <q-item-label class="q-mt-lg q-mb-sm" overline>Slides</q-item-label>
+  <q-card class="q-pa-sm q-mt-sm">
+    <q-item-label class="q-mb-sm" overline>Slides</q-item-label>
     <div class="row q-gutter-xs">
         <div class="col">
         <q-input
@@ -30,6 +31,7 @@
         />
         </div>
     </div>
+  </q-card>
 </template>
 
 <style>
@@ -41,7 +43,7 @@ import { defineComponent } from 'vue';
 import { SlidesStreakingPattern } from '@/types';
 
 export default defineComponent({
-  name: 'SlidesSettingsData',
+  name: 'SlidesSettings',
   emits: ["dataChanged"],
   data() {
     return {
@@ -64,6 +66,9 @@ export default defineComponent({
       },
       deep: true
     }
+  },
+  mounted() {
+    this.$emit("dataChanged", this.streakingPatterns);
   }
 });
 </script>

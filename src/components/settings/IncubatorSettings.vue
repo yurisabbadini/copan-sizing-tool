@@ -1,5 +1,6 @@
 <template>
-    <q-item-label class="q-mt-lg q-mb-sm" overline>Incubator</q-item-label>
+  <q-card class="q-pa-sm q-mt-sm">
+    <q-item-label class="q-mb-sm" overline>Incubator</q-item-label>
     <div class="row q-gutter-xs">
         <div class="col">
           <q-input
@@ -76,6 +77,7 @@
           <q-checkbox v-model="data.singleIncubator" label="Single incubator" />
         </div>
     </div>
+  </q-card>
 </template>
 
 <style>
@@ -87,7 +89,7 @@ import { defineComponent } from 'vue';
 import { IncubatorSettings } from '@/types';
 
 export default defineComponent({
-  name: 'BrothSettingsData',
+  name: 'IncubatorSettings',
   emits: ["dataChanged"],
   data() {
     return {
@@ -108,6 +110,9 @@ export default defineComponent({
       },
       deep: true
     }
+  },
+  mounted() {
+    this.$emit("dataChanged", this.data);
   }
 });
 </script>
