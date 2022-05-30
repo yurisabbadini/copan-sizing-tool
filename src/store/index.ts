@@ -1,6 +1,6 @@
 import { reactive, toRefs } from "vue";
 
-import { GrowthTrends, PlatesStreakingPattern, PrimaryProtocol, SecondaryProtocol, SamplePerDay, Settings, SlidesStreakingPattern } from "@/types";
+import { GrowthTrends, PlatesStreakingPattern, PrimaryProtocol, SecondaryProtocol, SamplePerDay, Settings, SlidesStreakingPattern, LineConfig } from "@/types";
 
 const state = reactive({
     settings: {
@@ -130,7 +130,8 @@ const state = reactive({
         }
       },
       primaryProtocols: [] as PrimaryProtocol[],
-      secondaryProtocols: [] as SecondaryProtocol[]
+      secondaryProtocols: [] as SecondaryProtocol[],
+      lines: [] as LineConfig[],
 });
 
 export default function appStorage() {

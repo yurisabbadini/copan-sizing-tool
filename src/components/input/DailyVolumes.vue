@@ -5,7 +5,7 @@
     dense
     :rows="primaryProtocols"
     :columns="tableColumns"
-    row-key="name"
+    row-key="id"
     >
     <template v-slot:body="props">
         <q-tr :props="props">

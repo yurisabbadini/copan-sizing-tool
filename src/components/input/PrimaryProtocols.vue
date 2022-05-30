@@ -1,7 +1,7 @@
 <template>
   <q-card class="q-pa-sm q-mt-sm">
     <q-item-label class="q-mb-sm" overline>Primary protocols</q-item-label>
-    <q-table :columns="tableColumns"  :rows="primaryProtocols" row-key="name" dense>
+    <q-table :columns="tableColumns"  :rows="primaryProtocols" row-key="id" dense>
       <template v-slot:body="props">
       <q-tr :props="props">
           <q-td key="name" :props="props">
@@ -75,7 +75,7 @@
             </q-popup-edit>
           </q-td>
           <q-td key="actions" :props="props">
-            <q-btn flat round color="red" icon="remove_circleoutline" size="xs" @click="removeProtocol(props.row.name)"/>
+            <q-btn flat round color="red" icon="remove_circleoutline" size="xs" @click="removeProtocol(props.row.id)"/>
           </q-td>
         </q-tr>
       </template>
@@ -179,7 +179,7 @@ export default defineComponent({
         name: "actions",
         label: '',
         align: 'left',
-        field: (row: PrimaryProtocol) =>row.name,
+        field: (row: PrimaryProtocol) =>row.id,
       },
     ];
 
@@ -231,8 +231,8 @@ export default defineComponent({
         subculturePercentage: 0,
       });
     },
-    removeProtocol(name: string) {
-      const indexToRemove = this.primaryProtocols.findIndex((x) => x.name == name);
+    removeProtocol(id: string) {
+      const indexToRemove = this.primaryProtocols.findIndex((x) => x.id == id);
       if(indexToRemove > -1) {
         this.primaryProtocols.splice(indexToRemove, 1);
       }

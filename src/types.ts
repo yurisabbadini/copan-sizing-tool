@@ -158,23 +158,26 @@ export type DailyLoad = {
 	safetyMargin: number;
 }
 
+export type LineConfigProtocol = {
+	name: string;
+	wasp1Percentage: number;
+	wasp2Percentage: number;
+	o2Incubator1Percentage: number;
+	o2Incubator2Percentage: number;
+	o2Incubator3Percentage: number;
+	co2Incubator1Percentage: number;
+	co2Incubator2Percentage: number;
+	co2Incubator3Percentage: number;
+}
+
 export type LineConfig = {
 	id: string;
+	name: string;
 	numberOfWasp: number;
 	numberOfO2Incubator: number;
-	numberOfCO2Incubator:number;
+	numberOfCO2Incubator: number;
 	collaborativeStation: boolean;
 	radian: boolean;
 	phenomatrix: boolean;
-	protocols: {
-		name: string;
-		wasp1Percentage: number;
-		wasp2Percentage: number;
-		o2Incubator1Percentage: number;
-		o2Incubator2Percentage: number;
-		o2Incubator3Percentage: number;
-		co2Incubator1Percentage: number;
-		co2Incubator2Percentage: number;
-		co2Incubator3Percentage: number;
-	}[]
+	protocols: LineConfigProtocol[];
 }
