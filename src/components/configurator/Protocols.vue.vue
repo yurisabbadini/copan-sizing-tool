@@ -1,6 +1,6 @@
 <template>
   <q-card class="q-pa-sm q-mt-sm">
-    <q-item-label class="q-mb-sm" overline>Primary protocols</q-item-label>
+    <q-item-label class="q-mb-sm" overline>Protocols</q-item-label>
     <q-table :columns="tableColumns"  :rows="primaryProtocols" row-key="name" dense>
       <template v-slot:body="props">
       <q-tr :props="props">
@@ -74,13 +74,9 @@
               <q-input v-model="scope.value" dense autofocus @keyup.enter="scope.set" />
             </q-popup-edit>
           </q-td>
-          <q-td key="actions" :props="props">
-            <q-btn flat round color="red" icon="remove_circleoutline" size="xs" @click="removeProtocol(props.row.name)"/>
-          </q-td>
         </q-tr>
       </template>
     </q-table>
-    <q-btn class="q-mt-md" label="Add" type="button" color="positive" @click="addProtocol"/>
   </q-card>
 </template>
 
@@ -174,12 +170,6 @@ export default defineComponent({
         label: 'WASPLAB CO2 read hours',
         align: 'left',
         field: (row: PrimaryProtocol) =>row.wasplabData.co2.readHours,
-      },
-      { 
-        name: "actions",
-        label: '',
-        align: 'left',
-        field: (row: PrimaryProtocol) =>row.name,
       },
     ];
 
