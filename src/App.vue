@@ -23,6 +23,14 @@
       class="bg-grey-2"
     >
       <q-list>
+        <q-item clickable tag="a" to="/settings">
+          <q-item-section avatar>
+            <q-icon name="settings" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>Settings</q-item-label>
+          </q-item-section>
+        </q-item>
         <q-item clickable tag="a" to="/">
           <q-item-section avatar>
             <q-icon name="create" />
@@ -31,12 +39,12 @@
             <q-item-label>Input</q-item-label>
           </q-item-section>
         </q-item>
-        <q-item clickable tag="a" to="/settings">
+        <q-item clickable tag="a" to="/configurator">
           <q-item-section avatar>
-            <q-icon name="settings" />
+            <q-icon name="perm_data_setting" />
           </q-item-section>
           <q-item-section>
-            <q-item-label>Settings</q-item-label>
+            <q-item-label>Configurator</q-item-label>
           </q-item-section>
         </q-item>
       </q-list>
