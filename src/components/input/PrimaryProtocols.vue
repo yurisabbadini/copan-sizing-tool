@@ -89,6 +89,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import { v4 as uuid } from 'uuid';
 import appStorage from '@/store';
 import { PrimaryProtocol, TableColumn } from '@/types';
 
@@ -198,6 +199,7 @@ export default defineComponent({
         volumes.push(0);
       }
       this.primaryProtocols.push({
+        id: uuid(),
         name: "protocol name",
         hasWasp: false,
         hasWasplab: false,

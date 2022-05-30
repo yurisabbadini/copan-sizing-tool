@@ -6,9 +6,6 @@
       <q-tr :props="props">
           <q-td key="name" :props="props">
             {{ props.row.name }}
-            <q-popup-edit v-model="props.row.name" auto-save v-slot="scope">
-              <q-input v-model="scope.value" dense autofocus @keyup.enter="scope.set" />
-            </q-popup-edit>
           </q-td>
           <q-td key="negativityRate" :props="props">
             {{ props.row.negativityRate }}
@@ -17,30 +14,30 @@
             </q-popup-edit>
           </q-td>
           <q-td key="hasID" :props="props">
-            <q-checkbox dense v-model="props.row.hasID"/>
+            <q-checkbox dense v-model="props.row.hasID" @update:model-value="setProtocolID({ id: props.row.id, value: $event })"/>
           </q-td>
           <q-td key="hasAST" :props="props">
-            <q-checkbox dense v-model="props.row.hasAST"/>
+            <q-checkbox dense v-model="props.row.hasAST" @update:model-value="setProtocolAST({ id: props.row.id, value: $event })"/>
           </q-td>
           <q-td key="hasASTID" :props="props">
-            <q-checkbox dense v-model="props.row.hasASTID"/>
+            <q-checkbox dense v-model="props.row.hasASTID" @update:model-value="setProtocolASTID({ id: props.row.id, value: $event })"/>
           </q-td>
           <q-td key="purityPlatesPercentage" :props="props">
             {{ props.row.purityPlatesPercentage }}
             <q-popup-edit v-model.number="props.row.purityPlatesPercentage" auto-save v-slot="scope">
-              <q-input v-model.number="scope.value" dense autofocus @keyup.enter="scope.set" />
+              <q-input v-model.number="scope.value" dense autofocus @keyup.enter="scope.set" @update:model-value="setProtocolPurityPlates({ id: props.row.id, value: Number($event || 0) })" />
             </q-popup-edit>
           </q-td>
           <q-td key="subculturePercentage" :props="props">
             {{ props.row.subculturePercentage }}
             <q-popup-edit v-model.number="props.row.subculturePercentage" auto-save v-slot="scope">
-              <q-input v-model.number="scope.value" dense autofocus @keyup.enter="scope.set" />
+              <q-input v-model.number="scope.value" dense autofocus @keyup.enter="scope.set" @update:model-value="setProtocolSubculture({ id: props.row.id, value: Number($event || 0) })" />
             </q-popup-edit>
           </q-td>
           <q-td key="brothsPercentage" :props="props">
             {{ props.row.brothsPercentage }}
             <q-popup-edit v-model.number="props.row.brothsPercentage" auto-save v-slot="scope">
-              <q-input v-model.number="scope.value" dense autofocus @keyup.enter="scope.set" />
+              <q-input v-model.number="scope.value" dense autofocus @keyup.enter="scope.set" @update:model-value="setProtocolBroths({ id: props.row.id, value: Number($event || 0) })" />
             </q-popup-edit>
           </q-td>
         </q-tr>
@@ -112,58 +109,81 @@ export default defineComponent({
     ];
 
     const {
-      primaryProtocols
+      primaryProtocols,
+      secondaryProtocols
     } = appStorage();
 
     return {
       tableColumns,
-      primaryProtocols
+      primaryProtocols,
+      secondaryProtocols
     }
   },
   methods: {
-    addProtocol() {
-      const volumes: number[] = [];
-      for(let i=0; i < 24; i++) {
-        volumes.push(0);
+    addSecondaryProtocol(id: string, from: "ID" | "AST" | "ID & AST" | "Purity plates" | "Subculture" | "Broths") {
+      const protocol = this.primaryProtocols.find((x) => x.id == id);
+      if(protocol) {
+        this.secondaryProtocols.push({
+          id: protocol.id,
+          from: from,
+          name: protocol.name,
+          plates: 0,
+          platesCO2: 0,
+          platesO2: 0,
+          recordingCO2: 0,
+          recordingO2: 0
+        });
       }
-      this.primaryProtocols.push({
-        name: "protocol name",
-        hasWasp: false,
-        hasWasplab: false,
-        pictureT0: false,
-        samplesPerDayAvg: 0,
-        waspData: {
-          streakingPattern: "1",
-          platesPerSample: 0,
-          slidesPerSample: 0,
-          brothsPerSample: 0
-        },
-        wasplabData: {
-          air: {
-            platesPerSample: 0,
-            readHours: "0"
-          },
-          co2: {
-            platesPerSample: 0,
-            readHours: "0"
-          }
-        },
-        volumes: volumes,
-        brothsPercentage: 0,
-        hasAST: false,
-        hasASTID: false,
-        hasID: false,
-        negativityRate: 0,
-        purityPlatesPercentage: 0,
-        subculturePercentage: 0,
-      });
     },
-    removeProtocol(name: string) {
-      const indexToRemove = this.primaryProtocols.findIndex((x) => x.name == name);
-      if(indexToRemove > -1) {
-        this.primaryProtocols.splice(indexToRemove, 1);
+    removeSecondaryProtocol(id: string, from: "ID" | "AST" | "ID & AST" | "Purity plates" | "Subculture" | "Broths") {
+      const protocol = this.primaryProtocols.find((x) => x.id == id);
+      if(protocol) {
+        const index = this.secondaryProtocols.findIndex((x) => x.id == protocol.id && x.from == from);
+        this.secondaryProtocols.splice(index, 1);
       }
-    }
+    },
+    setProtocolID(params: { id: string, value: boolean }) {
+      if(params.value == true) {
+        this.addSecondaryProtocol(params.id, "ID");
+      } else {
+        this.removeSecondaryProtocol(params.id, "ID");
+      }
+    },
+    setProtocolAST(params: { id: string, value: boolean }) {
+      if(params.value == true) {
+        this.addSecondaryProtocol(params.id, "AST");
+      } else {
+        this.removeSecondaryProtocol(params.id, "AST");
+      }
+    },
+    setProtocolASTID(params: { id: string, value: boolean }) {
+      if(params.value == true) {
+        this.addSecondaryProtocol(params.id, "ID & AST");
+      } else {
+        this.removeSecondaryProtocol(params.id, "ID & AST");
+      }
+    },
+    setProtocolPurityPlates(params: { id: string, value: number }) {
+      if(params.value > 0) {
+        this.addSecondaryProtocol(params.id, "Purity plates");
+      } else {
+        this.removeSecondaryProtocol(params.id, "Purity plates");
+      }
+    },
+    setProtocolSubculture(params: { id: string, value: number }) {
+      if(params.value > 0) {
+        this.addSecondaryProtocol(params.id, "Subculture");
+      } else {
+        this.removeSecondaryProtocol(params.id, "Subculture");
+      }
+    },
+    setProtocolBroths(params: { id: string, value: number }) {
+      if(params.value > 0) {
+        this.addSecondaryProtocol(params.id, "Broths");
+      } else {
+        this.removeSecondaryProtocol(params.id, "Broths");
+      }
+    },
   }
 });
 </script>

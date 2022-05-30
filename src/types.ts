@@ -90,6 +90,7 @@ export type GrowthTrends = {
 }
 
 export type PrimaryProtocol = {
+	id: string;
 	name: string;
 	hasWasp: boolean;
 	hasWasplab: boolean;
@@ -122,8 +123,9 @@ export type PrimaryProtocol = {
 }
 
 export type SecondaryProtocol = {
+	id: string;
 	name: string;
-	from: number;
+	from: "ID" | "AST" | "ID & AST" | "Purity plates" | "Subculture" | "Broths";
 	plates: number;
 	platesO2: number;
 	recordingO2: number;
