@@ -63,8 +63,7 @@ export default defineComponent({
   name: 'LayoutDefault',
   data() {
       return {
-        leftDrawerOpen: false,
-        
+        leftDrawerOpen: false
       }
   }
 });
