@@ -1,15 +1,26 @@
 <template>
   <q-card class="q-pa-sm q-mt-sm">
-    <q-item-label class="q-mb-sm" overline>Samples per day</q-item-label>
+    <q-item-label class="q-mb-sm" overline>FTE hours</q-item-label>
     <div class="row q-gutter-xs">
         <div class="col">
+            <q-item-label class="q-mb-sm text-caption">WASP</q-item-label>
             <q-input
                 dense
                 filled
                 type="number"
-                v-model.number="samplesPerDay[0].samples"
-                label="Monday"
-                hint="samples"
+                v-model.number="fteHours.wasp.start"
+                label="Start"
+                lazy-rules
+                :rules="[
+                val => val !== null && val !== '' || 'Please type a valid numeric value'
+                ]"
+            />
+            <q-input
+                dense
+                filled
+                type="number"
+                v-model.number="fteHours.wasp.end"
+                label="End"
                 lazy-rules
                 :rules="[
                 val => val !== null && val !== '' || 'Please type a valid numeric value'
@@ -17,13 +28,24 @@
             />
         </div>
         <div class="col">
+            <q-item-label class="q-mb-sm text-caption">Manual streaking</q-item-label>
             <q-input
                 dense
                 filled
                 type="number"
-                v-model.number="samplesPerDay[1].samples"
-                label="Tuesday"
-                hint="samples"
+                v-model.number="fteHours.manualStreaking.start"
+                label="Start"
+                lazy-rules
+                :rules="[
+                val => val !== null && val !== '' || 'Please type a valid numeric value'
+                ]"
+            />
+            <q-input
+                dense
+                filled
+                type="number"
+                v-model.number="fteHours.manualStreaking.end"
+                label="End"
                 lazy-rules
                 :rules="[
                 val => val !== null && val !== '' || 'Please type a valid numeric value'
@@ -31,13 +53,24 @@
             />
         </div>
         <div class="col">
+            <q-item-label class="q-mb-sm text-caption">Screening</q-item-label>
             <q-input
                 dense
                 filled
                 type="number"
-                v-model.number="samplesPerDay[2].samples"
-                label="Wednesday"
-                hint="samples"
+                v-model.number="fteHours.screening.start"
+                label="Start"
+                lazy-rules
+                :rules="[
+                val => val !== null && val !== '' || 'Please type a valid numeric value'
+                ]"
+            />
+            <q-input
+                dense
+                filled
+                type="number"
+                v-model.number="fteHours.screening.end"
+                label="End"
                 lazy-rules
                 :rules="[
                 val => val !== null && val !== '' || 'Please type a valid numeric value'
@@ -45,13 +78,24 @@
             />
         </div>
         <div class="col">
+            <q-item-label class="q-mb-sm text-caption">Reading</q-item-label>
             <q-input
                 dense
                 filled
                 type="number"
-                v-model.number="samplesPerDay[3].samples"
-                label="Thursday"
-                hint="samples"
+                v-model.number="fteHours.reading.start"
+                label="Start"
+                lazy-rules
+                :rules="[
+                val => val !== null && val !== '' || 'Please type a valid numeric value'
+                ]"
+            />
+            <q-input
+                dense
+                filled
+                type="number"
+                v-model.number="fteHours.reading.end"
+                label="End"
                 lazy-rules
                 :rules="[
                 val => val !== null && val !== '' || 'Please type a valid numeric value'
@@ -59,41 +103,24 @@
             />
         </div>
         <div class="col">
+            <q-item-label class="q-mb-sm text-caption">Colibrì</q-item-label>
             <q-input
                 dense
                 filled
                 type="number"
-                v-model.number="samplesPerDay[4].samples"
-                label="Friday"
-                hint="samples"
+                v-model.number="fteHours.colibri.start"
+                label="Start"
                 lazy-rules
                 :rules="[
                 val => val !== null && val !== '' || 'Please type a valid numeric value'
                 ]"
             />
-        </div>
-        <div class="col">
             <q-input
                 dense
                 filled
                 type="number"
-                v-model.number="samplesPerDay[5].samples"
-                label="Saturday"
-                hint="samples"
-                lazy-rules
-                :rules="[
-                val => val !== null && val !== '' || 'Please type a valid numeric value'
-                ]"
-            />
-        </div>
-        <div class="col">
-            <q-input
-                dense
-                filled
-                type="number"
-                v-model.number="samplesPerDay[6].samples"
-                label="Sunday"
-                hint="samples"
+                v-model.number="fteHours.colibri.end"
+                label="End"
                 lazy-rules
                 :rules="[
                 val => val !== null && val !== '' || 'Please type a valid numeric value'
@@ -112,14 +139,14 @@ import { defineComponent } from 'vue';
 import appStorage from '@/store';
 
 export default defineComponent({
-  name: 'SamplesPerDay',
+  name: 'FteHours',
   setup() {
     const {
-      samplesPerDay
+      fteHours
     } = appStorage();
 
     return {
-      samplesPerDay
+      fteHours
     }
   }
 });

@@ -1,6 +1,6 @@
 import { reactive, toRefs } from "vue";
 
-import { PlatesStreakingPattern, Settings, SlidesStreakingPattern } from "@/types";
+import { GrowthTrends, PlatesStreakingPattern, PrimaryProtocol, SamplePerDay, Settings, SlidesStreakingPattern } from "@/types";
 
 const state = reactive({
     settings: {
@@ -70,7 +70,66 @@ const state = reactive({
           colibriMinutesPerDay: 5,
           flowMinutesPerWorkingHour: 5
         }
-      } as Settings
+      } as Settings,
+      samplesPerDay: [
+        {
+          dayOfWeek: 1,
+          samples: 0
+        },
+        {
+          dayOfWeek: 2,
+          samples: 0
+        },
+        {
+          dayOfWeek: 3,
+          samples: 0
+        },
+        {
+          dayOfWeek: 4,
+          samples: 0
+        },
+        {
+          dayOfWeek: 5,
+          samples: 0
+        },
+        {
+          dayOfWeek: 6,
+          samples: 0
+        },
+        {
+          dayOfWeek: 0,
+          samples: 0
+        },
+      ] as SamplePerDay[],
+      growthTrends: {
+        startYear: new Date().getFullYear(),
+        endYear: new Date().getFullYear() + 3,
+        yearOfReference: new Date().getFullYear() + 3,
+        growthTrends: []
+      } as GrowthTrends,
+      fteHours: {
+        wasp: {
+          start: 8,
+          end: 19
+        },
+        manualStreaking: {
+          start: 8,
+          end: 19
+        },
+        screening: {
+          start: 8,
+          end: 19
+        },
+        reading: {
+          start: 8,
+          end: 19
+        },
+        colibri: {
+          start: 8,
+          end: 19
+        }
+      },
+      primaryProtocols: [] as PrimaryProtocol[]
 });
 
 export default function appStorage() {

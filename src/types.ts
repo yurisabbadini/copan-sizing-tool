@@ -96,13 +96,13 @@ export type PrimaryProtocol = {
 		}
 	},
 	negativityRate: number;
-	hasID: number;
-	hasAST: number;
-	hasASTID: number;
+	hasID: boolean;
+	hasAST: boolean;
+	hasASTID: boolean;
 	purityPlatesPercentage: number;
 	subculturePercentage: number;
 	brothsPercentage: number;
-	volumes: [];
+	volumes: number[];
 }
 
 export type SecondaryProtocol = {
