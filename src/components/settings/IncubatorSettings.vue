@@ -7,7 +7,7 @@
               dense
               filled
               type="number"
-              v-model.number="data.loadingPlatesPerHour"
+              v-model.number="settings.incubator.loadingPlatesPerHour"
               label="Loading"
               hint="plates/hour"
               lazy-rules
@@ -21,7 +21,7 @@
               dense
               filled
               type="number"
-              v-model.number="data.recordingPlatesPerHour"
+              v-model.number="settings.incubator.recordingPlatesPerHour"
               label="Recording"
               hint="plates/hour"
               lazy-rules
@@ -35,7 +35,7 @@
               dense
               filled
               type="number"
-              v-model.number="data.unloadingSinglePlatesPerHour"
+              v-model.number="settings.incubator.unloadingSinglePlatesPerHour"
               label="Unloading (1)"
               hint="plates/hour"
               lazy-rules
@@ -49,7 +49,7 @@
               dense
               filled
               type="number"
-              v-model.number="data.unloadingMultiplePlatesPerHour"
+              v-model.number="settings.incubator.unloadingMultiplePlatesPerHour"
               label="Unloading (1+)"
               hint="plates/hour"
               lazy-rules
@@ -64,7 +64,7 @@
               dense
               filled
               type="number"
-              v-model.number="data.incubatorSafetyMargin"
+              v-model.number="settings.incubator.incubatorSafetyMargin"
               label="Safety margin"
               hint="%"
               lazy-rules
@@ -74,7 +74,7 @@
           />
         </div>
         <div class="col">
-          <q-checkbox v-model="data.singleIncubator" label="Single incubator" />
+          <q-checkbox v-model="settings.incubator.singleIncubator" label="Single incubator" />
         </div>
     </div>
   </q-card>
@@ -86,33 +86,18 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import { IncubatorSettings } from '@/types';
+import appStorage from '@/store';
 
 export default defineComponent({
   name: 'IncubatorSettings',
-  emits: ["dataChanged"],
-  data() {
+  setup() {
+    const {
+      settings
+    } = appStorage();
+
     return {
-      data: {
-        loadingPlatesPerHour: 125,
-        recordingPlatesPerHour: 125,
-        unloadingSinglePlatesPerHour: 180,
-        unloadingMultiplePlatesPerHour: 250,
-        incubatorSafetyMargin: 20,
-        singleIncubator: true,
-      } as IncubatorSettings
+      settings
     }
-  },
-  watch: {
-    data: {
-      handler: function (newVal: IncubatorSettings) {
-        this.$emit("dataChanged", newVal);
-      },
-      deep: true
-    }
-  },
-  mounted() {
-    this.$emit("dataChanged", this.data);
   }
 });
 </script>

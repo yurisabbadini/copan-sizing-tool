@@ -7,7 +7,7 @@
             dense
             filled
             type="number"
-            v-model.number="data.platesPerHour"
+            v-model.number="settings.flow.platesPerHour"
             label="Plates/hour"
             hint="plates/hour"
             lazy-rules
@@ -26,28 +26,18 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import { FlowSettings } from '@/types';
+import appStorage from '@/store';
 
 export default defineComponent({
   name: 'FlowSettings',
-  emits: ["dataChanged"],
-  data() {
+  setup() {
+    const {
+      settings
+    } = appStorage();
+
     return {
-      data: {
-        platesPerHour: 550
-      } as FlowSettings
+      settings
     }
-  },
-  watch: {
-    data: {
-      handler: function (newVal: FlowSettings) {
-        this.$emit("dataChanged", newVal);
-      },
-      deep: true
-    }
-  },
-  mounted() {
-    this.$emit("dataChanged", this.data);
   }
 });
 </script>

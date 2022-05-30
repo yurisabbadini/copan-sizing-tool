@@ -7,7 +7,7 @@
             dense
             filled
             type="number"
-            v-model.number="streakingPatterns[0].timeInSeconds"
+            v-model.number="settings.plates.streakingPatterns[0].timeInSeconds"
             label="Pattern 1 (radian)"
             hint="seconds"
             lazy-rules
@@ -21,7 +21,7 @@
             dense
             filled
             type="number"
-            v-model.number="streakingPatterns[1].timeInSeconds"
+            v-model.number="settings.plates.streakingPatterns[1].timeInSeconds"
             label="Pattern 2"
             hint="seconds"
             lazy-rules
@@ -35,7 +35,7 @@
             dense
             filled
             type="number"
-            v-model.number="streakingPatterns[2].timeInSeconds"
+            v-model.number="settings.plates.streakingPatterns[2].timeInSeconds"
             label="Pattern 3"
             hint="seconds"
             lazy-rules
@@ -49,7 +49,7 @@
             dense
             filled
             type="number"
-            v-model.number="streakingPatterns[3].timeInSeconds"
+            v-model.number="settings.plates.streakingPatterns[3].timeInSeconds"
             label="Pattern 4"
             hint="seconds"
             lazy-rules
@@ -68,43 +68,18 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import { PlatesStreakingPattern } from '@/types';
+import appStorage from '@/store';
 
 export default defineComponent({
   name: 'PlatesSettings',
-  emits: ["dataChanged"],
-  data() {
+  setup() {
+    const {
+      settings
+    } = appStorage();
+
     return {
-      streakingPatterns: [
-        {
-          pattern: "1",
-          timeInSeconds: 25
-        },
-        {
-          pattern: "2",
-          timeInSeconds: 35
-        },
-        {
-          pattern: "3",
-          timeInSeconds: 40
-        },
-        {
-          pattern: "4",
-          timeInSeconds: 45
-        }
-      ] as PlatesStreakingPattern[]
+      settings
     }
-  },
-  watch: {
-    streakingPatterns: {
-      handler: function (newVal: PlatesStreakingPattern[]) {
-        this.$emit("dataChanged", newVal);
-      },
-      deep: true
-    }
-  },
-  mounted() {
-    this.$emit("dataChanged", this.streakingPatterns);
   }
 });
 </script>

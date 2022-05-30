@@ -7,7 +7,7 @@
             dense
             filled
             type="number"
-            v-model.number="data.timeInSeconds"
+            v-model.number="settings.broths.timeInSeconds"
             label="Time"
             hint="seconds"
             lazy-rules
@@ -25,28 +25,18 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { BrothSettings } from '@/types';
+import appStorage from '@/store';
 
 export default defineComponent({
   name: 'BrothSettings',
-  emits: ["dataChanged"],
-  data() {
+  setup() {
+    const {
+      settings
+    } = appStorage();
+
     return {
-      data: {
-        timeInSeconds: 70
-      } as BrothSettings
+      settings
     }
-  },
-  watch: {
-    timeInSeconds: {
-      handler: function (newVal: BrothSettings) {
-        this.$emit("dataChanged", newVal);
-      },
-      deep: true
-    }
-  },
-  mounted() {
-    this.$emit("dataChanged", this.data);
   }
 });
 </script>

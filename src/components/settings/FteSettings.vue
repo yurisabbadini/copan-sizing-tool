@@ -7,7 +7,7 @@
               dense
               filled
               type="number"
-              v-model.number="data.manualStreakingSecondsPerPlate"
+              v-model.number="settings.fte.manualStreakingSecondsPerPlate"
               label="Manual streaking"
               hint="sec/plate"
               lazy-rules
@@ -21,7 +21,7 @@
               dense
               filled
               type="number"
-              v-model.number="data.screeningSecondsPerPlate"
+              v-model.number="settings.fte.screeningSecondsPerPlate"
               label="Screening"
               hint="sec/plate"
               lazy-rules
@@ -35,7 +35,7 @@
               dense
               filled
               type="number"
-              v-model.number="data.readingSecondsPerPlate"
+              v-model.number="settings.fte.readingSecondsPerPlate"
               label="Reading"
               hint="sec/plate"
               lazy-rules
@@ -49,7 +49,7 @@
               dense
               filled
               type="number"
-              v-model.number="data.pickingSecondsPerPlate"
+              v-model.number="settings.fte.pickingSecondsPerPlate"
               label="Picking"
               hint="sec/plate"
               lazy-rules
@@ -69,7 +69,7 @@
               dense
               filled
               type="number"
-              v-model.number="data.productivitySecondsPerPlate"
+              v-model.number="settings.fte.productivitySecondsPerPlate"
               label="Productivity"
               hint="sec/plate"
               lazy-rules
@@ -83,7 +83,7 @@
               dense
               filled
               type="number"
-              v-model.number="data.phenomatrixSecondsPer30Plates"
+              v-model.number="settings.fte.phenomatrixSecondsPer30Plates"
               label="Phenomatrix"
               hint="sec/30 plates"
               lazy-rules
@@ -97,7 +97,7 @@
               dense
               filled
               type="number"
-              v-model.number="data.waspMinutesPerHour"
+              v-model.number="settings.fte.waspMinutesPerHour"
               label="Wasp"
               hint="minutes/hours"
               lazy-rules
@@ -111,7 +111,7 @@
               dense
               filled
               type="number"
-              v-model.number="data.wasplabMinutesPerIncubatorPerDay"
+              v-model.number="settings.fte.wasplabMinutesPerIncubatorPerDay"
               label="Wasplab"
               hint="minutes/hours"
               lazy-rules
@@ -125,7 +125,7 @@
               dense
               filled
               type="number"
-              v-model.number="data.radianMinutesPerDay"
+              v-model.number="settings.fte.radianMinutesPerDay"
               label="Radian"
               hint="minutes/day"
               lazy-rules
@@ -139,7 +139,7 @@
               dense
               filled
               type="number"
-              v-model.number="data.colibriMinutesPerDay"
+              v-model.number="settings.fte.colibriMinutesPerDay"
               label="Colibrì"
               hint="minutes/day"
               lazy-rules
@@ -153,7 +153,7 @@
               dense
               filled
               type="number"
-              v-model.number="data.flowMinutesPerWorkingHour"
+              v-model.number="settings.fte.flowMinutesPerWorkingHour"
               label="Flow"
               hint="minutes/hour"
               lazy-rules
@@ -172,38 +172,18 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import { FteSettings } from '@/types';
+import appStorage from '@/store';
 
 export default defineComponent({
   name: 'FteSettings',
-  emits: ["dataChanged"],
-  data() {
+  setup() {
+    const {
+      settings
+    } = appStorage();
+
     return {
-      data: {
-        manualStreakingSecondsPerPlate: 60,
-        screeningSecondsPerPlate: 10,
-        readingSecondsPerPlate: 30,
-        pickingSecondsPerPlate: 60,
-        productivitySecondsPerPlate: 15,
-        phenomatrixSecondsPer30Plates: 10,
-        waspMinutesPerHour: 5,
-        wasplabMinutesPerIncubatorPerDay: 5,
-        radianMinutesPerDay: 20,
-        colibriMinutesPerDay: 5,
-        flowMinutesPerWorkingHour: 5
-      } as FteSettings
+      settings
     }
-  },
-  watch: {
-    data: {
-      handler: function (newVal: FteSettings) {
-        this.$emit("dataChanged", newVal);
-      },
-      deep: true
-    }
-  },
-  mounted() {
-    this.$emit("dataChanged", this.data);
   }
 });
 </script>

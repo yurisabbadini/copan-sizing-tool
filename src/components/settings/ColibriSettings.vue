@@ -7,7 +7,7 @@
               dense
               filled
               type="number"
-              v-model.number="data.IDTimeInSeconds"
+              v-model.number="settings.colibri.IDTimeInSeconds"
               label="ID"
               hint="seconds"
               lazy-rules
@@ -21,7 +21,7 @@
               dense
               filled
               type="number"
-              v-model.number="data.ASTTimeInSeconds"
+              v-model.number="settings.colibri.ASTTimeInSeconds"
               label="AST"
               hint="seconds"
               lazy-rules
@@ -35,7 +35,7 @@
               dense
               filled
               type="number"
-              v-model.number="data.ASTIDTimeInSeconds"
+              v-model.number="settings.colibri.ASTIDTimeInSeconds"
               label="AST + ID"
               hint="seconds"
               lazy-rules
@@ -49,7 +49,7 @@
               dense
               filled
               type="number"
-              v-model.number="data.ASTIDPurityTimeInSeconds"
+              v-model.number="settings.colibri.ASTIDPurityTimeInSeconds"
               label="AST + ID + Purity plates"
               hint="seconds"
               lazy-rules
@@ -64,7 +64,7 @@
               dense
               filled
               type="number"
-              v-model.number="data.ASTPurityTimeInSeconds"
+              v-model.number="settings.colibri.ASTPurityTimeInSeconds"
               label="AST + Purity plates"
               hint="seconds"
               lazy-rules
@@ -83,32 +83,18 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import { ColibriSettings } from '@/types';
+import appStorage from '@/store';
 
 export default defineComponent({
   name: 'ColibriSettings',
-  emits: ["dataChanged"],
-  data() {
+  setup() {
+    const {
+      settings
+    } = appStorage();
+
     return {
-      data: {
-        IDTimeInSeconds: 60,
-        ASTTimeInSeconds: 120,
-        ASTIDTimeInSeconds: 175,
-        ASTIDPurityTimeInSeconds: 240,
-        ASTPurityTimeInSeconds: 180
-      } as ColibriSettings
+      settings
     }
-  },
-  watch: {
-    data: {
-      handler: function (newVal: ColibriSettings) {
-        this.$emit("dataChanged", newVal);
-      },
-      deep: true
-    }
-  },
-  mounted() {
-    this.$emit("dataChanged", this.data);
   }
 });
 </script>

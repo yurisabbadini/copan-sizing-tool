@@ -7,7 +7,7 @@
             dense
             filled
             type="number"
-            v-model.number="streakingPatterns[0].timeInSeconds"
+            v-model.number="settings.slides.streakingPatterns[0].timeInSeconds"
             label="Slide only"
             hint="seconds"
             lazy-rules
@@ -21,7 +21,7 @@
             dense
             filled
             type="number"
-            v-model.number="streakingPatterns[1].timeInSeconds"
+            v-model.number="settings.slides.streakingPatterns[1].timeInSeconds"
             label="Slide and other"
             hint="seconds"
             lazy-rules
@@ -40,35 +40,18 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import { SlidesStreakingPattern } from '@/types';
+import appStorage from '@/store';
 
 export default defineComponent({
   name: 'SlidesSettings',
-  emits: ["dataChanged"],
-  data() {
+  setup() {
+    const {
+      settings
+    } = appStorage();
+
     return {
-      streakingPatterns: [
-        {
-          pattern: "slide_only",
-          timeInSeconds: 60
-        },
-        {
-          pattern: "slide_and_other",
-          timeInSeconds: 30
-        }
-      ] as SlidesStreakingPattern[]
+      settings
     }
-  },
-  watch: {
-    streakingPatterns: {
-      handler: function (newVal: SlidesStreakingPattern[]) {
-        this.$emit("dataChanged", newVal);
-      },
-      deep: true
-    }
-  },
-  mounted() {
-    this.$emit("dataChanged", this.streakingPatterns);
   }
 });
 </script>
