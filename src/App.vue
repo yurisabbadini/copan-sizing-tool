@@ -25,7 +25,7 @@
       <q-list>
         <q-item clickable tag="a" to="/">
           <q-item-section avatar>
-            <q-icon name="settings" />
+            <q-icon name="create" />
           </q-item-section>
           <q-item-section>
             <q-item-label>Input</q-item-label>
