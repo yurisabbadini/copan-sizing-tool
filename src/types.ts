@@ -155,7 +155,7 @@ export type PeakDay = {
 
 export type DailyData = {
 	dayOfWeek: number;
-	value: number;
+	totalTime: number;
 	percentage: number;
 	totalSamples: number;
 	isPeakDay: boolean;

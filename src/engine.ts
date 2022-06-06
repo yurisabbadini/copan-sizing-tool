@@ -492,7 +492,7 @@ function getDayTotalTime(params: { data: WeightedDailyActivities[], dayOfWeek: n
 
     return {
         dayOfWeek: params.dayOfWeek,
-        value: dayValue,
+        totalTime: dayValue,
         percentage: (dayValue / 3600) / 24 * 100,
         totalSamples: params.samples,
         isPeakDay: false
@@ -511,6 +511,16 @@ export function getPeakDay(params: { data: WeightedDailyActivities[], samplesPer
         });
         res.push(dailyData);
     }
+
+    res.sort((a, b) => {
+        return b.totalTime - a.totalTime;
+    });
+    res.forEach(element => {
+        element.percentage = element.totalTime / res[0].totalTime * 100
+    });
+    res.sort((a, b) => {
+        return a.dayOfWeek - b.dayOfWeek;
+    });
     return res;
 }
 

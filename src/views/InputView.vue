@@ -34,20 +34,16 @@
     <DailyVolumes />
   </div>
 </div>
-<br/>
-<br/>
-<br/>
-<button @click="calcola">CALCOLA</button>
-
-<br/>
-<br/>
-<br/>
-<div v-for="dd in dailyData" :key="dd.dayOfWeek">
-DAY OF WEEK: {{ dd.dayOfWeek }}<br/>
-DAY SAMPLE: {{ dd.totalSamples }}<br/>
-PERCENTAGE: {{ dd.percentage }} %<br/>
-TIME: {{ (dd.value / 3600).toFixed(2) }}<br/><br/> 
+<div class="row">
+  <div class="col">
+    <PeakDayResult :daily-data="dailyData" />
+  </div>
 </div>
+
+<q-page-sticky position="bottom-right" :offset="[18, 18]">
+  <q-btn fab color="primary">CALCOLA</q-btn>
+</q-page-sticky>
+
 </template>
 
 <script lang="ts">
@@ -60,6 +56,7 @@ import PrimaryProtocols from '@/components/input/PrimaryProtocols.vue'
 import PrimaryProtocolsDetails from '@/components/input/PrimaryProtocolsDetails.vue'
 import SecondaryProtocols from '@/components/input/SecondaryProtocols.vue'
 import DailyVolumes from '@/components/input/DailyVolumes.vue'
+import PeakDayResult from '@/components/PeakDayResult.vue'
 import { getPeakDay, getWeightedDailyActivities, getWeightedDaysTimesInSeconds } from '@/engine';
 import appStorage from '@/store';
 
@@ -72,7 +69,8 @@ export default defineComponent({
     PrimaryProtocols,
     PrimaryProtocolsDetails,
     SecondaryProtocols,
-    DailyVolumes
+    DailyVolumes,
+    PeakDayResult
   },
   setup() {
     const {

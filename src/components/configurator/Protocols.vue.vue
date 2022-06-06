@@ -29,6 +29,8 @@
 </style>
 
 <script lang="ts">
+//TODO: di default se c'è solo una WASP togliere la colonna WASP 2 e mettere il 100% dei samples su WASP 1 altrimenti lo dividi uniforme su tutte le WASP
+
 import { defineComponent } from 'vue';
 import appStorage from '@/store';
 import { LineConfigProtocol, TableColumn } from '@/types';
