@@ -34,6 +34,20 @@
     <DailyVolumes />
   </div>
 </div>
+<br/>
+<br/>
+<br/>
+<button @click="calcola">CALCOLA</button>
+
+<br/>
+<br/>
+<br/>
+<div v-for="dd in dailyData" :key="dd.dayOfWeek">
+DAY OF WEEK: {{ dd.dayOfWeek }}<br/>
+DAY SAMPLE: {{ dd.totalSamples }}<br/>
+PERCENTAGE: {{ dd.percentage }} %<br/>
+TIME: {{ (dd.value / 3600).toFixed(2) }}<br/><br/> 
+</div>
 </template>
 
 <script lang="ts">
@@ -46,6 +60,8 @@ import PrimaryProtocols from '@/components/input/PrimaryProtocols.vue'
 import PrimaryProtocolsDetails from '@/components/input/PrimaryProtocolsDetails.vue'
 import SecondaryProtocols from '@/components/input/SecondaryProtocols.vue'
 import DailyVolumes from '@/components/input/DailyVolumes.vue'
+import { getPeakDay, getWeightedDailyActivities, getWeightedDaysTimesInSeconds } from '@/engine';
+import appStorage from '@/store';
 
 export default defineComponent({
   name: 'InputView',
@@ -58,5 +74,34 @@ export default defineComponent({
     SecondaryProtocols,
     DailyVolumes
   },
+  setup() {
+    const {
+      growthTrends,
+      primaryProtocols,
+      samplesPerDay,
+      settings,
+      dailyData
+    } = appStorage();
+
+    return {
+      growthTrends,
+      primaryProtocols,
+      samplesPerDay,
+      settings,
+      dailyData
+    }
+  },
+  methods: {
+    calcola() {
+      const weightedDayTimes = getWeightedDaysTimesInSeconds({
+        growthTrends: this.growthTrends,
+        protocols: this.primaryProtocols,
+        samplesPerDay: this.samplesPerDay,
+        settings: this.settings
+      });
+      const weightedDailyActivities = getWeightedDailyActivities(weightedDayTimes);
+      this.dailyData = getPeakDay({ data: weightedDailyActivities, samplesPerDay: this.samplesPerDay });
+    }
+  }
 });
 </script>

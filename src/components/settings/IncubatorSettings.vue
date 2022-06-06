@@ -73,9 +73,6 @@
               ]"
           />
         </div>
-        <div class="col">
-          <q-checkbox v-model="settings.incubator.singleIncubator" label="Single incubator" />
-        </div>
     </div>
   </q-card>
 </template>

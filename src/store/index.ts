@@ -1,6 +1,6 @@
 import { reactive, toRefs } from "vue";
 
-import { GrowthTrends, PlatesStreakingPattern, PrimaryProtocol, SecondaryProtocol, SamplePerDay, Settings, SlidesStreakingPattern, LineConfig } from "@/types";
+import { GrowthTrends, PlatesStreakingPattern, PrimaryProtocol, SecondaryProtocol, SamplePerDay, Settings, SlidesStreakingPattern, LineConfig, DailyData } from "@/types";
 
 const state = reactive({
     settings: {
@@ -19,7 +19,7 @@ const state = reactive({
         },
         incubator: {
           loadingPlatesPerHour: 125,
-          recordingPlatesPerHour: 125,
+          recordingPlatesPerHour: 100,
           unloadingSinglePlatesPerHour: 180,
           unloadingMultiplePlatesPerHour: 250,
           incubatorSafetyMargin: 20,
@@ -74,23 +74,23 @@ const state = reactive({
       samplesPerDay: [
         {
           dayOfWeek: 1,
-          samples: 0
+          samples: 250
         },
         {
           dayOfWeek: 2,
-          samples: 0
+          samples: 200
         },
         {
           dayOfWeek: 3,
-          samples: 0
+          samples: 230
         },
         {
           dayOfWeek: 4,
-          samples: 0
+          samples: 180
         },
         {
           dayOfWeek: 5,
-          samples: 0
+          samples: 100
         },
         {
           dayOfWeek: 6,
@@ -105,32 +105,130 @@ const state = reactive({
         startYear: new Date().getFullYear(),
         endYear: new Date().getFullYear() + 3,
         yearOfReference: new Date().getFullYear() + 3,
-        growthTrends: []
+        growthTrends: [5, 5, 10]
       } as GrowthTrends,
       fteHours: {
         wasp: {
           start: 8,
-          end: 19
+          end: 18
         },
         manualStreaking: {
           start: 8,
-          end: 19
+          end: 18
         },
         screening: {
           start: 8,
-          end: 19
+          end: 18
         },
         reading: {
           start: 8,
-          end: 19
+          end: 18
         },
         colibri: {
           start: 8,
-          end: 19
+          end: 18
         }
       },
-      primaryProtocols: [] as PrimaryProtocol[],
+      primaryProtocols: [
+        {
+          id: "1",
+          name: "urine",
+          hasWasp: true,
+          hasWasplab: true,
+          pictureT0: true,
+          samplesPerDayAvg: 100,
+          waspData: {
+            streakingPattern: "1",
+            platesPerSample: 2,
+            brothsPerSample: 1,
+            slidesPerSample: 0
+          },
+          wasplabData: {
+            air: {
+              platesPerSample: 2,
+              readHours: "16,40"
+            },
+            co2: {
+              platesPerSample: 0,
+              readHours: ""
+            }
+          },
+          brothsPercentage: 0,
+          hasAST: false,
+          hasASTID: false,
+          hasID: false,
+          negativityRate: 0,
+          purityPlatesPercentage: 0,
+          subculturePercentage: 0,
+          volumes: [],
+        },
+        {
+          id: "2",
+          name: "gola",
+          hasWasp: true,
+          hasWasplab: true,
+          pictureT0: true,
+          samplesPerDayAvg: 60,
+          waspData: {
+            streakingPattern: "2",
+            platesPerSample: 1,
+            brothsPerSample: 0,
+            slidesPerSample: 1
+          },
+          wasplabData: {
+            air: {
+              platesPerSample: 0,
+              readHours: ""
+            },
+            co2: {
+              platesPerSample: 1,
+              readHours: "20,40,60"
+            }
+          },
+          brothsPercentage: 0,
+          hasAST: false,
+          hasASTID: false,
+          hasID: false,
+          negativityRate: 0,
+          purityPlatesPercentage: 0,
+          subculturePercentage: 0,
+          volumes: [],
+        },
+        {
+          id: "3",
+          name: "feci",
+          hasWasp: true,
+          hasWasplab: true,
+          pictureT0: true,
+          samplesPerDayAvg: 10,
+          waspData: {
+            streakingPattern: "3",
+            platesPerSample: 3,
+            brothsPerSample: 0,
+            slidesPerSample: 0
+          },
+          wasplabData: {
+            air: {
+              platesPerSample: 1,
+              readHours: "24,48"
+            },
+            co2: {
+              platesPerSample: 2,
+              readHours: "16,40"
+            }
+          },
+          brothsPercentage: 0,
+          hasAST: false,
+          hasASTID: false,
+          hasID: false,
+          negativityRate: 0,
+          purityPlatesPercentage: 0,
+          subculturePercentage: 0,
+          volumes: [],
+        }
+      ] as PrimaryProtocol[],
       secondaryProtocols: [] as SecondaryProtocol[],
+      dailyData: [] as DailyData[],
       lines: [] as LineConfig[],
 });
 

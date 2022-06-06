@@ -136,6 +136,7 @@ export type SecondaryProtocol = {
 export type WeightedDayTimes = {
 	dayOfWeek: number;
 	timeInSeconds: number;
+	samples: number;
 	type: "plates" | "slides" | "broths" | "loading_air" | "recording_air" | "unloading_air" | "loading_co2" | "recording_co2" | "unloading_co2";
 };
 
@@ -150,6 +151,14 @@ export type PeakDay = {
 	value: number;
 	hours: number;
 	percentage: number;
+}
+
+export type DailyData = {
+	dayOfWeek: number;
+	value: number;
+	percentage: number;
+	totalSamples: number;
+	isPeakDay: boolean;
 }
 
 export type DailyLoad = {
