@@ -171,12 +171,9 @@ export type LineConfigProtocol = {
 	name: string;
 	wasp1Percentage: number;
 	wasp2Percentage: number;
-	o2Incubator1Percentage: number;
-	o2Incubator2Percentage: number;
-	o2Incubator3Percentage: number;
-	co2Incubator1Percentage: number;
-	co2Incubator2Percentage: number;
-	co2Incubator3Percentage: number;
+	samples: number;
+	o2IncubatorPercentage: number;
+	co2IncubatorPercentage: number;
 }
 
 export type LineConfig = {
