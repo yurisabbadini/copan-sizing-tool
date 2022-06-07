@@ -1,7 +1,7 @@
 <template>
   <q-card class="q-pa-sm q-mt-sm">
     <q-item-label class="q-mb-sm" overline>Lines</q-item-label>
-    <q-table :columns="tableColumns"  :rows="lines" row-key="id" dense>
+    <q-table :columns="tableColumns"  :rows="lines" row-key="id" dense hide-bottom :pagination="{ rowsPerPage: 0}">
       <template v-slot:body="props">
       <q-tr :props="props">
           <q-td key="name" :props="props">
@@ -21,7 +21,7 @@
             <q-select
               dense
               v-model.number="props.row.numberOfO2Incubator"
-              :options="[1, 2, 4]"
+              :options="[1, 2, 3]"
             ></q-select>
           </q-td>
           <q-td key="numberOfCO2Incubator" :props="props">
@@ -39,6 +39,12 @@
           </q-td>
           <q-td key="phenomatrix" :props="props">
             <q-checkbox dense v-model="props.row.phenomatrix"/>
+          </q-td>
+          <q-td key="waspOccupancyRate" :props="props">
+            {{ props.row.waspOccupancyRate }}
+          </q-td>
+          <q-td key="wasplabOccupancyRate" :props="props">
+            {{ props.row.wasplabOccupancyRate }}
           </q-td>
           <q-td key="actions" :props="props">
             <q-btn flat round color="red" icon="remove_circleoutline" size="xs" @click="removeLine(props.row.id)"/>
@@ -109,13 +115,13 @@ export default defineComponent({
         name: "waspOccupancyRate",
         label: 'WASP Occupancy rate', //TODO: tempo in % dei protocolli che sono su questa linea
         align: 'left',
-        field: (row: LineConfig) => row.phenomatrix,
+        field: (row: LineConfig) => row.waspOccupancyRate,
       },
       { 
         name: "wasplabOccupancyRate",
         label: 'WASPLAB Occupancy rate', //TODO: tempo in % dei protocolli che sono su questa linea
         align: 'left',
-        field: (row: LineConfig) => row.phenomatrix,
+        field: (row: LineConfig) => row.wasplabOccupancyRate,
       },
       { 
         name: "actions",
@@ -145,7 +151,9 @@ export default defineComponent({
         numberOfWasp: 1,
         phenomatrix: false,
         protocols: [],
-        radian: false
+        radian: false,
+        waspOccupancyRate: 0,
+        wasplabOccupancyRate: 0,
       });
     },
     removeLine(id: string) {

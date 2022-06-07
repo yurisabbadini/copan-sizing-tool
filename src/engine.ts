@@ -237,7 +237,7 @@ export function getWeightedDaysTimesInSeconds(
                     type: "plates",
                     dayOfWeek: dayOfWeek,
                     timeInSeconds: totalPlatesTime,
-                    samples: 0,
+                    samples: totalPlates,
                 });
             } else {
                 weightedDaysTimesInSeconds[platesIndex].timeInSeconds +=
@@ -252,7 +252,7 @@ export function getWeightedDaysTimesInSeconds(
                     type: "slides",
                     dayOfWeek: dayOfWeek,
                     timeInSeconds: totalSlidesTime,
-                    samples: 0,
+                    samples: totalSlides,
                 });
             } else {
                 weightedDaysTimesInSeconds[slidesIndex].timeInSeconds +=
@@ -267,7 +267,7 @@ export function getWeightedDaysTimesInSeconds(
                     type: "broths",
                     dayOfWeek: dayOfWeek,
                     timeInSeconds: totalBrothsTime,
-                    samples: 0,
+                    samples: totalBroths,
                 });
             } else {
                 weightedDaysTimesInSeconds[brothsIndex].timeInSeconds +=
@@ -282,7 +282,7 @@ export function getWeightedDaysTimesInSeconds(
                     type: "loading_air",
                     dayOfWeek: dayOfWeek,
                     timeInSeconds: totalLoadingAirPlatesTime,
-                    samples: 0,
+                    samples: totalLoadingAirPlates,
                 });
             } else {
                 weightedDaysTimesInSeconds[loadingAirIndex].timeInSeconds += totalLoadingAirPlatesTime;
@@ -296,7 +296,7 @@ export function getWeightedDaysTimesInSeconds(
                     type: "loading_co2",
                     dayOfWeek: dayOfWeek,
                     timeInSeconds: totalLoadingCO2PlatesTime,
-                    samples: 0,
+                    samples: totalLoadingCO2Plates,
                 });
             } else {
                 weightedDaysTimesInSeconds[loadingCO2Index].timeInSeconds += totalLoadingCO2PlatesTime;
@@ -310,7 +310,7 @@ export function getWeightedDaysTimesInSeconds(
                     type: "recording_air",
                     dayOfWeek: dayOfWeek,
                     timeInSeconds: totalRecordingAirPlatesTime,
-                    samples: 0,
+                    samples: totalRecordingAirPlates,
                 });
             } else {
                 weightedDaysTimesInSeconds[recordingAirIndex].timeInSeconds += totalRecordingAirPlatesTime;
@@ -324,7 +324,7 @@ export function getWeightedDaysTimesInSeconds(
                     type: "recording_co2",
                     dayOfWeek: dayOfWeek,
                     timeInSeconds: totalRecordingCO2PlatesTime,
-                    samples: 0,
+                    samples: totalRecordingCO2Plates,
                 });
             } else {
                 weightedDaysTimesInSeconds[recordingCO2Index].timeInSeconds += totalRecordingCO2PlatesTime;
@@ -338,7 +338,7 @@ export function getWeightedDaysTimesInSeconds(
                     type: "unloading_air",
                     dayOfWeek: dayOfWeek,
                     timeInSeconds: totalUnloadingAirPlatesTime,
-                    samples: 0,
+                    samples: totalUnloadingAirPlates,
                 });
             } else {
                 weightedDaysTimesInSeconds[unloadingAirIndex].timeInSeconds += totalUnloadingAirPlatesTime;
@@ -352,7 +352,7 @@ export function getWeightedDaysTimesInSeconds(
                     type: "unloading_co2",
                     dayOfWeek: dayOfWeek,
                     timeInSeconds: totalUnloadingCO2PlatesTime,
-                    samples: 0,
+                    samples: totalUnloadingCO2Plates,
                 });
             } else {
                 weightedDaysTimesInSeconds[unloadingCO2Index].timeInSeconds += totalUnloadingCO2PlatesTime;
@@ -529,6 +529,9 @@ export function getPeakDay(params: { data: WeightedDailyActivities[], samplesPer
     });
     res.forEach(element => {
         element.percentage = element.totalTime / res[0].totalTime * 100
+        if(element.percentage == 100) {
+            element.isPeakDay = true;
+        }
     });
     res.sort((a, b) => {
         return a.dayOfWeek - b.dayOfWeek;

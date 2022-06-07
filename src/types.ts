@@ -169,11 +169,21 @@ export type DailyLoad = {
 
 export type LineConfigProtocol = {
 	name: string;
-	wasp1Percentage: number;
-	wasp2Percentage: number;
 	samples: number;
-	o2IncubatorPercentage: number;
-	co2IncubatorPercentage: number;
+	wasp1Percentage: number;
+	wasp1Plates: number;
+	wasp1Slides: number;
+	wasp1Broths: number;
+	wasp2Percentage: number;
+	wasp2Plates: number;
+	wasp2Slides: number;
+	wasp2Broths: number;
+	o2Loading: number;
+	o2Recording: number;
+	o2Unloading: number;
+	co2Loading: number;
+	co2Recording: number;
+	co2Unloading: number;
 }
 
 export type LineConfig = {
@@ -185,5 +195,7 @@ export type LineConfig = {
 	collaborativeStation: boolean;
 	radian: boolean;
 	phenomatrix: boolean;
+	waspOccupancyRate: number;
+	wasplabOccupancyRate: number;
 	protocols: LineConfigProtocol[];
 }

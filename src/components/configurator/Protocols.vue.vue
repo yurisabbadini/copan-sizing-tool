@@ -1,29 +1,65 @@
 <template>
   <q-card class="q-pa-sm q-mt-sm">
     <q-item-label class="q-mb-sm" overline>{{ title }}</q-item-label>
-    <q-table :columns="line?.numberOfWasp == 1 ? tableColumns1 : tableColumns2"  :rows="line?.protocols" row-key="id" dense>
+    <q-table :columns="line?.numberOfWasp == 1 ? tableColumns1 : tableColumns2"  :rows="line?.protocols" row-key="id" dense hide-bottom :pagination="{ rowsPerPage: 0}">
       <template v-slot:body="props">
       <q-tr :props="props">
           <q-td key="name" :props="props">
             {{ props.row.name }}
           </q-td>
           <q-td key="samples" :props="props">
-            {{ props.row.samples }}
+            {{ props.row.samples }} %
             <q-popup-edit v-model.number="props.row.samples" auto-save v-slot="scope">
               <q-input v-model.number="scope.value" dense autofocus @keyup.enter="scope.set" />
             </q-popup-edit>
           </q-td>
           <q-td key="wasp1Percentage" :props="props">
-            {{ props.row.wasp1Percentage }}
+            {{ props.row.wasp1Percentage }} %
+            <q-popup-edit v-model.number="props.row.wasp1Percentage" auto-save v-slot="scope">
+              <q-input v-model.number="scope.value" dense autofocus @keyup.enter="scope.set" />
+            </q-popup-edit>
+          </q-td>
+          <q-td key="wasp1Plates" :props="props">
+            {{ props.row.wasp1Plates }}
+          </q-td>
+          <q-td key="wasp1Slides" :props="props">
+            {{ props.row.wasp1Slides }}
+          </q-td>
+          <q-td key="wasp1Broths" :props="props">
+            {{ props.row.wasp1Broths }}
           </q-td>
           <q-td key="wasp2Percentage" :props="props">
-            {{ props.row.wasp2Percentage }}
+            {{ props.row.wasp2Percentage }} %
+            <q-popup-edit v-model.number="props.row.wasp2Percentage" auto-save v-slot="scope">
+              <q-input v-model.number="scope.value" dense autofocus @keyup.enter="scope.set" />
+            </q-popup-edit>
           </q-td>
-          <q-td key="o2IncubatorPercentage" :props="props">
-            {{ props.row.wasp2Percentage }}
+          <q-td key="wasp2Plates" :props="props">
+            {{ props.row.wasp2Plates }}
           </q-td>
-          <q-td key="co2IncubatorPercentage" :props="props">
-            {{ props.row.wasp2Percentage }}
+          <q-td key="wasp2Slides" :props="props">
+            {{ props.row.wasp2Slides }}
+          </q-td>
+          <q-td key="wasp2Broths" :props="props">
+            {{ props.row.wasp2Broths }}
+          </q-td>
+          <q-td key="o2Loading" :props="props">
+            {{ props.row.o2Loading }}
+          </q-td>
+          <q-td key="co2Loading" :props="props">
+            {{ props.row.co2Loading }}
+          </q-td>
+          <q-td key="o2Recording" :props="props">
+            {{ props.row.o2Recording }}
+          </q-td>
+          <q-td key="co2Recording" :props="props">
+            {{ props.row.co2Recording }}
+          </q-td>
+          <q-td key="co2Unloading" :props="props">
+            {{ props.row.co2Unloading }}
+          </q-td>
+          <q-td key="co2Unloading" :props="props">
+            {{ props.row.co2Unloading }}
           </q-td>
         </q-tr>
       </template>
@@ -51,29 +87,36 @@ export default defineComponent({
     const {
       lines,
       primaryProtocols,
-      secondaryProtocols,
+      dailyData,
+      weightedDayTimes
     } = appStorage();
 
+    const peakDay = dailyData.value.find((x) => x.isPeakDay);
+    const weightedPeakDayTimes = weightedDayTimes.value.filter((x) => x.dayOfWeek == peakDay?.dayOfWeek);
+    console.log(weightedPeakDayTimes)
     const line = lines.value.find((x) => x.id == props.lineId);
     if(line) {
+      line.protocols = [];
       primaryProtocols.value.forEach(element => {
+        const wasp1Percentage = line.numberOfWasp == 1 ? 100 : 50;
+        console.log(weightedPeakDayTimes.find((x) => x.type == "plates")?.samples)
         line.protocols.push({
-          co2IncubatorPercentage: 0,
           name: element.name,
-          o2IncubatorPercentage: 0,
-          wasp1Percentage: 0,
-          wasp2Percentage: 0,
-          samples: 0,
-        });
-      });
-      secondaryProtocols.value.forEach(element => {
-        line.protocols.push({
-          co2IncubatorPercentage: 0,
-          name: element.name + " " + element.from,
-          o2IncubatorPercentage: 0,
-          wasp1Percentage: 0,
-          wasp2Percentage: 0,
-          samples: 0,
+          samples: Number((100 / lines.value.length).toFixed(2)),
+          wasp1Percentage: wasp1Percentage,
+          wasp2Percentage: line.numberOfWasp == 1 ? 0 : 50,
+          co2Loading: 0,
+          co2Recording: 0,
+          co2Unloading: 0,
+          o2Loading: 0,
+          o2Recording: 0,
+          o2Unloading: 0,
+          wasp1Broths: 0,
+          wasp1Plates: weightedPeakDayTimes.find((x) => x.type == "plates")?.samples || 0 * wasp1Percentage / 100,
+          wasp1Slides: 0,
+          wasp2Broths: 0,
+          wasp2Plates: 0,
+          wasp2Slides: 0
         });
       });
     }
@@ -98,168 +141,109 @@ export default defineComponent({
         field: (row: LineConfigProtocol) => row.wasp1Percentage,
       },
       { 
-        name: "o2Loading",
-        label: 'Plates',
+        name: "wasp1Plates",
+        label: 'Plates (1)',
         align: 'left',
-        field: (row: LineConfigProtocol) => row.o2IncubatorPercentage,
+        field: (row: LineConfigProtocol) => row.wasp1Plates,
       },
       { 
-        name: "o2Loading",
-        label: 'Slides',
+        name: "wasp1Slides",
+        label: 'Slides (1)',
         align: 'left',
-        field: (row: LineConfigProtocol) => row.o2IncubatorPercentage,
+        field: (row: LineConfigProtocol) => row.wasp1Slides,
       },
       { 
-        name: "o2Loading",
-        label: 'Broths',
+        name: "wasp1Broths",
+        label: 'Broths (1)',
         align: 'left',
-        field: (row: LineConfigProtocol) => row.o2IncubatorPercentage,
+        field: (row: LineConfigProtocol) => row.wasp1Broths,
       },
       { 
         name: "o2Loading",
         label: 'Air loading',
         align: 'left',
-        field: (row: LineConfigProtocol) => row.o2IncubatorPercentage,
+        field: (row: LineConfigProtocol) => row.o2Loading,
       },
       { 
         name: "co2Loading",
         label: 'CO2 loading',
         align: 'left',
-        field: (row: LineConfigProtocol) => row.co2IncubatorPercentage,
+        field: (row: LineConfigProtocol) => row.co2Loading,
       },
       { 
         name: "o2Recording",
         label: 'Air recording',
         align: 'left',
-        field: (row: LineConfigProtocol) => row.o2IncubatorPercentage,
+        field: (row: LineConfigProtocol) => row.o2Recording,
       },
       { 
         name: "co2Recording",
         label: 'CO2 recording',
         align: 'left',
-        field: (row: LineConfigProtocol) => row.co2IncubatorPercentage,
+        field: (row: LineConfigProtocol) => row.co2Recording,
       },
       { 
         name: "o2Unloading",
         label: 'CO2 unloading',
         align: 'left',
-        field: (row: LineConfigProtocol) => row.co2IncubatorPercentage,
+        field: (row: LineConfigProtocol) => row.o2Unloading,
       },
       { 
         name: "co2Unloading",
         label: 'CO2 unloading',
         align: 'left',
-        field: (row: LineConfigProtocol) => row.co2IncubatorPercentage,
+        field: (row: LineConfigProtocol) => row.o2Unloading,
       }
     ];
 
-    const tableColumns2: TableColumn<LineConfigProtocol>[] = [
-      { 
-        name: "name",
-        label: 'Name',
-        align: 'left',
-        field: (row: LineConfigProtocol) => row.name,
-      },
-      { 
-        name: "samples",
-        label: 'Samples',
-        align: 'left',
-        field: (row: LineConfigProtocol) => row.samples,
-      },
-      { 
-        name: "wasp1Percentage",
-        label: 'WASP 1',
-        align: 'left',
-        field: (row: LineConfigProtocol) => row.wasp1Percentage,
-      },
-      { 
-        name: "o2Loading",
-        label: 'Plates',
-        align: 'left',
-        field: (row: LineConfigProtocol) => row.o2IncubatorPercentage,
-      },
-      { 
-        name: "o2Loading",
-        label: 'Slides',
-        align: 'left',
-        field: (row: LineConfigProtocol) => row.o2IncubatorPercentage,
-      },
-      { 
-        name: "o2Loading",
-        label: 'Broths',
-        align: 'left',
-        field: (row: LineConfigProtocol) => row.o2IncubatorPercentage,
-      },
-      { 
-        name: "wasp1Percentage",
-        label: 'WASP 2',
-        align: 'left',
-        field: (row: LineConfigProtocol) => row.wasp1Percentage,
-      },
-      { 
-        name: "o2Loading",
-        label: 'Plates',
-        align: 'left',
-        field: (row: LineConfigProtocol) => row.o2IncubatorPercentage,
-      },
-      { 
-        name: "o2Loading",
-        label: 'Slides',
-        align: 'left',
-        field: (row: LineConfigProtocol) => row.o2IncubatorPercentage,
-      },
-      { 
-        name: "o2Loading",
-        label: 'Broths',
-        align: 'left',
-        field: (row: LineConfigProtocol) => row.o2IncubatorPercentage,
-      },
-      { 
-        name: "o2Loading",
-        label: 'Air loading',
-        align: 'left',
-        field: (row: LineConfigProtocol) => row.o2IncubatorPercentage,
-      },
-      { 
-        name: "co2Loading",
-        label: 'CO2 loading',
-        align: 'left',
-        field: (row: LineConfigProtocol) => row.co2IncubatorPercentage,
-      },
-      { 
-        name: "o2Recording",
-        label: 'Air recording',
-        align: 'left',
-        field: (row: LineConfigProtocol) => row.o2IncubatorPercentage,
-      },
-      { 
-        name: "co2Recording",
-        label: 'CO2 recording',
-        align: 'left',
-        field: (row: LineConfigProtocol) => row.co2IncubatorPercentage,
-      },
-      { 
-        name: "o2Unloading",
-        label: 'CO2 unloading',
-        align: 'left',
-        field: (row: LineConfigProtocol) => row.co2IncubatorPercentage,
-      },
-      { 
-        name: "co2Unloading",
-        label: 'CO2 unloading',
-        align: 'left',
-        field: (row: LineConfigProtocol) => row.co2IncubatorPercentage,
-      }
-    ];
+    const tableColumns2: TableColumn<LineConfigProtocol>[] = [];
+    for(const tc of tableColumns1) {
+      tableColumns2.push(tc);
+    }
+    tableColumns2.splice(6, 0, { 
+      name: "wasp2Percentage",
+      label: 'WASP 2',
+      align: 'left',
+      field: (row: LineConfigProtocol) => row.wasp2Percentage,
+    });
+    tableColumns2.splice(7, 0, { 
+      name: "wasp2Plates",
+      label: 'Plates (2)',
+      align: 'left',
+      field: (row: LineConfigProtocol) => row.wasp2Plates,
+    });
+    tableColumns2.splice(8, 0, { 
+      name: "wasp2Slides",
+      label: 'Slides (2)',
+      align: 'left',
+      field: (row: LineConfigProtocol) => row.wasp2Slides,
+    });
+    tableColumns2.splice(9, 0, { 
+      name: "wasp2Broths",
+      label: 'Broths (2)',
+      align: 'left',
+      field: (row: LineConfigProtocol) => row.wasp2Broths,
+    });
    
     return {
       tableColumns1,
       tableColumns2,
-      line
+      lines,
+      line,
+      weightedPeakDayTimes
     }
   },
-  methods: {
-    
+  watch: {
+    lines: {
+      handler: function () {
+        this.line?.protocols.forEach((p) =>  {
+          p.samples = Number((100 / this.lines.length).toFixed(2));
+          p.wasp1Percentage = this.line?.numberOfWasp == 1 ? 100 : 50;
+          p.wasp2Percentage = this.line?.numberOfWasp == 1 ? 0 : 50;
+        })
+      },
+      deep: true
+    }
   }
 });
 </script>

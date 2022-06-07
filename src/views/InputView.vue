@@ -83,7 +83,8 @@ export default defineComponent({
       primaryProtocols,
       samplesPerDay,
       settings,
-      dailyData
+      dailyData,
+      weightedDayTimes
     } = appStorage();
 
     return {
@@ -91,18 +92,19 @@ export default defineComponent({
       primaryProtocols,
       samplesPerDay,
       settings,
-      dailyData
+      dailyData,
+      weightedDayTimes
     }
   },
   methods: {
     calcola() {
-      const weightedDayTimes = getWeightedDaysTimesInSeconds({
+      this.weightedDayTimes = getWeightedDaysTimesInSeconds({
         growthTrends: this.growthTrends,
         protocols: this.primaryProtocols,
         samplesPerDay: this.samplesPerDay,
         settings: this.settings
       });
-      const weightedDailyActivities = getWeightedDailyActivities(weightedDayTimes);
+      const weightedDailyActivities = getWeightedDailyActivities(this.weightedDayTimes);
       this.dailyData = getPeakDay({ data: weightedDailyActivities, samplesPerDay: this.samplesPerDay });
       const sundayValue = this.dailyData[0];
       this.dailyData.push(sundayValue);

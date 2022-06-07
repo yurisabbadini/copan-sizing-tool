@@ -42,7 +42,7 @@ export default defineComponent({
               return weekDays[Number(val)];
             },
             classes: (row: DailyData) => {
-              if(row.percentage == 100) {
+              if(row.isPeakDay) {
                 return "row-peak-day";
               }
               return "";
@@ -56,7 +56,7 @@ export default defineComponent({
             align: 'left',
             field: (row: DailyData) => row.totalSamples,
             classes: (row: DailyData) => {
-              if(row.percentage == 100) {
+              if(row.isPeakDay) {
                 return "row-peak-day";
               }
               return "";
@@ -73,7 +73,7 @@ export default defineComponent({
               return `${Number(val).toFixed(2)} %`;
             },
             classes: (row: DailyData) => {
-              if(row.percentage == 100) {
+              if(row.isPeakDay) {
                 return "row-peak-day";
               }
               return "";

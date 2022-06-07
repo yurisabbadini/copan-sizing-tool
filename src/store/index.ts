@@ -1,6 +1,6 @@
 import { reactive, toRefs } from "vue";
 
-import { GrowthTrends, PlatesStreakingPattern, PrimaryProtocol, SecondaryProtocol, SamplePerDay, Settings, SlidesStreakingPattern, LineConfig, DailyData } from "@/types";
+import { GrowthTrends, PlatesStreakingPattern, PrimaryProtocol, SecondaryProtocol, SamplePerDay, Settings, SlidesStreakingPattern, LineConfig, DailyData, WeightedDayTimes } from "@/types";
 
 const state = reactive({
     settings: {
@@ -228,6 +228,7 @@ const state = reactive({
         }
       ] as PrimaryProtocol[],
       secondaryProtocols: [] as SecondaryProtocol[],
+      weightedDayTimes: [] as WeightedDayTimes[],
       dailyData: [] as DailyData[],
       lines: [] as LineConfig[],
 });
