@@ -106,6 +106,18 @@ export default defineComponent({
         field: (row: LineConfig) => row.phenomatrix,
       },
       { 
+        name: "waspOccupancyRate",
+        label: 'WASP Occupancy rate', //TODO: tempo in % dei protocolli che sono su questa linea
+        align: 'left',
+        field: (row: LineConfig) => row.phenomatrix,
+      },
+      { 
+        name: "wasplabOccupancyRate",
+        label: 'WASPLAB Occupancy rate', //TODO: tempo in % dei protocolli che sono su questa linea
+        align: 'left',
+        field: (row: LineConfig) => row.phenomatrix,
+      },
+      { 
         name: "actions",
         label: '',
         align: 'left',

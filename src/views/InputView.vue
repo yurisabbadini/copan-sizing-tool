@@ -41,7 +41,7 @@
 </div>
 
 <q-page-sticky position="bottom-right" :offset="[18, 18]">
-  <q-btn fab color="primary">CALCOLA</q-btn>
+  <q-btn fab color="primary" @click="calcola">CALCOLA</q-btn>
 </q-page-sticky>
 
 </template>
@@ -99,6 +99,9 @@ export default defineComponent({
       });
       const weightedDailyActivities = getWeightedDailyActivities(weightedDayTimes);
       this.dailyData = getPeakDay({ data: weightedDailyActivities, samplesPerDay: this.samplesPerDay });
+      const sundayValue = this.dailyData[0];
+      this.dailyData.push(sundayValue);
+      this.dailyData.splice(0, 1);
     }
   }
 });

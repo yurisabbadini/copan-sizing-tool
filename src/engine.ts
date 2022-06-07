@@ -11,6 +11,18 @@ function getYearIncrement(data: GrowthTrends): number {
     return 0;
 }
 
+export function getWeekDays(locale?: string)
+{
+    const baseDate = new Date(Date.UTC(2017, 0, 1)); // just a Sunday
+    const weekDays = [];
+    for(let i = 0; i < 7; i++)
+    {       
+        weekDays.push(baseDate.toLocaleDateString(locale, { weekday: 'long' }));
+        baseDate.setDate(baseDate.getDate() + 1);       
+    }
+    return weekDays;
+}
+
 export function getWeightedDaysTimesInSeconds(
     params: {
         growthTrends: GrowthTrends;

@@ -111,6 +111,12 @@ export default defineComponent({
       },
       { 
         name: "o2Loading",
+        label: 'Broths',
+        align: 'left',
+        field: (row: LineConfigProtocol) => row.o2IncubatorPercentage,
+      },
+      { 
+        name: "o2Loading",
         label: 'Air loading',
         align: 'left',
         field: (row: LineConfigProtocol) => row.o2IncubatorPercentage,

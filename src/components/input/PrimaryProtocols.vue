@@ -1,7 +1,7 @@
 <template>
   <q-card class="q-pa-sm q-mt-sm">
     <q-item-label class="q-mb-sm" overline>Primary protocols</q-item-label>
-    <q-table :columns="tableColumns"  :rows="primaryProtocols" row-key="id" dense>
+    <q-table :columns="tableColumns"  :rows="primaryProtocols" row-key="id" dense hide-bottom :pagination="{ rowsPerPage: 0}">
       <template v-slot:body="props">
       <q-tr :props="props">
           <q-td key="name" :props="props">

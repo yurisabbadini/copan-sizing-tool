@@ -1,16 +1,14 @@
 <template>
   <q-card class="q-pa-sm q-mt-sm">
     <q-item-label class="q-mb-sm" overline>Peak day</q-item-label>
-    <template>
-        <div class="q-pa-md">
-            <q-table
-            dense
-            :rows="dailyData"
-            :columns="tableColumns"
-            row-key="dayOfWeek"
-            />
-        </div>
-    </template>
+    <q-table
+      dense
+      :rows="dailyData"
+      :columns="tableColumns"
+      row-key="dayOfWeek"
+      :pagination="{ rowsPerPage: 0}"
+      hide-bottom
+    />
   </q-card>
 </template>
 
@@ -20,11 +18,17 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { DailyData, TableColumn } from '@/types';
+import appStorage from '@/store';
+import { getWeekDays } from '@/engine';
 
 export default defineComponent({
   name: 'BrothSettings',
-  props: ["dailyData"],
   setup() {
+    const {
+      dailyData
+    } = appStorage();
+
+
     const tableColumns: TableColumn<DailyData>[] = [
         {
             name: 'dayOfWeek',
@@ -32,6 +36,16 @@ export default defineComponent({
             label: 'Day',
             align: 'left',
             field: (row: DailyData) => row.dayOfWeek,
+            format: (val) => {
+              const weekDays = getWeekDays("en-US");
+              return weekDays[Number(val)];
+            },
+            classes: (row: DailyData) => {
+              if(row.percentage == 100) {
+                return "row-peak-day";
+              }
+              return "";
+            },
             sortable: false
         },
         {
@@ -40,6 +54,12 @@ export default defineComponent({
             label: 'Number of samples',
             align: 'left',
             field: (row: DailyData) => row.totalSamples,
+            classes: (row: DailyData) => {
+              if(row.percentage == 100) {
+                return "row-peak-day";
+              }
+              return "";
+            },
             sortable: false
         },
         {
@@ -48,13 +68,30 @@ export default defineComponent({
             label: 'Total occupancy rate',
             align: 'left',
             field: (row: DailyData) => row.percentage,
+            format: (val) => {
+              return `${Number(val).toFixed(2)} %`;
+            },
+            classes: (row: DailyData) => {
+              if(row.percentage == 100) {
+                return "row-peak-day";
+              }
+              return "";
+            },
             sortable: false
         }
     ]
 
     return {
-        tableColumns
+      tableColumns,
+      dailyData
     }
   }
 });
 </script>
+
+<style>
+.row-peak-day {
+  font-weight: bold;
+  background-color: gainsboro !important;;
+}
+</style>
