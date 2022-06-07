@@ -137,6 +137,7 @@ export type WeightedDayTimes = {
 	dayOfWeek: number;
 	timeInSeconds: number;
 	samples: number;
+	protocol?: string;
 	type: "plates" | "slides" | "broths" | "loading_air" | "recording_air" | "unloading_air" | "loading_co2" | "recording_co2" | "unloading_co2";
 };
 

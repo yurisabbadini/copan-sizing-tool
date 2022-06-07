@@ -148,7 +148,7 @@ export default defineComponent({
         name: "wasplab " + (this.lines.length + 1),
         numberOfCO2Incubator: 0,
         numberOfO2Incubator: 0,
-        numberOfWasp: 1,
+        numberOfWasp: 0,
         phenomatrix: false,
         protocols: [],
         radian: false,

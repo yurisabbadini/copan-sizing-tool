@@ -30,10 +30,11 @@ export function getWeightedDaysTimesInSeconds(
         samplesPerDay: SamplePerDay[];
         settings: Settings;
     }
-): WeightedDayTimes[] {
+): { weightedDaysTimesInSeconds: WeightedDayTimes[], weightedDaysTimesInSecondsPerProtocol: WeightedDayTimes[] } {
     //const yearIncrement = getYearIncrement(params.growthTrends);
 
     const weightedDaysTimesInSeconds: WeightedDayTimes[] = [];
+    const weightedDaysTimesInSecondsPerProtocol: WeightedDayTimes[] = [];
 
     params.protocols.forEach((protocol) => {
 
@@ -243,6 +244,13 @@ export function getWeightedDaysTimesInSeconds(
                 weightedDaysTimesInSeconds[platesIndex].timeInSeconds +=
                     totalPlatesTime;
             }
+            weightedDaysTimesInSecondsPerProtocol.push({
+                type: "plates",
+                dayOfWeek: dayOfWeek,
+                timeInSeconds: totalPlatesTime,
+                samples: totalPlates,
+                protocol: protocol.id
+            });
 
             const slidesIndex = weightedDaysTimesInSeconds.findIndex(
                 (x) => x.type == "slides" && x.dayOfWeek == dayOfWeek
@@ -258,6 +266,13 @@ export function getWeightedDaysTimesInSeconds(
                 weightedDaysTimesInSeconds[slidesIndex].timeInSeconds +=
                     totalSlidesTime;
             }
+            weightedDaysTimesInSecondsPerProtocol.push({
+                type: "slides",
+                dayOfWeek: dayOfWeek,
+                timeInSeconds: totalSlidesTime,
+                samples: totalSlides,
+                protocol: protocol.id
+            });
 
             const brothsIndex = weightedDaysTimesInSeconds.findIndex(
                 (x) => x.type == "broths" && x.dayOfWeek == dayOfWeek
@@ -273,6 +288,13 @@ export function getWeightedDaysTimesInSeconds(
                 weightedDaysTimesInSeconds[brothsIndex].timeInSeconds +=
                     totalBrothsTime;
             }
+            weightedDaysTimesInSecondsPerProtocol.push({
+                type: "broths",
+                dayOfWeek: dayOfWeek,
+                timeInSeconds: totalBrothsTime,
+                samples: totalBroths,
+                protocol: protocol.id
+            });
 
             const loadingAirIndex = weightedDaysTimesInSeconds.findIndex(
                 (x) => x.type == "loading_air" && x.dayOfWeek == dayOfWeek
@@ -287,6 +309,13 @@ export function getWeightedDaysTimesInSeconds(
             } else {
                 weightedDaysTimesInSeconds[loadingAirIndex].timeInSeconds += totalLoadingAirPlatesTime;
             }
+            weightedDaysTimesInSecondsPerProtocol.push({
+                type: "loading_air",
+                dayOfWeek: dayOfWeek,
+                timeInSeconds: totalLoadingAirPlatesTime,
+                samples: totalLoadingAirPlates,
+                protocol: protocol.id
+            });
 
             const loadingCO2Index = weightedDaysTimesInSeconds.findIndex(
                 (x) => x.type == "loading_co2" && x.dayOfWeek == dayOfWeek
@@ -301,6 +330,13 @@ export function getWeightedDaysTimesInSeconds(
             } else {
                 weightedDaysTimesInSeconds[loadingCO2Index].timeInSeconds += totalLoadingCO2PlatesTime;
             }
+            weightedDaysTimesInSecondsPerProtocol.push({
+                type: "loading_co2",
+                dayOfWeek: dayOfWeek,
+                timeInSeconds: totalLoadingCO2PlatesTime,
+                samples: totalLoadingCO2Plates,
+                protocol: protocol.id
+            });
 
             const recordingAirIndex = weightedDaysTimesInSeconds.findIndex(
                 (x) => x.type == "recording_air" && x.dayOfWeek == dayOfWeek
@@ -315,6 +351,13 @@ export function getWeightedDaysTimesInSeconds(
             } else {
                 weightedDaysTimesInSeconds[recordingAirIndex].timeInSeconds += totalRecordingAirPlatesTime;
             }
+            weightedDaysTimesInSecondsPerProtocol.push({
+                type: "recording_air",
+                dayOfWeek: dayOfWeek,
+                timeInSeconds: totalRecordingAirPlatesTime,
+                samples: totalRecordingAirPlates,
+                protocol: protocol.id
+            });
 
             const recordingCO2Index = weightedDaysTimesInSeconds.findIndex(
                 (x) => x.type == "recording_co2" && x.dayOfWeek == dayOfWeek
@@ -329,6 +372,13 @@ export function getWeightedDaysTimesInSeconds(
             } else {
                 weightedDaysTimesInSeconds[recordingCO2Index].timeInSeconds += totalRecordingCO2PlatesTime;
             }
+            weightedDaysTimesInSecondsPerProtocol.push({
+                type: "recording_co2",
+                dayOfWeek: dayOfWeek,
+                timeInSeconds: totalRecordingCO2PlatesTime,
+                samples: totalRecordingCO2Plates,
+                protocol: protocol.id
+            });
 
             const unloadingAirIndex = weightedDaysTimesInSeconds.findIndex(
                 (x) => x.type == "unloading_air" && x.dayOfWeek == dayOfWeek
@@ -343,6 +393,13 @@ export function getWeightedDaysTimesInSeconds(
             } else {
                 weightedDaysTimesInSeconds[unloadingAirIndex].timeInSeconds += totalUnloadingAirPlatesTime;
             }
+            weightedDaysTimesInSecondsPerProtocol.push({
+                type: "unloading_air",
+                dayOfWeek: dayOfWeek,
+                timeInSeconds: totalUnloadingAirPlatesTime,
+                samples: totalUnloadingAirPlates,
+                protocol: protocol.id
+            });
 
             const unloadingCO2Index = weightedDaysTimesInSeconds.findIndex(
                 (x) => x.type == "unloading_co2" && x.dayOfWeek == dayOfWeek
@@ -357,9 +414,19 @@ export function getWeightedDaysTimesInSeconds(
             } else {
                 weightedDaysTimesInSeconds[unloadingCO2Index].timeInSeconds += totalUnloadingCO2PlatesTime;
             }
+            weightedDaysTimesInSecondsPerProtocol.push({
+                type: "unloading_co2",
+                dayOfWeek: dayOfWeek,
+                timeInSeconds: totalUnloadingCO2PlatesTime,
+                samples: totalUnloadingCO2Plates,
+                protocol: protocol.id
+            });
         }
     });
-    return weightedDaysTimesInSeconds;
+    return {
+        weightedDaysTimesInSeconds,
+        weightedDaysTimesInSecondsPerProtocol
+    }
 }
 
 export function getWeightedDailyActivities(data: WeightedDayTimes[]): WeightedDailyActivities[] {

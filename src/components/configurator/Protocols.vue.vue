@@ -88,38 +88,12 @@ export default defineComponent({
       lines,
       primaryProtocols,
       dailyData,
-      weightedDayTimes
+      weightedDayTimesPerProtocol
     } = appStorage();
 
     const peakDay = dailyData.value.find((x) => x.isPeakDay);
-    const weightedPeakDayTimes = weightedDayTimes.value.filter((x) => x.dayOfWeek == peakDay?.dayOfWeek);
-    console.log(weightedPeakDayTimes)
+    const weightedPeakDayTimes = weightedDayTimesPerProtocol.value.filter((x) => x.dayOfWeek == peakDay?.dayOfWeek);
     const line = lines.value.find((x) => x.id == props.lineId);
-    if(line) {
-      line.protocols = [];
-      primaryProtocols.value.forEach(element => {
-        const wasp1Percentage = line.numberOfWasp == 1 ? 100 : 50;
-        console.log(weightedPeakDayTimes.find((x) => x.type == "plates")?.samples)
-        line.protocols.push({
-          name: element.name,
-          samples: Number((100 / lines.value.length).toFixed(2)),
-          wasp1Percentage: wasp1Percentage,
-          wasp2Percentage: line.numberOfWasp == 1 ? 0 : 50,
-          co2Loading: 0,
-          co2Recording: 0,
-          co2Unloading: 0,
-          o2Loading: 0,
-          o2Recording: 0,
-          o2Unloading: 0,
-          wasp1Broths: 0,
-          wasp1Plates: weightedPeakDayTimes.find((x) => x.type == "plates")?.samples || 0 * wasp1Percentage / 100,
-          wasp1Slides: 0,
-          wasp2Broths: 0,
-          wasp2Plates: 0,
-          wasp2Slides: 0
-        });
-      });
-    }
     
     const tableColumns1: TableColumn<LineConfigProtocol>[] = [
       { 
@@ -230,19 +204,51 @@ export default defineComponent({
       tableColumns2,
       lines,
       line,
-      weightedPeakDayTimes
+      weightedPeakDayTimes,
+      primaryProtocols
     }
   },
   watch: {
     lines: {
       handler: function () {
+        this.addProtocols();
         this.line?.protocols.forEach((p) =>  {
           p.samples = Number((100 / this.lines.length).toFixed(2));
           p.wasp1Percentage = this.line?.numberOfWasp == 1 ? 100 : 50;
           p.wasp2Percentage = this.line?.numberOfWasp == 1 ? 0 : 50;
-        })
+        });
       },
       deep: true
+    }
+  },
+  methods: {
+    addProtocols() {
+      if(this.line && this.line.numberOfWasp > 0) {
+        this.line.protocols = [];
+        this.primaryProtocols.forEach(element => {
+          const linePercentage = 100 / this.lines.filter((x) => x.numberOfWasp >= 1).length;
+          const wasp1Percentage = this.line?.numberOfWasp == 1 ? 100 : 50;
+          const wasp2Percentage = this.line?.numberOfWasp == 1 ? 0 : 50;
+          this.line?.protocols.push({
+            name: element.name,
+            samples: Number(linePercentage.toFixed(2)),
+            wasp1Percentage: wasp1Percentage,
+            wasp2Percentage: wasp2Percentage,
+            co2Loading: Math.ceil((this.weightedPeakDayTimes.find((x) => x.type == "loading_co2" && x.protocol == element.id)?.samples || 0) * wasp1Percentage / 100 * linePercentage / 100),
+            co2Recording: Math.ceil((this.weightedPeakDayTimes.find((x) => x.type == "recording_co2" && x.protocol == element.id)?.samples || 0) * wasp1Percentage / 100 * linePercentage / 100),
+            co2Unloading: Math.ceil((this.weightedPeakDayTimes.find((x) => x.type == "unloading_co2" && x.protocol == element.id)?.samples || 0) * wasp1Percentage / 100 * linePercentage / 100),
+            o2Loading: Math.ceil((this.weightedPeakDayTimes.find((x) => x.type == "loading_air" && x.protocol == element.id)?.samples || 0) * wasp1Percentage / 100 * linePercentage / 100),
+            o2Recording: Math.ceil((this.weightedPeakDayTimes.find((x) => x.type == "recording_air" && x.protocol == element.id)?.samples || 0) * wasp1Percentage / 100 * linePercentage / 100),
+            o2Unloading: Math.ceil((this.weightedPeakDayTimes.find((x) => x.type == "unloading_air" && x.protocol == element.id)?.samples || 0) * wasp1Percentage / 100 * linePercentage / 100),
+            wasp1Broths: Math.ceil((this.weightedPeakDayTimes.find((x) => x.type == "broths" && x.protocol == element.id)?.samples || 0) * wasp1Percentage / 100 * linePercentage / 100),
+            wasp1Plates: Math.ceil((this.weightedPeakDayTimes.find((x) => x.type == "plates" && x.protocol == element.id)?.samples || 0) * wasp1Percentage / 100 * linePercentage / 100),
+            wasp1Slides: Math.ceil((this.weightedPeakDayTimes.find((x) => x.type == "slides" && x.protocol == element.id)?.samples || 0) * wasp1Percentage / 100 * linePercentage / 100),
+            wasp2Broths: Math.floor((this.weightedPeakDayTimes.find((x) => x.type == "broths" && x.protocol == element.id)?.samples || 0) * wasp2Percentage / 100 * linePercentage / 100),
+            wasp2Plates: Math.floor((this.weightedPeakDayTimes.find((x) => x.type == "plates" && x.protocol == element.id)?.samples || 0) * wasp2Percentage / 100 * linePercentage / 100),
+            wasp2Slides: Math.floor((this.weightedPeakDayTimes.find((x) => x.type == "slides" && x.protocol == element.id)?.samples || 0) * wasp2Percentage / 100 * linePercentage / 100),
+          });
+        });
+      }
     }
   }
 });

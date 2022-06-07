@@ -229,6 +229,7 @@ const state = reactive({
       ] as PrimaryProtocol[],
       secondaryProtocols: [] as SecondaryProtocol[],
       weightedDayTimes: [] as WeightedDayTimes[],
+      weightedDayTimesPerProtocol: [] as WeightedDayTimes[],
       dailyData: [] as DailyData[],
       lines: [] as LineConfig[],
 });
