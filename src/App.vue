@@ -12,7 +12,7 @@
         />
 
         <q-toolbar-title>
-          App
+          Sizing Tool
         </q-toolbar-title>
       </q-toolbar>
     </q-header>
