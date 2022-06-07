@@ -39,12 +39,20 @@
             <q-item-label>Input</q-item-label>
           </q-item-section>
         </q-item>
-        <q-item clickable tag="a" to="/configurator">
+        <q-item v-if="dailyData.find((x) => x.isPeakDay)" clickable tag="a" to="/configurator">
           <q-item-section avatar>
             <q-icon name="perm_data_setting" />
           </q-item-section>
           <q-item-section>
             <q-item-label>Configurator</q-item-label>
+          </q-item-section>
+        </q-item>
+        <q-item v-if="lines.length > 0" clickable tag="a" to="/output">
+          <q-item-section avatar>
+            <q-icon name="summarize" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>Output</q-item-label>
           </q-item-section>
         </q-item>
       </q-list>
@@ -58,9 +66,21 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import appStorage from './store';
 
 export default defineComponent({
   name: 'LayoutDefault',
+  setup() {
+    const {
+      dailyData,
+      lines
+    } = appStorage();
+
+    return {
+      dailyData,
+      lines
+    }
+  },
   data() {
       return {
         leftDrawerOpen: false

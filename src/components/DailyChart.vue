@@ -1,7 +1,7 @@
 <template>
   <q-card class="q-pa-sm q-mt-sm"
       v-if="dailyData.length > 0">
-    <q-item-label class="q-mb-sm" overline>Daily volumes</q-item-label>
+    <q-item-label v-if="showTitle" class="q-mb-sm" overline>Daily volumes</q-item-label>
     <apexchart
       type="bar"
       :options="chartOptions"
@@ -24,6 +24,10 @@ export default defineComponent({
     dailyData: {
         type: Object as PropType<DailyData[]>,
         required: true
+    },
+    showTitle: {
+        type: Object as PropType<boolean>,
+        required: false
     }
   },
   setup() {
