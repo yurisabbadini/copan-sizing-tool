@@ -6,6 +6,7 @@
     :rows="primaryProtocols"
     :columns="tableColumns"
     row-key="id"
+    hide-bottom :pagination="{ rowsPerPage: 0}"
     >
     <template v-slot:body="props">
         <q-tr :props="props">

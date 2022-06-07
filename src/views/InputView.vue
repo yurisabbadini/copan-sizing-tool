@@ -36,7 +36,10 @@
 </div>
 <div class="row">
   <div class="col">
-    <PeakDayResult :daily-data="dailyData" />
+    <PeakDayResult />
+  </div>
+  <div class="col">
+    <DailyChart :daily-data="dailyData"/>
   </div>
 </div>
 
@@ -57,6 +60,7 @@ import PrimaryProtocolsDetails from '@/components/input/PrimaryProtocolsDetails.
 import SecondaryProtocols from '@/components/input/SecondaryProtocols.vue'
 import DailyVolumes from '@/components/input/DailyVolumes.vue'
 import PeakDayResult from '@/components/PeakDayResult.vue'
+import DailyChart from '@/components/DailyChart.vue'
 import { getPeakDay, getWeightedDailyActivities, getWeightedDaysTimesInSeconds } from '@/engine';
 import appStorage from '@/store';
 
@@ -70,7 +74,8 @@ export default defineComponent({
     PrimaryProtocolsDetails,
     SecondaryProtocols,
     DailyVolumes,
-    PeakDayResult
+    PeakDayResult,
+    DailyChart
   },
   setup() {
     const {

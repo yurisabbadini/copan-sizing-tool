@@ -46,7 +46,7 @@
         </q-tr>
       </template>
     </q-table>
-    <q-btn class="q-mt-md" label="Add" type="button" color="positive" @click="addLine"/>
+    <q-btn class="q-mt-md" label="Add" type="button" color="secondary" @click="addLine"/>
   </q-card>
 </template>
 

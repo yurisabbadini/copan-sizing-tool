@@ -1,5 +1,6 @@
 <template>
-  <q-card class="q-pa-sm q-mt-sm">
+  <q-card class="q-pa-sm q-mt-sm"
+      v-if="dailyData.length > 0">
     <q-item-label class="q-mb-sm" overline>Peak day</q-item-label>
     <q-table
       dense
@@ -22,7 +23,7 @@ import appStorage from '@/store';
 import { getWeekDays } from '@/engine';
 
 export default defineComponent({
-  name: 'BrothSettings',
+  name: 'PeakDay',
   setup() {
     const {
       dailyData
