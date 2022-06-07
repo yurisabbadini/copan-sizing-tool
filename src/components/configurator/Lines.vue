@@ -41,10 +41,10 @@
             <q-checkbox dense v-model="props.row.phenomatrix"/>
           </q-td>
           <q-td key="waspOccupancyRate" :props="props">
-            {{ props.row.waspOccupancyRate }}
+            {{ props.row.waspOccupancyRate.toFixed(2) }} %
           </q-td>
           <q-td key="wasplabOccupancyRate" :props="props">
-            {{ props.row.wasplabOccupancyRate }}
+            {{ props.row.wasplabOccupancyRate.toFixed(2) }} %
           </q-td>
           <q-td key="actions" :props="props">
             <q-btn flat round color="red" icon="remove_circleoutline" size="xs" @click="removeLine(props.row.id)"/>
@@ -132,12 +132,39 @@ export default defineComponent({
     ];
 
     const {
-      lines
+      lines,
+      weightedDayTimesPerProtocol,
+      dailyData
     } = appStorage();
+
+    const peakDay = dailyData.value.find((x) => x.isPeakDay);
 
     return {
       tableColumns,
-      lines
+      lines,
+      weightedDayTimesPerProtocol,
+      peakDay
+    }
+  },
+  watch: {
+    lines: {
+      handler: function () {
+        this.lines.forEach(line => {
+          let totalWaspTime = 0;
+          let totalWasplabTime = 0;
+          const protocols = line.protocols;
+          protocols.forEach(protocol => {
+            const waspProtocolTime = this.weightedDayTimesPerProtocol.filter((x) => x.protocol == protocol.id && x.dayOfWeek == this.peakDay?.dayOfWeek && (x.type == "plates" || x.type == "slides" || x.type == "broths")).map((x) => x.timeInSeconds).reduce((a, b) => a + b) * protocol.samples / 100;
+            totalWaspTime += waspProtocolTime;
+
+            const wasplabProtocolTime = this.weightedDayTimesPerProtocol.filter((x) => x.protocol == protocol.id && x.dayOfWeek == this.peakDay?.dayOfWeek && !(x.type == "plates" || x.type == "slides" || x.type == "broths")).map((x) => x.timeInSeconds).reduce((a, b) => a + b) * protocol.samples / 100;
+            totalWasplabTime += wasplabProtocolTime;
+          });
+          line.waspOccupancyRate = totalWaspTime / 3600 / 24 * 100;
+          line.wasplabOccupancyRate = totalWasplabTime / 3600 / 24 * 100;
+        });
+      },
+      deep: true
     }
   },
   methods: {

@@ -169,6 +169,7 @@ export type DailyLoad = {
 }
 
 export type LineConfigProtocol = {
+	id: string;
 	name: string;
 	samples: number;
 	wasp1Percentage: number;

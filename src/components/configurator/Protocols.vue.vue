@@ -9,15 +9,15 @@
           </q-td>
           <q-td key="samples" :props="props">
             {{ props.row.samples }} %
-            <q-popup-edit v-model.number="props.row.samples" auto-save v-slot="scope">
+            <!-- <q-popup-edit v-model.number="props.row.samples" auto-save v-slot="scope">
               <q-input v-model.number="scope.value" dense autofocus @keyup.enter="scope.set" />
-            </q-popup-edit>
+            </q-popup-edit> -->
           </q-td>
           <q-td key="wasp1Percentage" :props="props">
             {{ props.row.wasp1Percentage }} %
-            <q-popup-edit v-model.number="props.row.wasp1Percentage" auto-save v-slot="scope">
+            <!-- <q-popup-edit v-model.number="props.row.wasp1Percentage" auto-save v-slot="scope">
               <q-input v-model.number="scope.value" dense autofocus @keyup.enter="scope.set" />
-            </q-popup-edit>
+            </q-popup-edit> -->
           </q-td>
           <q-td key="wasp1Plates" :props="props">
             {{ props.row.wasp1Plates }}
@@ -30,9 +30,9 @@
           </q-td>
           <q-td key="wasp2Percentage" :props="props">
             {{ props.row.wasp2Percentage }} %
-            <q-popup-edit v-model.number="props.row.wasp2Percentage" auto-save v-slot="scope">
+            <!-- <q-popup-edit v-model.number="props.row.wasp2Percentage" auto-save v-slot="scope">
               <q-input v-model.number="scope.value" dense autofocus @keyup.enter="scope.set" />
-            </q-popup-edit>
+            </q-popup-edit> -->
           </q-td>
           <q-td key="wasp2Plates" :props="props">
             {{ props.row.wasp2Plates }}
@@ -71,8 +71,6 @@
 </style>
 
 <script lang="ts">
-//TODO: di default se c'è solo una WASP togliere la colonna WASP 2 e mettere il 100% dei samples su WASP 1 altrimenti lo dividi uniforme su tutte le WASP che si può cambiare
-
 import { defineComponent } from 'vue';
 import appStorage from '@/store';
 import { LineConfigProtocol, TableColumn } from '@/types';
@@ -230,6 +228,7 @@ export default defineComponent({
           const wasp1Percentage = this.line?.numberOfWasp == 1 ? 100 : 50;
           const wasp2Percentage = this.line?.numberOfWasp == 1 ? 0 : 50;
           this.line?.protocols.push({
+            id: element.id,
             name: element.name,
             samples: Number(linePercentage.toFixed(2)),
             wasp1Percentage: wasp1Percentage,
