@@ -1,7 +1,7 @@
 <template>
   <q-card class="q-pa-sm q-mt-sm">
     <q-item-label class="q-mb-sm" overline>Protocols in-depth</q-item-label>
-    <q-table :columns="tableColumns"  :rows="primaryProtocols" row-key="id" dense hide-bottom :pagination="{ rowsPerPage: 0}">
+    <q-table :columns="tableColumns"  :rows="primaryProtocols" row-key="id" dense hide-bottom :pagination="{ rowsPerPage: 0}" separator="cell">
       <template v-slot:body="props">
       <q-tr :props="props">
           <q-td key="name" :props="props">
@@ -13,32 +13,40 @@
               <q-input v-model.number="scope.value" dense autofocus @keyup.enter="scope.set" />
             </q-popup-edit>
           </q-td>
-          <q-td key="hasID" :props="props">
-            <q-checkbox dense v-model="props.row.hasID" @update:model-value="setProtocolID({ id: props.row.id, value: $event })"/>
-          </q-td>
-          <q-td key="hasAST" :props="props">
-            <q-checkbox dense v-model="props.row.hasAST" @update:model-value="setProtocolAST({ id: props.row.id, value: $event })"/>
-          </q-td>
-          <q-td key="hasASTID" :props="props">
-            <q-checkbox dense v-model="props.row.hasASTID" @update:model-value="setProtocolASTID({ id: props.row.id, value: $event })"/>
-          </q-td>
-          <q-td key="purityPlatesPercentage" :props="props">
-            {{ props.row.purityPlatesPercentage }}
-            <q-popup-edit v-model.number="props.row.purityPlatesPercentage" auto-save v-slot="scope">
-              <q-input v-model.number="scope.value" dense autofocus @keyup.enter="scope.set" @update:model-value="setProtocolPurityPlates({ id: props.row.id, value: Number($event || 0) })" />
+          <q-td key="idPercentage" :props="props">
+            {{ props.row.idPercentage }}
+            <q-popup-edit v-model.number="props.row.idPercentage" auto-save v-slot="scope">
+              <q-input v-model.number="scope.value" dense autofocus @keyup.enter="scope.set" @update:model-value="setProtocolIDPercentage({ id: props.row.id, value: Number($event || 0) })" />
             </q-popup-edit>
           </q-td>
-          <q-td key="subculturePercentage" :props="props">
-            {{ props.row.subculturePercentage }}
-            <q-popup-edit v-model.number="props.row.subculturePercentage" auto-save v-slot="scope">
-              <q-input v-model.number="scope.value" dense autofocus @keyup.enter="scope.set" @update:model-value="setProtocolSubculture({ id: props.row.id, value: Number($event || 0) })" />
+          <q-td key="astPercentage" :props="props">
+            {{ props.row.astPercentage }}
+            <q-popup-edit v-model.number="props.row.astPercentage" auto-save v-slot="scope">
+              <q-input v-model.number="scope.value" dense autofocus @keyup.enter="scope.set" @update:model-value="setProtocolASTPercentage({ id: props.row.id, value: Number($event || 0) })" />
             </q-popup-edit>
           </q-td>
-          <q-td key="brothsPercentage" :props="props">
-            {{ props.row.brothsPercentage }}
-            <q-popup-edit v-model.number="props.row.brothsPercentage" auto-save v-slot="scope">
-              <q-input v-model.number="scope.value" dense autofocus @keyup.enter="scope.set" @update:model-value="setProtocolBroths({ id: props.row.id, value: Number($event || 0) })" />
+          <q-td key="astIdPercentage" :props="props">
+            {{ props.row.astIdPercentage }}
+            <q-popup-edit v-model.number="props.row.astIdPercentage" auto-save v-slot="scope">
+              <q-input v-model.number="scope.value" dense autofocus @keyup.enter="scope.set" @update:model-value="setProtocolASTIDPercentage({ id: props.row.id, value: Number($event || 0) })" />
             </q-popup-edit>
+          </q-td>
+          <q-td key="radianPercentage" :props="props">
+            {{ props.row.radianPercentage }}
+            <q-popup-edit v-model.number="props.row.radianPercentage" auto-save v-slot="scope">
+              <q-input v-model.number="scope.value" dense autofocus @keyup.enter="scope.set" @update:model-value="setProtocolRadianPercentage({ id: props.row.id, value: Number($event || 0) })" />
+            </q-popup-edit>
+          </q-td>
+          <q-td key="totalPercentage" :props="props">
+            <q-badge :color="props.row.totalPercentage != 100 ? 'negative' : 'positive'">
+              {{ props.row.totalPercentage }}
+            </q-badge>
+          </q-td>
+          <q-td key="hasPurityPlates" :props="props">
+            <q-checkbox dense v-model="props.row.hasPurityPlates" @update:model-value="setProtocolPurityPlates({ id: props.row.id, value: $event })"/>
+          </q-td>
+          <q-td key="hasBrothsPercentage" :props="props">
+            <q-checkbox dense v-model="props.row.hasBrothsPercentage" @update:model-value="setProtocolBroth({ id: props.row.id, value: $event })"/>
           </q-td>
         </q-tr>
       </template>
@@ -71,40 +79,46 @@ export default defineComponent({
         field: (row: PrimaryProtocol) =>row.negativityRate,
       },
       { 
-        name: "hasID",
-        label: 'ID',
+        name: "idPercentage",
+        label: 'ID %',
         align: 'left',
-        field: (row: PrimaryProtocol) =>row.hasID,
+        field: (row: PrimaryProtocol) =>row.idPercentage,
       },
       { 
-        name: "hasAST",
-        label: 'AST',
+        name: "astPercentage",
+        label: 'AST %',
         align: 'left',
-        field: (row: PrimaryProtocol) =>row.hasAST,
+        field: (row: PrimaryProtocol) =>row.astPercentage,
       },
       { 
-        name: "hasASTID",
-        label: 'ID & AST',
+        name: "astIdPercentage",
+        label: 'ID & AST %',
         align: 'left',
-        field: (row: PrimaryProtocol) =>row.hasASTID,
+        field: (row: PrimaryProtocol) =>row.astIdPercentage,
       },
       { 
-        name: "purityPlatesPercentage",
-        label: 'Purity Plates %',
+        name: "radianPercentage",
+        label: 'Radian %',
         align: 'left',
-        field: (row: PrimaryProtocol) =>row.purityPlatesPercentage,
+        field: (row: PrimaryProtocol) =>row.radianPercentage,
       },
       { 
-        name: "subculturePercentage",
-        label: 'Subculture %',
+        name: "totalPercentage",
+        label: 'Total %',
         align: 'left',
-        field: (row: PrimaryProtocol) =>row.subculturePercentage,
+        field: (row: PrimaryProtocol) =>row.totalPercentage,
       },
       { 
-        name: "brothsPercentage",
-        label: 'Broths %',
+        name: "hasPurityPlates",
+        label: 'Purity Plates',
         align: 'left',
-        field: (row: PrimaryProtocol) =>row.brothsPercentage,
+        field: (row: PrimaryProtocol) =>row.hasPurityPlates,
+      },
+      { 
+        name: "hasBrothsPercentage",
+        label: 'Broth',
+        align: 'left',
+        field: (row: PrimaryProtocol) =>row.hasBrothsPercentage,
       },
     ];
 
@@ -119,10 +133,34 @@ export default defineComponent({
       secondaryProtocols
     }
   },
+  watch: {
+    primaryProtocols: {
+      handler: function (newValue: PrimaryProtocol[]) {
+        newValue.forEach(protocol => {
+          this.getProtocolTotalPercentage({ id: protocol.id });
+          this.getSecondaryProtocolSample({ id: protocol.id });
+        });
+        
+      },
+      deep: true
+    }
+  },
   methods: {
-    addSecondaryProtocol(id: string, from: "ID" | "AST" | "ID & AST" | "Purity plates" | "Subculture" | "Broths") {
+    addSecondaryProtocol(id: string, from: "ID" | "AST" | "ID & AST" | "Purity plates" | "Broth" | "Radian") {
       const protocol = this.primaryProtocols.find((x) => x.id == id);
       if(protocol) {
+        let factor = (100 - protocol.negativityRate) / 100;
+        if(from != "Purity plates" && from != "Broth") {
+          if(from == "ID") {
+            factor = protocol.idPercentage / 100;
+          } else if(from == "AST") {
+            factor = protocol.astPercentage / 100;
+          } else if(from == "ID & AST") {
+            factor = protocol.astIdPercentage / 100;
+          } else if(from == "Radian") {
+            factor = protocol.radianPercentage / 100;
+          }
+        }
         this.secondaryProtocols.push({
           id: protocol.id,
           from: from,
@@ -131,59 +169,106 @@ export default defineComponent({
           platesCO2: 0,
           platesO2: 0,
           recordingCO2: 0,
-          recordingO2: 0
+          recordingO2: 0,
+          samples: Math.ceil(protocol.samplesPerDayAvg * factor)
         });
       }
     },
-    removeSecondaryProtocol(id: string, from: "ID" | "AST" | "ID & AST" | "Purity plates" | "Subculture" | "Broths") {
+    removeSecondaryProtocol(id: string, from: "ID" | "AST" | "ID & AST" | "Purity plates" | "Broth" | "Radian") {
       const protocol = this.primaryProtocols.find((x) => x.id == id);
       if(protocol) {
         const index = this.secondaryProtocols.findIndex((x) => x.id == protocol.id && x.from == from);
         this.secondaryProtocols.splice(index, 1);
       }
     },
-    setProtocolID(params: { id: string, value: boolean }) {
-      if(params.value == true) {
-        this.addSecondaryProtocol(params.id, "ID");
+    getProtocolTotalPercentage(params: { id: string }) {
+      const protocolIndex = this.primaryProtocols.findIndex((x) => x.id == params.id);
+      if(protocolIndex >= 0) {
+        this.primaryProtocols[protocolIndex].totalPercentage = 
+          this.primaryProtocols[protocolIndex].idPercentage + this.primaryProtocols[protocolIndex].astIdPercentage + this.primaryProtocols[protocolIndex].astPercentage + this.primaryProtocols[protocolIndex].radianPercentage + this.primaryProtocols[protocolIndex].negativityRate;
+      }
+    },
+    getSecondaryProtocolSample(params: { id: string }) {
+      const protocolIndex = this.primaryProtocols.findIndex((x) => x.id == params.id);
+      if(protocolIndex >= 0) {
+        const secondaryProtocols = this.secondaryProtocols.filter((x) => x.id == params.id);
+        secondaryProtocols.forEach(protocol => {
+          let factor = (100 - this.primaryProtocols[protocolIndex].negativityRate) / 100;
+          if(protocol.from != "Purity plates" && protocol.from != "Broth") {
+            if(protocol.from == "ID") {
+              factor = this.primaryProtocols[protocolIndex].idPercentage / 100;
+            } else if(protocol.from == "AST") {
+              factor = this.primaryProtocols[protocolIndex].astPercentage / 100;
+            } else if(protocol.from == "ID & AST") {
+              factor = this.primaryProtocols[protocolIndex].astIdPercentage / 100;
+            } else if(protocol.from == "Radian") {
+              factor = this.primaryProtocols[protocolIndex].radianPercentage / 100;
+            }
+          }
+          protocol.samples = Math.ceil(this.primaryProtocols[protocolIndex].samplesPerDayAvg * factor)
+        });
+      }
+    },
+    setProtocolIDPercentage(params: { id: string, value: number }) {
+      if(params.value > 0) {
+        const secondaryProtocolIndex = this.secondaryProtocols.findIndex((x) => x.from == "ID" && x.id == params.id);
+        if(secondaryProtocolIndex < 0) {
+          this.addSecondaryProtocol(params.id, "ID");
+        }
       } else {
         this.removeSecondaryProtocol(params.id, "ID");
       }
     },
-    setProtocolAST(params: { id: string, value: boolean }) {
-      if(params.value == true) {
-        this.addSecondaryProtocol(params.id, "AST");
+    setProtocolASTPercentage(params: { id: string, value: number }) {
+      if(params.value > 0) {
+        const secondaryProtocolIndex = this.secondaryProtocols.findIndex((x) => x.from == "AST" && x.id == params.id);
+        if(secondaryProtocolIndex < 0) {
+          this.addSecondaryProtocol(params.id, "AST");
+        }
       } else {
         this.removeSecondaryProtocol(params.id, "AST");
       }
     },
-    setProtocolASTID(params: { id: string, value: boolean }) {
-      if(params.value == true) {
-        this.addSecondaryProtocol(params.id, "ID & AST");
+    setProtocolASTIDPercentage(params: { id: string, value: number }) {
+      if(params.value > 0) {
+        const secondaryProtocolIndex = this.secondaryProtocols.findIndex((x) => x.from == "ID & AST" && x.id == params.id);
+        if(secondaryProtocolIndex < 0) {
+          this.addSecondaryProtocol(params.id, "ID & AST");
+        }
       } else {
         this.removeSecondaryProtocol(params.id, "ID & AST");
       }
     },
-    setProtocolPurityPlates(params: { id: string, value: number }) {
+    setProtocolRadianPercentage(params: { id: string, value: number }) {
       if(params.value > 0) {
-        this.addSecondaryProtocol(params.id, "Purity plates");
+        const secondaryProtocolIndex = this.secondaryProtocols.findIndex((x) => x.from == "Radian" && x.id == params.id);
+        if(secondaryProtocolIndex < 0) {
+          this.addSecondaryProtocol(params.id, "Radian");
+        }
+      } else {
+        this.removeSecondaryProtocol(params.id, "Radian");
+      }
+    },
+    setProtocolPurityPlates(params: { id: string, value: boolean }) {
+      if(params.value) {
+        const secondaryProtocolIndex = this.secondaryProtocols.findIndex((x) => x.from == "Purity plates" && x.id == params.id);
+        if(secondaryProtocolIndex < 0) {
+          this.addSecondaryProtocol(params.id, "Purity plates");
+        }
       } else {
         this.removeSecondaryProtocol(params.id, "Purity plates");
       }
     },
-    setProtocolSubculture(params: { id: string, value: number }) {
-      if(params.value > 0) {
-        this.addSecondaryProtocol(params.id, "Subculture");
+    setProtocolBroth(params: { id: string, value: boolean }) {
+      if(params.value) {
+        const secondaryProtocolIndex = this.secondaryProtocols.findIndex((x) => x.from == "Broth" && x.id == params.id);
+        if(secondaryProtocolIndex < 0) {
+          this.addSecondaryProtocol(params.id, "Broth");
+        }
       } else {
-        this.removeSecondaryProtocol(params.id, "Subculture");
+        this.removeSecondaryProtocol(params.id, "Broth");
       }
-    },
-    setProtocolBroths(params: { id: string, value: number }) {
-      if(params.value > 0) {
-        this.addSecondaryProtocol(params.id, "Broths");
-      } else {
-        this.removeSecondaryProtocol(params.id, "Broths");
-      }
-    },
+    }
   }
 });
 </script>

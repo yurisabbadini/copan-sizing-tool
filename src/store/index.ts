@@ -7,6 +7,9 @@ const state = reactive({
         broths: {
           timeInSeconds: 70
         },
+        radian: {
+          timeInSeconds: 35
+        },
         colibri: {
           IDTimeInSeconds: 60,
           ASTTimeInSeconds: 120,
@@ -14,7 +17,7 @@ const state = reactive({
           ASTIDPurityTimeInSeconds: 240,
           ASTPurityTimeInSeconds: 180
         },
-        flow: {
+        flo: {
           platesPerHour: 550
         },
         incubator: {
@@ -68,7 +71,7 @@ const state = reactive({
           wasplabMinutesPerIncubatorPerDay: 5,
           radianMinutesPerDay: 20,
           colibriMinutesPerDay: 5,
-          flowMinutesPerWorkingHour: 5
+          floMinutesPerWorkingHour: 5
         }
       } as Settings,
       samplesPerDay: [
@@ -153,13 +156,14 @@ const state = reactive({
               readHours: ""
             }
           },
-          brothsPercentage: 0,
-          hasAST: false,
-          hasASTID: false,
-          hasID: false,
+          hasBrothsPercentage: false,
+          astPercentage: 0,
+          astIdPercentage: 0,
+          idPercentage: 0,
+          radianPercentage: 0,
           negativityRate: 0,
-          purityPlatesPercentage: 0,
-          subculturePercentage: 0,
+          totalPercentage: 0,
+          hasPurityPlates: false,
           volumes: [],
         },
         {
@@ -185,13 +189,14 @@ const state = reactive({
               readHours: "20,40,60"
             }
           },
-          brothsPercentage: 0,
-          hasAST: false,
-          hasASTID: false,
-          hasID: false,
+          hasBrothsPercentage: false,
+          astPercentage: 0,
+          astIdPercentage: 0,
+          idPercentage: 0,
+          radianPercentage: 0,
           negativityRate: 0,
-          purityPlatesPercentage: 0,
-          subculturePercentage: 0,
+          totalPercentage: 0,
+          hasPurityPlates: false,
           volumes: [],
         },
         {
@@ -217,13 +222,14 @@ const state = reactive({
               readHours: "16,40"
             }
           },
-          brothsPercentage: 0,
-          hasAST: false,
-          hasASTID: false,
-          hasID: false,
+          hasBrothsPercentage: false,
+          astPercentage: 0,
+          astIdPercentage: 0,
+          idPercentage: 0,
+          radianPercentage: 0,
+          totalPercentage: 0,
           negativityRate: 0,
-          purityPlatesPercentage: 0,
-          subculturePercentage: 0,
+          hasPurityPlates: false,
           volumes: [],
         }
       ] as PrimaryProtocol[],

@@ -153,8 +153,8 @@
               dense
               filled
               type="number"
-              v-model.number="settings.fte.flowMinutesPerWorkingHour"
-              label="Flow"
+              v-model.number="settings.fte.floMinutesPerWorkingHour"
+              label="Flo"
               hint="minutes/hour"
               lazy-rules
               :rules="[

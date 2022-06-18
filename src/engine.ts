@@ -69,11 +69,11 @@ export function getWeightedDaysTimesInSeconds(
             ...(protocol.wasplabData.air.readHours.split(",").map((x => Number(x))) || [])
         );
         if (airReadHours > 24) {
-            const tempDate = new Date();
+            const tempDate = new Date(Date.UTC(2017, 0, 1)); // just a Sunday
             const endDate = new Date(
                 tempDate.getTime() + airReadHours * 60 * 60 * 1000
             );
-            airDayOffset = endDate.getDay() - tempDate.getDay() - 1;
+            airDayOffset = endDate.getDay() - tempDate.getDay();
             for (let dayOfWeek = 0; dayOfWeek < 7; dayOfWeek++) {
                 for (let d = 1; d <= airDayOffset; d++) {
                     let nextDay = dayOfWeek + d;
@@ -91,17 +91,18 @@ export function getWeightedDaysTimesInSeconds(
                 }
             }
         }
+        console.log(platesOverflowAir)
 
         let co2DayOffset = 0;
         const co2ReadHour = Math.max(
             ...(protocol.wasplabData.co2.readHours.split(",").map((x => Number(x))) || [])
         );
         if (co2ReadHour > 24) {
-            const tempDate = new Date();
+            const tempDate = new Date(Date.UTC(2017, 0, 1)); // just a Sunday
             const endDate = new Date(
                 tempDate.getTime() + co2ReadHour * 60 * 60 * 1000
             );
-            co2DayOffset = endDate.getDay() - tempDate.getDay() - 1;
+            co2DayOffset = endDate.getDay() - tempDate.getDay();
             for (let dayOfWeek = 0; dayOfWeek < 7; dayOfWeek++) {
                 for (let d = 1; d <= co2DayOffset; d++) {
                     let nextDay = dayOfWeek + d;
@@ -119,7 +120,6 @@ export function getWeightedDaysTimesInSeconds(
                 }
             }
         }
-
         const platesUnloadingAir: {
             dayOfWeek: number;
             samples: number;

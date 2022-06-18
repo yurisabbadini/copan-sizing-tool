@@ -1,7 +1,7 @@
 <template>
   <q-card class="q-pa-sm q-mt-sm">
     <q-item-label class="q-mb-sm" overline>Secondary protocols</q-item-label>
-    <q-table :columns="tableColumns"  :rows="secondaryProtocols" row-key="id" dense hide-bottom :pagination="{ rowsPerPage: 0}">
+    <q-table :columns="tableColumns"  :rows="secondaryProtocols" row-key="id" dense hide-bottom :pagination="{ rowsPerPage: 0}" separator="cell">
       <template v-slot:body="props">
       <q-tr :props="props">
           <q-td key="name" :props="props">
@@ -9,6 +9,9 @@
           </q-td>
           <q-td key="from" :props="props">
             {{ props.row.from }}
+          </q-td>
+          <q-td key="samples" :props="props">
+            {{ props.row.samples }}
           </q-td>
           <q-td key="plates" :props="props">
             {{ props.row.plates }}
@@ -69,6 +72,12 @@ export default defineComponent({
         label: 'From',
         align: 'left',
         field: (row: SecondaryProtocol) => row.from,
+      },
+      { 
+        name: "samples",
+        label: 'Samples',
+        align: 'left',
+        field: (row: SecondaryProtocol) =>row.samples,
       },
       { 
         name: "plates",

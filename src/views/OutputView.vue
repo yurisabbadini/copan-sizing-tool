@@ -10,6 +10,7 @@
         row-key="label"
         :pagination="{ rowsPerPage: 0}"
         hide-bottom
+        separator="cell"
       />
     </q-card>
   </div>
@@ -25,6 +26,7 @@
         row-key="label"
         :pagination="{ rowsPerPage: 0}"
         hide-bottom
+        separator="cell"
       >
       <template v-slot:body="props">
         <q-tr :props="props">

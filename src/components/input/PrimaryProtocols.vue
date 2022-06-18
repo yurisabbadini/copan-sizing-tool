@@ -1,7 +1,7 @@
 <template>
   <q-card class="q-pa-sm q-mt-sm">
     <q-item-label class="q-mb-sm" overline>Primary protocols</q-item-label>
-    <q-table :columns="tableColumns"  :rows="primaryProtocols" row-key="id" dense hide-bottom :pagination="{ rowsPerPage: 0}">
+    <q-table :columns="tableColumns"  :rows="primaryProtocols" row-key="id" dense hide-bottom :pagination="{ rowsPerPage: 0}" separator="cell">
       <template v-slot:body="props">
       <q-tr :props="props">
           <q-td key="name" :props="props">
@@ -222,13 +222,14 @@ export default defineComponent({
           }
         },
         volumes: volumes,
-        brothsPercentage: 0,
-        hasAST: false,
-        hasASTID: false,
-        hasID: false,
+        hasBrothsPercentage: false,
+        astPercentage: 0,
+        astIdPercentage: 0,
+        idPercentage: 0,
+        radianPercentage: 0,
+        totalPercentage: 0,
         negativityRate: 0,
-        purityPlatesPercentage: 0,
-        subculturePercentage: 0,
+        hasPurityPlates: false
       });
     },
     removeProtocol(id: string) {

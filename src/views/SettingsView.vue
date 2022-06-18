@@ -1,14 +1,17 @@
 <template>
   <div class="text-h5 q-mt-sm">Settings</div>
   <div class="row">
-    <div class="col-6">
+    <div class="col-5">
       <PlatesSettingsVue />
     </div>
-    <div class="col-4">
+    <div class="col-3">
       <SlidesSettingsVue />
     </div>
     <div class="col-2">
       <BrothSettingsVue />
+    </div>
+    <div class="col-2">
+      <RadianSettingsVue />
     </div>
   </div>
   <div class="row">
@@ -21,7 +24,7 @@
       <ColibriSettingsVue  />
     </div>
     <div class="col-2">
-      <FlowSettingsVue  />
+      <FloSettingsVue  />
     </div>
   </div>
   <div class="row">
@@ -36,9 +39,10 @@ import { defineComponent } from 'vue';
 import PlatesSettingsVue from '@/components/settings/PlatesSettings.vue';
 import SlidesSettingsVue from '@/components/settings/SlidesSettings.vue'
 import BrothSettingsVue from '@/components/settings/BrothSettings.vue';
+import RadianSettingsVue from '@/components/settings/RadianSettings.vue';
 import IncubatorSettingsVue from '@/components/settings/IncubatorSettings.vue';
 import ColibriSettingsVue from '@/components/settings/ColibriSettings.vue';
-import FlowSettingsVue from '@/components/settings/FlowSettings.vue';
+import FloSettingsVue from '@/components/settings/FloSettings.vue';
 import FteSettingsVue from '@/components/settings/FteSettings.vue';
 
 export default defineComponent({
@@ -49,8 +53,9 @@ export default defineComponent({
     BrothSettingsVue,
     IncubatorSettingsVue,
     ColibriSettingsVue,
-    FlowSettingsVue,
-    FteSettingsVue
+    FloSettingsVue,
+    FteSettingsVue,
+    RadianSettingsVue
   }
 });
 </script>

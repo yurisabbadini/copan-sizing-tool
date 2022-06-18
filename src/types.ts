@@ -28,6 +28,10 @@ export type BrothSettings = {
 	timeInSeconds: number;
 }
 
+export type RadianSettings = {
+	timeInSeconds: number;
+}
+
 export type IncubatorSettings = {
 	loadingPlatesPerHour: number;
 	recordingPlatesPerHour: number;
@@ -45,7 +49,7 @@ export type ColibriSettings = {
 	ASTPurityTimeInSeconds: number;
 }
 
-export type FlowSettings = {
+export type FloSettings = {
 	platesPerHour: number;
 }
 
@@ -60,7 +64,7 @@ export type FteSettings = {
 	wasplabMinutesPerIncubatorPerDay: number;
 	radianMinutesPerDay: number;
 	colibriMinutesPerDay: number;
-	flowMinutesPerWorkingHour: number;
+	floMinutesPerWorkingHour: number;
 }
 
 export type Settings = {
@@ -71,8 +75,9 @@ export type Settings = {
 		streakingPatterns: SlidesStreakingPattern[]
 	},
 	broths: BrothSettings,
+	radian: RadianSettings,
 	colibri: ColibriSettings;
-	flow: FlowSettings;
+	flo: FloSettings;
 	incubator: IncubatorSettings;
 	fte: FteSettings;
 }
@@ -113,19 +118,21 @@ export type PrimaryProtocol = {
 		}
 	},
 	negativityRate: number;
-	hasID: boolean;
-	hasAST: boolean;
-	hasASTID: boolean;
-	purityPlatesPercentage: number;
-	subculturePercentage: number;
-	brothsPercentage: number;
+	idPercentage: number;
+	astPercentage: number;
+	astIdPercentage: number;
+	radianPercentage: number;
+	totalPercentage: number;
+	hasPurityPlates: boolean;
+	hasBrothsPercentage: boolean;
 	volumes: number[];
 }
 
 export type SecondaryProtocol = {
 	id: string;
 	name: string;
-	from: "ID" | "AST" | "ID & AST" | "Purity plates" | "Subculture" | "Broths";
+	from: "ID" | "AST" | "ID & AST" | "Purity plates" | "Broth" | "Radian";
+	samples: number;
 	plates: number;
 	platesO2: number;
 	recordingO2: number;

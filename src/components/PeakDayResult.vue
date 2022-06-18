@@ -1,13 +1,14 @@
 <template>
   <q-card class="q-pa-sm q-mt-sm"
       v-if="dailyData.length > 0">
-    <q-item-label class="q-mb-sm" overline>Peak day</q-item-label>
+    <q-item-label class="q-mb-sm" overline>Weekly workload</q-item-label>
     <q-table
       dense
       :rows="dailyData"
       :columns="tableColumns"
       row-key="dayOfWeek"
       :pagination="{ rowsPerPage: 0}"
+      separator="cell"
       hide-bottom
     />
   </q-card>

@@ -1,13 +1,13 @@
 <template>
   <q-card class="q-pa-sm q-mt-sm">
-    <q-item-label class="q-mb-sm" overline>Flow</q-item-label>
+    <q-item-label class="q-mb-sm" overline>Flo</q-item-label>
     <div class="row q-gutter-xs">
         <div class="col">
         <q-input
             dense
             filled
             type="number"
-            v-model.number="settings.flow.platesPerHour"
+            v-model.number="settings.flo.platesPerHour"
             label="Plates/hour"
             hint="plates/hour"
             lazy-rules
@@ -29,7 +29,7 @@ import { defineComponent } from 'vue';
 import appStorage from '@/store';
 
 export default defineComponent({
-  name: 'FlowSettings',
+  name: 'FloSettings',
   setup() {
     const {
       settings

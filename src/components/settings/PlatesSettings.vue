@@ -8,7 +8,7 @@
             filled
             type="number"
             v-model.number="settings.plates.streakingPatterns[0].timeInSeconds"
-            label="Pattern 1 (radian)"
+            label="Pattern 1"
             hint="seconds"
             lazy-rules
             :rules="[
