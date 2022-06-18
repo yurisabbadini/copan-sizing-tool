@@ -135,9 +135,9 @@ export type SecondaryProtocol = {
 	samples: number;
 	plates: number;
 	platesO2: number;
-	recordingO2: number;
+	recordingO2: string;
 	platesCO2: number;
-	recordingCO2: number;
+	recordingCO2: string;
 }
 
 export type WeightedDayTimes = {

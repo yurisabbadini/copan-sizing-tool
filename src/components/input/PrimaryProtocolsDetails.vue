@@ -168,8 +168,8 @@ export default defineComponent({
           plates: 0,
           platesCO2: 0,
           platesO2: 0,
-          recordingCO2: 0,
-          recordingO2: 0,
+          recordingCO2: "",
+          recordingO2: "",
           samples: Math.ceil(protocol.samplesPerDayAvg * factor)
         });
       }

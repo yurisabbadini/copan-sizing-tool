@@ -27,8 +27,8 @@
           </q-td>
           <q-td key="recordingO2" :props="props">
             {{ props.row.recordingO2 }}
-            <q-popup-edit v-model.number="props.row.recordingO2" auto-save v-slot="scope">
-              <q-input v-model.number="scope.value" dense autofocus @keyup.enter="scope.set" />
+            <q-popup-edit v-model="props.row.recordingO2" auto-save v-slot="scope">
+              <q-input v-model="scope.value" dense autofocus @keyup.enter="scope.set" />
             </q-popup-edit>
           </q-td>
           <q-td key="platesCO2" :props="props">
@@ -39,8 +39,8 @@
           </q-td>
           <q-td key="recordingCO2" :props="props">
             {{ props.row.recordingCO2 }}
-            <q-popup-edit v-model.number="props.row.recordingCO2" auto-save v-slot="scope">
-              <q-input v-model.number="scope.value" dense autofocus @keyup.enter="scope.set" />
+            <q-popup-edit v-model="props.row.recordingCO2" auto-save v-slot="scope">
+              <q-input v-model="scope.value" dense autofocus @keyup.enter="scope.set" />
             </q-popup-edit>
           </q-td>
         </q-tr>

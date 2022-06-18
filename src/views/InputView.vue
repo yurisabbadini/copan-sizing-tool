@@ -81,6 +81,7 @@ export default defineComponent({
     const {
       growthTrends,
       primaryProtocols,
+      secondaryProtocols,
       samplesPerDay,
       settings,
       dailyData,
@@ -91,6 +92,7 @@ export default defineComponent({
     return {
       growthTrends,
       primaryProtocols,
+      secondaryProtocols,
       samplesPerDay,
       settings,
       dailyData,
@@ -102,7 +104,8 @@ export default defineComponent({
     calcola() {
       const weightedDayTimes = getWeightedDaysTimesInSeconds({
         growthTrends: this.growthTrends,
-        protocols: this.primaryProtocols,
+        primaryProtocols: this.primaryProtocols,
+        secondaryProtocols: this.secondaryProtocols,
         samplesPerDay: this.samplesPerDay,
         settings: this.settings
       });
