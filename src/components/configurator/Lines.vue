@@ -44,7 +44,7 @@
             {{ props.row.waspOccupancyRate.toFixed(2) }} %
           </q-td>
           <q-td key="wasplabOccupancyRate" :props="props">
-            {{ props.row.wasplabOccupancyRate.toFixed(2) }} %
+            {{ isFinite(props.row.wasplabOccupancyRate) ? props.row.wasplabOccupancyRate.toFixed(2) + " %" : "N/A" }}
           </q-td>
           <q-td key="actions" :props="props">
             <q-btn flat round color="red" icon="remove_circleoutline" size="xs" @click="removeLine(props.row.id)"/>
@@ -121,13 +121,13 @@ export default defineComponent({
         name: "wasplabOccupancyRate",
         label: 'WASPLAB Occupancy rate', //TODO: tempo in % dei protocolli che sono su questa linea
         align: 'left',
-        field: (row: LineConfig) => row.wasplabOccupancyRate,
+        field: (row: LineConfig) => row.wasplabOccupancyRate
       },
       { 
         name: "actions",
         label: '',
         align: 'left',
-        field: (row: LineConfig) =>row.id,
+        field: (row: LineConfig) => row.id,
       },
     ];
 
@@ -154,11 +154,23 @@ export default defineComponent({
           let totalWasplabTime = 0;
           const protocols = line.protocols;
           protocols.forEach(protocol => {
-            const waspProtocolTime = this.weightedDayTimesPerProtocol.filter((x) => x.protocol == protocol.id && x.dayOfWeek == this.peakDay?.dayOfWeek && (x.type == "plates" || x.type == "slides" || x.type == "broths")).map((x) => x.timeInSeconds).reduce((a, b) => a + b) * protocol.samples / 100;
+            const waspProtocolTime = this.weightedDayTimesPerProtocol.filter((x) => x.protocol == protocol.id && x.dayOfWeek == this.peakDay?.dayOfWeek && (x.type == "plates" || x.type == "slides" || x.type == "broths")).map((x) => x.timeInSeconds).reduce((a, b) => a + b) * protocol.samples / line.numberOfWasp / 100 || 0;
             totalWaspTime += waspProtocolTime;
 
-            const wasplabProtocolTime = this.weightedDayTimesPerProtocol.filter((x) => x.protocol == protocol.id && x.dayOfWeek == this.peakDay?.dayOfWeek && !(x.type == "plates" || x.type == "slides" || x.type == "broths")).map((x) => x.timeInSeconds).reduce((a, b) => a + b) * protocol.samples / 100;
-            totalWasplabTime += wasplabProtocolTime;
+            const wasplabProtocolTimeLoadingO2 = this.weightedDayTimesPerProtocol.filter((x) => x.protocol == protocol.id && x.dayOfWeek == this.peakDay?.dayOfWeek && x.type == "loading_air").map((x) => x.timeInSeconds).reduce((a, b) => a + b) * protocol.samples / line.numberOfO2Incubator / 100 || 0;
+            const wasplabProtocolTimeRecordingO2 = this.weightedDayTimesPerProtocol.filter((x) => x.protocol == protocol.id && x.dayOfWeek == this.peakDay?.dayOfWeek && x.type == "recording_air").map((x) => x.timeInSeconds).reduce((a, b) => a + b) * protocol.samples / line.numberOfO2Incubator / 100 || 0;
+            const wasplabProtocolTimeUnloadingO2 = this.weightedDayTimesPerProtocol.filter((x) => x.protocol == protocol.id && x.dayOfWeek == this.peakDay?.dayOfWeek && x.type == "unloading_air").map((x) => x.timeInSeconds).reduce((a, b) => a + b) * protocol.samples / line.numberOfO2Incubator / 100 || 0;
+            totalWasplabTime += wasplabProtocolTimeLoadingO2;
+            totalWasplabTime += wasplabProtocolTimeRecordingO2;
+            totalWasplabTime += wasplabProtocolTimeUnloadingO2;
+
+            const incubatorCO2Factor = line.numberOfCO2Incubator > 0 ? line.numberOfCO2Incubator : 1;
+            const wasplabProtocolTimeLoadingCO2 = this.weightedDayTimesPerProtocol.filter((x) => x.protocol == protocol.id && x.dayOfWeek == this.peakDay?.dayOfWeek && x.type == "loading_co2").map((x) => x.timeInSeconds).reduce((a, b) => a + b) * protocol.samples / incubatorCO2Factor / 100 || 0;
+            const wasplabProtocolTimeRecordingCO2 = this.weightedDayTimesPerProtocol.filter((x) => x.protocol == protocol.id && x.dayOfWeek == this.peakDay?.dayOfWeek && x.type == "recording_co2").map((x) => x.timeInSeconds).reduce((a, b) => a + b) * protocol.samples / incubatorCO2Factor / 100 || 0;
+            const wasplabProtocolTimeUnloadingCO2 = this.weightedDayTimesPerProtocol.filter((x) => x.protocol == protocol.id && x.dayOfWeek == this.peakDay?.dayOfWeek && x.type == "unloading_co2").map((x) => x.timeInSeconds).reduce((a, b) => a + b) * protocol.samples / incubatorCO2Factor / 100 || 0;
+            totalWasplabTime += wasplabProtocolTimeLoadingCO2;
+            totalWasplabTime += wasplabProtocolTimeRecordingCO2;
+            totalWasplabTime += wasplabProtocolTimeUnloadingCO2;
           });
           line.waspOccupancyRate = totalWaspTime / 3600 / 24 * 100;
           line.wasplabOccupancyRate = totalWasplabTime / 3600 / 24 * 100;
@@ -180,7 +192,7 @@ export default defineComponent({
         protocols: [],
         radian: false,
         waspOccupancyRate: 0,
-        wasplabOccupancyRate: 0,
+        wasplabOccupancyRate: 0
       });
     },
     removeLine(id: string) {

@@ -208,3 +208,11 @@ export type LineConfig = {
 	wasplabOccupancyRate: number;
 	protocols: LineConfigProtocol[];
 }
+
+export type ConfiguratorAdditionalItems = {
+	flo: number;
+	colibri: number;
+	manualStation: number;
+	readingStation: number;
+	pickingStation: number;
+}

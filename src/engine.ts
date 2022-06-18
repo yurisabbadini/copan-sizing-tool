@@ -617,13 +617,11 @@ export function getWeightedDaysTimesInSeconds(
                 weightedDaysTimesInSeconds[platesIndex].timeInSeconds +=
                     totalPlatesTime;
             }
-            weightedDaysTimesInSecondsPerProtocol.push({
-                type: "plates",
-                dayOfWeek: dayOfWeek,
-                timeInSeconds: totalPlatesTime,
-                samples: totalPlates,
-                protocol: protocol.id
-            });
+            const platesIndexPerProtocol = weightedDaysTimesInSecondsPerProtocol.findIndex((x) => x.type == "plates" && x.protocol == protocol.id && x.dayOfWeek == dayOfWeek);
+            if(platesIndexPerProtocol >= 0) {
+                weightedDaysTimesInSecondsPerProtocol[platesIndexPerProtocol].timeInSeconds += totalPlatesTime;
+                weightedDaysTimesInSecondsPerProtocol[platesIndexPerProtocol].samples += totalPlates;
+            }
 
             const loadingAirIndex = weightedDaysTimesInSeconds.findIndex(
                 (x) => x.type == "loading_air" && x.dayOfWeek == dayOfWeek
@@ -638,13 +636,11 @@ export function getWeightedDaysTimesInSeconds(
             } else {
                 weightedDaysTimesInSeconds[loadingAirIndex].timeInSeconds += totalLoadingAirPlatesTime;
             }
-            weightedDaysTimesInSecondsPerProtocol.push({
-                type: "loading_air",
-                dayOfWeek: dayOfWeek,
-                timeInSeconds: totalLoadingAirPlatesTime,
-                samples: totalLoadingAirPlates,
-                protocol: protocol.id
-            });
+            const loadingAirIndexPerProtocol = weightedDaysTimesInSecondsPerProtocol.findIndex((x) => x.type == "loading_air" && x.protocol == protocol.id && x.dayOfWeek == dayOfWeek);
+            if(loadingAirIndexPerProtocol >= 0) {
+                weightedDaysTimesInSecondsPerProtocol[loadingAirIndexPerProtocol].timeInSeconds += totalPlatesTime;
+                weightedDaysTimesInSecondsPerProtocol[loadingAirIndexPerProtocol].samples += totalPlates;
+            }
 
             const loadingCO2Index = weightedDaysTimesInSeconds.findIndex(
                 (x) => x.type == "loading_co2" && x.dayOfWeek == dayOfWeek
@@ -659,13 +655,11 @@ export function getWeightedDaysTimesInSeconds(
             } else {
                 weightedDaysTimesInSeconds[loadingCO2Index].timeInSeconds += totalLoadingCO2PlatesTime;
             }
-            weightedDaysTimesInSecondsPerProtocol.push({
-                type: "loading_co2",
-                dayOfWeek: dayOfWeek,
-                timeInSeconds: totalLoadingCO2PlatesTime,
-                samples: totalLoadingCO2Plates,
-                protocol: protocol.id
-            });
+            const loadingCO2IndexPerProtocol = weightedDaysTimesInSecondsPerProtocol.findIndex((x) => x.type == "loading_co2" && x.protocol == protocol.id && x.dayOfWeek == dayOfWeek);
+            if(loadingCO2IndexPerProtocol >= 0) {
+                weightedDaysTimesInSecondsPerProtocol[loadingCO2IndexPerProtocol].timeInSeconds += totalPlatesTime;
+                weightedDaysTimesInSecondsPerProtocol[loadingCO2IndexPerProtocol].samples += totalPlates;
+            }
 
             const recordingAirIndex = weightedDaysTimesInSeconds.findIndex(
                 (x) => x.type == "recording_air" && x.dayOfWeek == dayOfWeek
@@ -680,13 +674,11 @@ export function getWeightedDaysTimesInSeconds(
             } else {
                 weightedDaysTimesInSeconds[recordingAirIndex].timeInSeconds += totalRecordingAirPlatesTime;
             }
-            weightedDaysTimesInSecondsPerProtocol.push({
-                type: "recording_air",
-                dayOfWeek: dayOfWeek,
-                timeInSeconds: totalRecordingAirPlatesTime,
-                samples: totalRecordingAirPlates,
-                protocol: protocol.id
-            });
+            const recordingAirIndexPerProtocol = weightedDaysTimesInSecondsPerProtocol.findIndex((x) => x.type == "recording_air" && x.protocol == protocol.id && x.dayOfWeek == dayOfWeek);
+            if(recordingAirIndexPerProtocol >= 0) {
+                weightedDaysTimesInSecondsPerProtocol[recordingAirIndexPerProtocol].timeInSeconds += totalPlatesTime;
+                weightedDaysTimesInSecondsPerProtocol[recordingAirIndexPerProtocol].samples += totalPlates;
+            }
 
             const recordingCO2Index = weightedDaysTimesInSeconds.findIndex(
                 (x) => x.type == "recording_co2" && x.dayOfWeek == dayOfWeek
@@ -701,13 +693,11 @@ export function getWeightedDaysTimesInSeconds(
             } else {
                 weightedDaysTimesInSeconds[recordingCO2Index].timeInSeconds += totalRecordingCO2PlatesTime;
             }
-            weightedDaysTimesInSecondsPerProtocol.push({
-                type: "recording_co2",
-                dayOfWeek: dayOfWeek,
-                timeInSeconds: totalRecordingCO2PlatesTime,
-                samples: totalRecordingCO2Plates,
-                protocol: protocol.id
-            });
+            const recordingCO2IndexPerProtocol = weightedDaysTimesInSecondsPerProtocol.findIndex((x) => x.type == "recording_co2" && x.protocol == protocol.id && x.dayOfWeek == dayOfWeek);
+            if(recordingCO2IndexPerProtocol >= 0) {
+                weightedDaysTimesInSecondsPerProtocol[recordingCO2IndexPerProtocol].timeInSeconds += totalPlatesTime;
+                weightedDaysTimesInSecondsPerProtocol[recordingCO2IndexPerProtocol].samples += totalPlates;
+            }
 
             const unloadingAirIndex = weightedDaysTimesInSeconds.findIndex(
                 (x) => x.type == "unloading_air" && x.dayOfWeek == dayOfWeek
@@ -722,13 +712,11 @@ export function getWeightedDaysTimesInSeconds(
             } else {
                 weightedDaysTimesInSeconds[unloadingAirIndex].timeInSeconds += totalUnloadingAirPlatesTime;
             }
-            weightedDaysTimesInSecondsPerProtocol.push({
-                type: "unloading_air",
-                dayOfWeek: dayOfWeek,
-                timeInSeconds: totalUnloadingAirPlatesTime,
-                samples: totalUnloadingAirPlates,
-                protocol: protocol.id
-            });
+            const unloadingAirIndexPerProtocol = weightedDaysTimesInSecondsPerProtocol.findIndex((x) => x.type == "unloading_air" && x.protocol == protocol.id && x.dayOfWeek == dayOfWeek);
+            if(unloadingAirIndexPerProtocol >= 0) {
+                weightedDaysTimesInSecondsPerProtocol[unloadingAirIndexPerProtocol].timeInSeconds += totalPlatesTime;
+                weightedDaysTimesInSecondsPerProtocol[unloadingAirIndexPerProtocol].samples += totalPlates;
+            }
 
             const unloadingCO2Index = weightedDaysTimesInSeconds.findIndex(
                 (x) => x.type == "unloading_co2" && x.dayOfWeek == dayOfWeek
@@ -743,13 +731,11 @@ export function getWeightedDaysTimesInSeconds(
             } else {
                 weightedDaysTimesInSeconds[unloadingCO2Index].timeInSeconds += totalUnloadingCO2PlatesTime;
             }
-            weightedDaysTimesInSecondsPerProtocol.push({
-                type: "unloading_co2",
-                dayOfWeek: dayOfWeek,
-                timeInSeconds: totalUnloadingCO2PlatesTime,
-                samples: totalUnloadingCO2Plates,
-                protocol: protocol.id
-            });
+            const unloadingCO2IndexPerProtocol = weightedDaysTimesInSecondsPerProtocol.findIndex((x) => x.type == "unloading_co2" && x.protocol == protocol.id && x.dayOfWeek == dayOfWeek);
+            if(unloadingCO2IndexPerProtocol >= 0) {
+                weightedDaysTimesInSecondsPerProtocol[unloadingCO2IndexPerProtocol].timeInSeconds += totalPlatesTime;
+                weightedDaysTimesInSecondsPerProtocol[unloadingCO2IndexPerProtocol].samples += totalPlates;
+            }
         }
     });
 

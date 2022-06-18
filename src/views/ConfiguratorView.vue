@@ -1,6 +1,11 @@
 <template>
   <div class="row">
     <div class="col">
+      <AdditionalItems />
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
       <Lines />
     </div>
   </div>
@@ -16,13 +21,15 @@ import { defineComponent } from 'vue';
 import appStorage from '@/store';
 import Lines from '@/components/configurator/Lines.vue';
 import Protocols from '@/components/configurator/Protocols.vue';
+import AdditionalItems from '@/components/configurator/AdditionalItems.vue';
 
 export default defineComponent({
   name: 'HomeView',
   components: {
     Lines,
-    Protocols
-  },
+    Protocols,
+    AdditionalItems
+},
   setup() {
     const {
       lines
