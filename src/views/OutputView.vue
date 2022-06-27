@@ -1,18 +1,7 @@
 <template>
 <div class="row">
-  <div class="col-4">
-    <q-card class="q-pa-sm q-mt-sm">
-      <q-item-label class="q-mb-sm" overline>Outputs</q-item-label>
-      <q-table
-        dense
-        :rows="outputRows"
-        :columns="outputColumns"
-        row-key="label"
-        :pagination="{ rowsPerPage: 0}"
-        hide-bottom
-        separator="cell"
-      />
-    </q-card>
+  <div class="col">
+    <TotalHardware />
   </div>
 </div>
 <div class="row">
@@ -68,63 +57,19 @@ import { TableColumn } from '@/types';
 import { defineComponent } from 'vue';
 
 import DailyChart from '@/components/DailyChart.vue'
+import TotalHardware from '@/components/outputs/TotalHardware.vue';
 import appStorage from '@/store';
 
 export default defineComponent({
   name: 'OutputView',
   components: {
-    DailyChart
+    DailyChart,
+    TotalHardware
   },
   setup() {
     const {
       dailyData
     } = appStorage();
-
-    type OutputRow = {
-      label: string;
-      value: number;
-    };
-    const outputColumns: TableColumn<OutputRow>[] = [
-        {
-            name: 'label',
-            required: true,
-            label: '',
-            align: 'left',
-            field: (row: OutputRow) => row.label,
-            sortable: false
-        },
-        {
-            name: 'value',
-            required: true,
-            label: '',
-            align: 'left',
-            field: (row: OutputRow) => row.value,
-            sortable: false
-        }
-    ];
-
-    const outputRows: OutputRow[] = [
-      {
-        label: "Number of WASPLAB",
-        value: 2
-      },
-      {
-        label: "Number of WASP-FLO",
-        value: 1
-      },
-      {
-        label: "Number of COLIBI'",
-        value: 1
-      },
-      {
-        label: "Manual streaking station",
-        value: 2
-      },
-      {
-        label: "Reading station",
-        value: 3
-      }
-    ]
 
     type WaspRow = {
       label: string;
@@ -217,8 +162,6 @@ export default defineComponent({
     ];
 
     return {
-      outputColumns,
-      outputRows,
       waspColumns,
       waspRows,
       incubatorColumns,
