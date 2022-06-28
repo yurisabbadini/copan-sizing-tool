@@ -47,7 +47,7 @@ export default defineComponent({
 
         let slides = line?.protocols.find((x) => x.id == protocol.id)?.wasp1Slides || 0;
         if(props.wasp == 2) {
-          plates = line?.protocols.find((x) => x.id == protocol.id)?.wasp2Slides || 0;
+          slides = line?.protocols.find((x) => x.id == protocol.id)?.wasp2Slides || 0;
         }
         let slideTimeSettings = settings.value.slides.streakingPatterns.find((x) => x.pattern == "slide_and_other")?.timeInSeconds || 0;
         if (protocol.waspData.platesPerSample == 0) {
@@ -57,7 +57,7 @@ export default defineComponent({
 
         let broths = line?.protocols.find((x) => x.id == protocol.id)?.wasp1Broths || 0;
         if(props.wasp == 2) {
-          plates = line?.protocols.find((x) => x.id == protocol.id)?.wasp2Broths || 0;
+          broths = line?.protocols.find((x) => x.id == protocol.id)?.wasp2Broths || 0;
         }
         const brothsTime = broths * (protocol.volumes[i] || 0) / 100 * settings.value.broths.timeInSeconds;
 

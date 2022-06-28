@@ -33,188 +33,80 @@ export default defineComponent({
 
     const line = lines.value.find((x) => x.id == props.lineId);
 
-    const waspPlates: {
-      total: number;
+    const platesPerProtocolVolumes: {
       plates: number;
-      slides: number;
-      broths: number;
+      totalPlatesTime: number;
+      platesPerHour: number[];
+      platesTimePerHour: number[];
       protocol?: PrimaryProtocol;
     }[] = [];
-    
-    for(let i = 0; i < 25; i++) {
-      waspPlates.push({
-        total: 0,
-        plates: 0,
-        slides: 0,
-        broths: 0
-      })
-    }
+
+    const waspTimesData: number[] = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
     primaryProtocols.value.forEach(protocol => {
       for(let i = 0; i < protocol.volumes.length; i++) {
-        const platesWasp1 = line?.protocols.find((x) => x.id == protocol.id)?.wasp1Plates || 0;
-        const platesWasp2 = line?.protocols.find((x) => x.id == protocol.id)?.wasp2Plates || 0;
-        const plates = (Math.ceil(platesWasp1 + platesWasp2) * (protocol.volumes[i] || 0) / 100);
+        const plates = (line?.protocols.find((x) => x.id == protocol.id)?.wasp1Plates || 0) + (line?.protocols.find((x) => x.id == protocol.id)?.wasp2Plates || 0);
         const platesTime = plates * (protocol.volumes[i] || 0) / 100 * (settings.value.plates.streakingPatterns.find((x) => x.pattern == protocol.waspData.streakingPattern)?.timeInSeconds || 0);
 
-        const slidesWasp1 = line?.protocols.find((x) => x.id == protocol.id)?.wasp1Slides || 0;
-        const slidesWasp2 = line?.protocols.find((x) => x.id == protocol.id)?.wasp2Slides || 0;
-        const slides = (Math.ceil(slidesWasp1 + slidesWasp2) * (protocol.volumes[i] || 0) / 100);
-        
+        let slides = (line?.protocols.find((x) => x.id == protocol.id)?.wasp1Slides || 0) + (line?.protocols.find((x) => x.id == protocol.id)?.wasp2Slides || 0);
         let slideTimeSettings = settings.value.slides.streakingPatterns.find((x) => x.pattern == "slide_and_other")?.timeInSeconds || 0;
         if (protocol.waspData.platesPerSample == 0) {
             slideTimeSettings = settings.value.slides.streakingPatterns.find((x) => x.pattern == "slide_only")?.timeInSeconds || 0;
         }
         const slidesTime = slides * (protocol.volumes[i] || 0) / 100 * slideTimeSettings;
 
-        const brothsWasp1 = line?.protocols.find((x) => x.id == protocol.id)?.wasp1Broths || 0;
-        const brothsWasp2 = line?.protocols.find((x) => x.id == protocol.id)?.wasp2Broths || 0;
-        const broths = (Math.ceil(brothsWasp1 + brothsWasp2) * (protocol.volumes[i] || 0) / 100);
-        
+        let broths = (line?.protocols.find((x) => x.id == protocol.id)?.wasp1Broths || 0) + (line?.protocols.find((x) => x.id == protocol.id)?.wasp2Broths || 0);
         const brothsTime = broths * (protocol.volumes[i] || 0) / 100 * settings.value.broths.timeInSeconds;
-
-        waspPlates[i].total += platesTime + brothsTime + slidesTime;
-        waspPlates[i].plates += platesTime;
-        waspPlates[i].slides += slides;
-        waspPlates[i].broths += broths;
-        if(waspPlates[i].total > 3600) {
-          let next = i + 1;
-          if(next > waspPlates.length - 1) {
+        waspTimesData[i] += platesTime + slidesTime + brothsTime;
+        if(waspTimesData[i] > 3600) {
+          let next = i+1;
+          if(next > waspTimesData.length - 1) {
             next = 0;
           }
-          waspPlates[next].total += waspPlates[i].total - 3600;
-          waspPlates[i].total = 3600;
+          waspTimesData[next] += waspTimesData[i] - 3600;
+          waspTimesData[i] = 3600;
         }
-        waspPlates[i].protocol = protocol;
       }
     });
 
-    // waspPlates.forEach(element => {
-    //   let slideTimeSettings = settings.value.slides.streakingPatterns.find((x) => x.pattern == "slide_and_other")?.timeInSeconds || 0;
-    //   if (element.protocol?.waspData.platesPerSample == 0) {
-    //       slideTimeSettings = settings.value.slides.streakingPatterns.find((x) => x.pattern == "slide_only")?.timeInSeconds || 0;
-    //   }
-    //   element.plates /= (settings.value.plates.streakingPatterns.find((x) => x.pattern == element.protocol?.waspData.streakingPattern)?.timeInSeconds || 0);
-    //   element.slides /= slideTimeSettings;
-    //   element.broths /= settings.value.broths.timeInSeconds;
-    // });
 
-    console.log(waspPlates);
-
-    // const loadingPlatesData: number[] = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
-    // primaryProtocols.value.forEach(protocol => {
-    //   const maxPlates = Math.ceil(3600 / (settings.value.plates.streakingPatterns.find((x) => x.pattern == protocol.waspData.streakingPattern)?.timeInSeconds || 0));
-    //   for(let i = 0; i < protocol.volumes.length; i++) {
-    //     const plates = ((line?.protocols.find((x) => x.id == protocol.id)?.wasp1Plates || 0) + (line?.protocols.find((x) => x.id == protocol.id)?.wasp2Plates || 0)) * ((protocol.volumes[i] || 0) / 100);
-    //     loadingPlatesData[i] += plates;
-    //     if(loadingPlatesData[i] > maxPlates) {
-    //       let next = i+1;
-    //       if(next > loadingPlatesData.length - 1) {
-    //         next = 0;
-    //       }
-    //       loadingPlatesData[next] += loadingPlatesData[i] - maxPlates;
-    //       loadingPlatesData[i] = maxPlates;
-    //     }
-    //   }
-    // });
-
+    primaryProtocols.value.forEach(protocol => {
+      platesPerProtocolVolumes.push({
+        protocol: protocol,
+        platesPerHour: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        platesTimePerHour: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        plates: 0,
+        totalPlatesTime: 0
+      });
+      for(let i = 0; i < platesPerProtocolVolumes[platesPerProtocolVolumes.length - 1].platesPerHour.length; i++) {
+        const plates = (line?.protocols.find((x) => x.id == protocol.id)?.wasp1Plates || 0) + (line?.protocols.find((x) => x.id == protocol.id)?.wasp2Plates || 0);
+        platesPerProtocolVolumes[platesPerProtocolVolumes.length - 1].platesPerHour[i] += Math.ceil(plates * (protocol.volumes[i] || 0) / 100);
+        platesPerProtocolVolumes[platesPerProtocolVolumes.length - 1].platesTimePerHour[i] += plates * (protocol.volumes[i] || 0) / 100 * (settings.value.plates.streakingPatterns.find((x) => x.pattern == protocol.waspData.streakingPattern)?.timeInSeconds || 0);
+        platesPerProtocolVolumes[platesPerProtocolVolumes.length - 1].plates += Math.ceil(plates * (protocol.volumes[i] || 0) / 100);
+        platesPerProtocolVolumes[platesPerProtocolVolumes.length - 1].totalPlatesTime += plates * (protocol.volumes[i] || 0) / 100 * (settings.value.plates.streakingPatterns.find((x) => x.pattern == protocol.waspData.streakingPattern)?.timeInSeconds || 0);
+      }
+    });
+    
+    const totalWaspTime = waspTimesData.reduce((a, b) => a+b);
+    let totalPlates = 0;
+    let totalPlatesTime = 0;
+    platesPerProtocolVolumes.forEach(element => {
+      totalPlatesTime += element.totalPlatesTime
+      totalPlates += element.plates;
+    });
+    const factor = totalPlatesTime / totalWaspTime;
+    const plateAvgTime = totalPlatesTime / totalPlates;
+    
     const unloadingPositiveData: number[] = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
-    const loadingData: number[] = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+    const platesFromWasp: number[] = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+    const loadingPlates: number[] = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
     const recordingData: number[] = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
     const unloadingNegativeData: number[] = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
 
-    // waspPlates.forEach(element => {
-    //   for(let i = 0; i < element.platesPerHour.length; i++) {
-    //     loadingData[i] += element.platesPerHour[i];
-    //   }
-    // });
-    // primaryProtocols.value.forEach(protocol => {
-    //   const positiveRate = (100 - protocol.negativityRate) / 100;
-    //   const negativeRate = (protocol.negativityRate) / 100;
+    for(let i = 0; i < waspTimesData.length; i++) {
+      platesFromWasp[i] = Math.ceil(waspTimesData[i] * factor / plateAvgTime);
+      loadingPlates[i] = Number((Math.ceil(waspTimesData[i] * factor / plateAvgTime) / settings.value.incubator.loadingPlatesPerHour).toFixed(2));
+    }
 
-    //   const offsetHoursCO2 = Math.max(...(protocol.wasplabData.co2.readHours.split(",").map((x => Number(x))) || []));
-    //   const offsetHoursO2 = Math.max(...(protocol.wasplabData.air.readHours.split(",").map((x => Number(x))) || []));
-
-    //   for(let i = 0; i < protocol.volumes.length; i++) { 
-    //     const tempDate = new Date(Date.UTC(2017, 0, 1, i-1, 0, 0, 0)); // just a Sunday
-        
-    //     const endDateCO2 = new Date(tempDate.getTime() + offsetHoursCO2 * 60 * 60 * 1000);
-    //     const endHourCO2 = endDateCO2.getHours();
-        
-    //     const endDateO2 = new Date(tempDate.getTime() + offsetHoursO2 * 60 * 60 * 1000);
-    //     const endHourO2 = endDateO2.getHours();
-
-    //     let unloadingTime = settings.value.incubator.unloadingSinglePlatesPerHour;
-    //     if((line?.numberOfCO2Incubator || 0) + (line?.numberOfO2Incubator || 0)) {
-    //       unloadingTime = settings.value.incubator.unloadingMultiplePlatesPerHour;
-    //     }
-    //     unloadingTime = unloadingTime * (protocol.volumes[i] || 0) / 100;
-    //     const loadingTime = settings.value.incubator.loadingPlatesPerHour;
-    //     const recordingTime = settings.value.incubator.recordingPlatesPerHour * (protocol.volumes[i] || 0) / 100;
-
-    //     let indexCO2 = endHourCO2;
-    //     if(indexCO2 > unloadingPositiveData.length - 1) {
-    //       indexCO2 = indexCO2 - unloadingPositiveData.length - 1;
-    //     }
-        
-    //     let indexO2 = endHourO2;
-    //     if(indexO2 > unloadingPositiveData.length - 1) {
-    //       indexO2 = indexO2 - unloadingPositiveData.length - 1;
-    //     }
-
-    //     //unloading CO2
-    //     const co2Unloading = unloadingTime == 0 ? 0 : (line?.protocols.find((x) => x.id == protocol.id)?.co2Unloading || 0) * (positiveRate) / (unloadingTime / 3600) / (line?.numberOfCO2Incubator || 0);
-    //     unloadingPositiveData[indexCO2] += co2Unloading;
-
-    //     //unloading O2
-    //     const o2Unloading = unloadingTime == 0 ? 0 : (line?.protocols.find((x) => x.id == protocol.id)?.co2Unloading || 0) * (positiveRate) / (unloadingTime / 3600) / (line?.numberOfO2Incubator || 0);
-    //     unloadingPositiveData[indexO2] += o2Unloading;
-
-    //     //loading CO2
-    //     const co2Loading = loadingPlatesData[i] / (loadingTime / 3600);
-    //     loadingData[i] += co2Loading;
-
-    //     //loading O2
-    //     const o2Loading = loadingPlatesData[i] / (loadingTime / 3600);
-    //     loadingData[i] += o2Loading;
-
-    //     //recording CO2
-    //     const co2Recording = recordingTime == 0 ? 0 : (line?.protocols.find((x) => x.id == protocol.id)?.co2Recording || 0) / (recordingTime / 3600) / (line?.numberOfCO2Incubator || 0);
-    //     recordingData[indexCO2] += co2Recording;
-
-    //     //recording O2
-    //     const o2Recording = recordingTime == 0 ? 0 : (line?.protocols.find((x) => x.id == protocol.id)?.o2Recording || 0) / (recordingTime / 3600) / (line?.numberOfO2Incubator || 0);
-    //     recordingData[indexO2] += o2Recording;
-
-    //     //unloading N CO2
-    //     const co2UnloadingN = unloadingTime == 0 ? 0 : (line?.protocols.find((x) => x.id == protocol.id)?.co2Unloading || 0) * (negativeRate) / (unloadingTime / 3600) / (line?.numberOfCO2Incubator || 0);
-    //     unloadingNegativeData[indexCO2] += co2UnloadingN;
-
-    //     //unloading O2
-    //     const o2UnloadingN = unloadingTime == 0 ? 0 : (line?.protocols.find((x) => x.id == protocol.id)?.o2Unloading || 0) * (negativeRate) / (unloadingTime / 3600) / (line?.numberOfO2Incubator || 0);
-    //     unloadingNegativeData[indexO2] += o2UnloadingN;
-    //   }
-
-      // for(let i = 0; i < protocol.volumes.length; i++) {
-      //   if(unloadingPositiveData[i] > 3600) {
-      //     let next = i + 1;
-      //     if(next > unloadingPositiveData.length - 1) {
-      //       next = 0;
-      //     }
-      //     unloadingPositiveData[next] += unloadingPositiveData[i] - 3600;
-      //     unloadingPositiveData[i] = 3600;
-      //   }
-
-      //   if(loadingPositiveData[i] > 3600) {
-      //     let next = i + 1;
-      //     if(next > loadingPositiveData.length - 1) {
-      //       next = 0;
-      //     }
-      //     loadingPositiveData[next] += loadingPositiveData[i] - 3600;
-      //     loadingPositiveData[i] = 3600;
-      //   }
-      // }
-    // });
-    
     const series = [
       /*{
         name: 'Unloading positive plates',
@@ -223,7 +115,7 @@ export default defineComponent({
       }, */
       {
         name: 'Loading',
-        data: loadingData.map((x) => Number((x / 3600 * 100).toFixed(2))),
+        data: loadingPlates,
         color: "#7794FB"
       }, 
       /*{
