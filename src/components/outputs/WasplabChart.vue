@@ -96,16 +96,35 @@ export default defineComponent({
     const factor = totalPlatesTime / totalWaspTime;
     const plateAvgTime = totalPlatesTime / totalPlates;
     
-    const unloadingPositiveData: number[] = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
     const platesFromWasp: number[] = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
-    const loadingPlates: number[] = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
-    const recordingData: number[] = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
-    const unloadingNegativeData: number[] = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+    const platesFromWaspPerProtocol: 
+    {
+      protocol: PrimaryProtocol,
+      plates: number[],
+    }[] = [];
+    const loadingChartData: number[] = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
 
     for(let i = 0; i < waspTimesData.length; i++) {
       platesFromWasp[i] = Math.ceil(waspTimesData[i] * factor / plateAvgTime);
-      loadingPlates[i] = Number((Math.ceil(waspTimesData[i] * factor / plateAvgTime) / settings.value.incubator.loadingPlatesPerHour).toFixed(2));
+      loadingChartData[i] = Number((Math.ceil(waspTimesData[i] * factor / plateAvgTime) / settings.value.incubator.loadingPlatesPerHour).toFixed(2));
     }
+
+    primaryProtocols.value.forEach(protocol => {
+      platesFromWaspPerProtocol.push({
+        protocol: protocol,
+        plates: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+      });
+      for(let i = 0; i < platesFromWasp.length; i++) {
+        const totalPlatesInHour = platesPerProtocolVolumes.map((x) => x.platesPerHour[i]).reduce((a,b) => a+b);
+        const protocolPlatesInHour = (platesPerProtocolVolumes.find((x) => x.protocol?.id == protocol.id)?.platesPerHour[i] || 0);
+        const protocolFactor = protocolPlatesInHour == 0 ? 0 : protocolPlatesInHour / totalPlatesInHour;
+        platesFromWaspPerProtocol[platesFromWaspPerProtocol.length - 1].plates[i] = Math.ceil(platesFromWasp[i] * protocol.volumes[i] / 100 * protocolFactor);
+      }
+    });
+
+    console.log("platesFromWasp", platesFromWasp);
+    console.log("platesPerProtocolVolumes", platesPerProtocolVolumes);
+    console.log("platesFromWaspPerProtocol", platesFromWaspPerProtocol);
 
     const series = [
       /*{
@@ -115,7 +134,7 @@ export default defineComponent({
       }, */
       {
         name: 'Loading',
-        data: loadingPlates,
+        data: loadingChartData,
         color: "#7794FB"
       }, 
       /*{
