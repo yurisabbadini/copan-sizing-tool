@@ -115,10 +115,10 @@ export default defineComponent({
         plates: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
       });
       for(let i = 0; i < platesFromWasp.length; i++) {
-        const totalPlatesInHour = platesPerProtocolVolumes.map((x) => x.platesPerHour[i]).reduce((a,b) => a+b);
-        const protocolPlatesInHour = (platesPerProtocolVolumes.find((x) => x.protocol?.id == protocol.id)?.platesPerHour[i] || 0);
-        const protocolFactor = protocolPlatesInHour == 0 ? 0 : protocolPlatesInHour / totalPlatesInHour;
-        platesFromWaspPerProtocol[platesFromWaspPerProtocol.length - 1].plates[i] = Math.ceil(platesFromWasp[i] * protocol.volumes[i] / 100 * protocolFactor);
+        const totalPlates = platesPerProtocolVolumes.map((x) => x.plates).reduce((a,b) => a+b);
+        const protocolPlates = (platesPerProtocolVolumes.find((x) => x.protocol?.id == protocol.id)?.plates || 0);
+        const protocolFactor = protocolPlates == 0 ? 0 : protocolPlates / totalPlates;
+        platesFromWaspPerProtocol[platesFromWaspPerProtocol.length - 1].plates[i] = Math.ceil(platesFromWasp[i] * protocolFactor);
       }
     });
 
