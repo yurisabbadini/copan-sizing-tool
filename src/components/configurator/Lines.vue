@@ -52,7 +52,7 @@
         </q-tr>
       </template>
     </q-table>
-    <q-btn class="q-mt-md" label="Add" type="button" color="secondary" @click="addLine"/>
+    <q-btn class="q-mt-md" label="Add" type="button" color="secondary" size="sm" @click="addLine"/>
   </q-card>
 </template>
 
@@ -133,8 +133,8 @@ export default defineComponent({
 
     const {
       lines,
-      weightedDayTimesPerProtocol,
-      dailyData
+      dailyData,
+      primaryProtocols
     } = appStorage();
 
     const peakDay = dailyData.value.find((x) => x.isPeakDay);
@@ -142,41 +142,8 @@ export default defineComponent({
     return {
       tableColumns,
       lines,
-      weightedDayTimesPerProtocol,
-      peakDay
-    }
-  },
-  watch: {
-    lines: {
-      handler: function () {
-        this.lines.forEach(line => {
-          let totalWaspTime = 0;
-          let totalWasplabTime = 0;
-          const protocols = line.protocols;
-          protocols.forEach(protocol => {
-            const waspProtocolTime = this.weightedDayTimesPerProtocol.filter((x) => x.protocol == protocol.id && x.dayOfWeek == this.peakDay?.dayOfWeek && (x.type == "plates" || x.type == "slides" || x.type == "broths")).map((x) => x.timeInSeconds).reduce((a, b) => a + b) * protocol.samples / line.numberOfWasp / 100 || 0;
-            totalWaspTime += waspProtocolTime;
-
-            const wasplabProtocolTimeLoadingO2 = this.weightedDayTimesPerProtocol.filter((x) => x.protocol == protocol.id && x.dayOfWeek == this.peakDay?.dayOfWeek && x.type == "loading_air").map((x) => x.timeInSeconds).reduce((a, b) => a + b) * protocol.samples / line.numberOfO2Incubator / 100 || 0;
-            const wasplabProtocolTimeRecordingO2 = this.weightedDayTimesPerProtocol.filter((x) => x.protocol == protocol.id && x.dayOfWeek == this.peakDay?.dayOfWeek && x.type == "recording_air").map((x) => x.timeInSeconds).reduce((a, b) => a + b) * protocol.samples / line.numberOfO2Incubator / 100 || 0;
-            const wasplabProtocolTimeUnloadingO2 = this.weightedDayTimesPerProtocol.filter((x) => x.protocol == protocol.id && x.dayOfWeek == this.peakDay?.dayOfWeek && x.type == "unloading_air").map((x) => x.timeInSeconds).reduce((a, b) => a + b) * protocol.samples / line.numberOfO2Incubator / 100 || 0;
-            totalWasplabTime += wasplabProtocolTimeLoadingO2;
-            totalWasplabTime += wasplabProtocolTimeRecordingO2;
-            totalWasplabTime += wasplabProtocolTimeUnloadingO2;
-
-            const incubatorCO2Factor = line.numberOfCO2Incubator > 0 ? line.numberOfCO2Incubator : 1;
-            const wasplabProtocolTimeLoadingCO2 = this.weightedDayTimesPerProtocol.filter((x) => x.protocol == protocol.id && x.dayOfWeek == this.peakDay?.dayOfWeek && x.type == "loading_co2").map((x) => x.timeInSeconds).reduce((a, b) => a + b) * protocol.samples / incubatorCO2Factor / 100 || 0;
-            const wasplabProtocolTimeRecordingCO2 = this.weightedDayTimesPerProtocol.filter((x) => x.protocol == protocol.id && x.dayOfWeek == this.peakDay?.dayOfWeek && x.type == "recording_co2").map((x) => x.timeInSeconds).reduce((a, b) => a + b) * protocol.samples / incubatorCO2Factor / 100 || 0;
-            const wasplabProtocolTimeUnloadingCO2 = this.weightedDayTimesPerProtocol.filter((x) => x.protocol == protocol.id && x.dayOfWeek == this.peakDay?.dayOfWeek && x.type == "unloading_co2").map((x) => x.timeInSeconds).reduce((a, b) => a + b) * protocol.samples / incubatorCO2Factor / 100 || 0;
-            totalWasplabTime += wasplabProtocolTimeLoadingCO2;
-            totalWasplabTime += wasplabProtocolTimeRecordingCO2;
-            totalWasplabTime += wasplabProtocolTimeUnloadingCO2;
-          });
-          line.waspOccupancyRate = totalWaspTime / 3600 / 24 * 100;
-          line.wasplabOccupancyRate = totalWasplabTime / 3600 / 24 * 100;
-        });
-      },
-      deep: true
+      peakDay,
+      primaryProtocols
     }
   },
   methods: {
@@ -193,6 +160,29 @@ export default defineComponent({
         radian: false,
         waspOccupancyRate: 0,
         wasplabOccupancyRate: 0
+      });
+      const line = this.lines[this.lines.length - 1];
+      line.protocols = [];
+      this.primaryProtocols.forEach(element => {
+        line?.protocols.push({
+          id: element.id,
+          name: element.name,
+          samples: 0,
+          wasp1Percentage: 0,
+          wasp2Percentage: 0,
+          co2Loading: 0,
+          co2Recording: 0,
+          co2Unloading: 0,
+          o2Loading: 0,
+          o2Recording: 0,
+          o2Unloading: 0,
+          wasp1Broths: 0,
+          wasp1Plates: 0,
+          wasp1Slides: 0,
+          wasp2Broths: 0,
+          wasp2Plates: 0,
+          wasp2Slides: 0,
+        });
       });
     },
     removeLine(id: string) {

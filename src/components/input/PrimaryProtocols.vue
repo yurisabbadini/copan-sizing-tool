@@ -80,7 +80,7 @@
         </q-tr>
       </template>
     </q-table>
-    <q-btn class="q-mt-md" label="Add" type="button" color="secondary" @click="addProtocol"/>
+    <q-btn class="q-mt-md" label="Add" type="button" color="secondary" size="sm" @click="addProtocol"/>
   </q-card>
 </template>
 

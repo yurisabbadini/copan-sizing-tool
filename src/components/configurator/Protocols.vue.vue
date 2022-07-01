@@ -7,17 +7,17 @@
           <q-td key="name" :props="props">
             {{ props.row.name }}
           </q-td>
-          <q-td key="samples" :props="props">
+          <q-td key="samples" :props="props" style="background-color:rgba(0, 0, 0, 0.05)">
             {{ props.row.samples }} %
-            <!-- <q-popup-edit v-model.number="props.row.samples" auto-save v-slot="scope">
+            <q-popup-edit v-model.number="props.row.samples" auto-save v-slot="scope">
               <q-input v-model.number="scope.value" dense autofocus @keyup.enter="scope.set" />
-            </q-popup-edit> -->
+            </q-popup-edit>
           </q-td>
-          <q-td key="wasp1Percentage" :props="props">
+          <q-td key="wasp1Percentage" :props="props" style="background-color:rgba(0, 0, 0, 0.05)">
             {{ props.row.wasp1Percentage }} %
-            <!-- <q-popup-edit v-model.number="props.row.wasp1Percentage" auto-save v-slot="scope">
+            <q-popup-edit v-model.number="props.row.wasp1Percentage" auto-save v-slot="scope">
               <q-input v-model.number="scope.value" dense autofocus @keyup.enter="scope.set" />
-            </q-popup-edit> -->
+            </q-popup-edit>
           </q-td>
           <q-td key="wasp1Plates" :props="props">
             {{ props.row.wasp1Plates }}
@@ -28,11 +28,11 @@
           <q-td key="wasp1Broths" :props="props">
             {{ props.row.wasp1Broths }}
           </q-td>
-          <q-td key="wasp2Percentage" :props="props">
+          <q-td key="wasp2Percentage" :props="props" style="background-color:rgba(0, 0, 0, 0.05)">
             {{ props.row.wasp2Percentage }} %
-            <!-- <q-popup-edit v-model.number="props.row.wasp2Percentage" auto-save v-slot="scope">
+            <q-popup-edit v-model.number="props.row.wasp2Percentage" auto-save v-slot="scope">
               <q-input v-model.number="scope.value" dense autofocus @keyup.enter="scope.set" />
-            </q-popup-edit> -->
+            </q-popup-edit>
           </q-td>
           <q-td key="wasp2Plates" :props="props">
             {{ props.row.wasp2Plates }}
@@ -204,50 +204,6 @@ export default defineComponent({
       line,
       weightedPeakDayTimes,
       primaryProtocols
-    }
-  },
-  watch: {
-    lines: {
-      handler: function () {
-        this.addProtocols();
-        this.line?.protocols.forEach((p) =>  {
-          p.samples = Number((100 / this.lines.length).toFixed(2));
-          p.wasp1Percentage = this.line?.numberOfWasp == 1 ? 100 : 50;
-          p.wasp2Percentage = this.line?.numberOfWasp == 1 ? 0 : 50;
-        });
-      },
-      deep: true
-    }
-  },
-  methods: {
-    addProtocols() {
-      if(this.line && this.line.numberOfWasp > 0) {
-        this.line.protocols = [];
-        this.primaryProtocols.forEach(element => {
-          const linePercentage = 100 / this.lines.filter((x) => x.numberOfWasp >= 1).length;
-          const wasp1Percentage = this.line?.numberOfWasp == 1 ? 100 : 50;
-          const wasp2Percentage = this.line?.numberOfWasp == 1 ? 0 : 50;
-          this.line?.protocols.push({
-            id: element.id,
-            name: element.name,
-            samples: Number(linePercentage.toFixed(2)),
-            wasp1Percentage: wasp1Percentage,
-            wasp2Percentage: wasp2Percentage,
-            co2Loading: Math.ceil((this.weightedPeakDayTimes.find((x) => x.type == "loading_co2" && x.protocol == element.id)?.samples || 0) * wasp1Percentage / 100 * linePercentage / 100),
-            co2Recording: Math.ceil((this.weightedPeakDayTimes.find((x) => x.type == "recording_co2" && x.protocol == element.id)?.samples || 0) * wasp1Percentage / 100 * linePercentage / 100),
-            co2Unloading: Math.ceil((this.weightedPeakDayTimes.find((x) => x.type == "unloading_co2" && x.protocol == element.id)?.samples || 0) * wasp1Percentage / 100 * linePercentage / 100),
-            o2Loading: Math.ceil((this.weightedPeakDayTimes.find((x) => x.type == "loading_air" && x.protocol == element.id)?.samples || 0) * wasp1Percentage / 100 * linePercentage / 100),
-            o2Recording: Math.ceil((this.weightedPeakDayTimes.find((x) => x.type == "recording_air" && x.protocol == element.id)?.samples || 0) * wasp1Percentage / 100 * linePercentage / 100),
-            o2Unloading: Math.ceil((this.weightedPeakDayTimes.find((x) => x.type == "unloading_air" && x.protocol == element.id)?.samples || 0) * wasp1Percentage / 100 * linePercentage / 100),
-            wasp1Broths: Math.ceil((this.weightedPeakDayTimes.find((x) => x.type == "broths" && x.protocol == element.id)?.samples || 0) * wasp1Percentage / 100 * linePercentage / 100),
-            wasp1Plates: Math.ceil((this.weightedPeakDayTimes.find((x) => x.type == "plates" && x.protocol == element.id)?.samples || 0) * wasp1Percentage / 100 * linePercentage / 100),
-            wasp1Slides: Math.ceil((this.weightedPeakDayTimes.find((x) => x.type == "slides" && x.protocol == element.id)?.samples || 0) * wasp1Percentage / 100 * linePercentage / 100),
-            wasp2Broths: Math.floor((this.weightedPeakDayTimes.find((x) => x.type == "broths" && x.protocol == element.id)?.samples || 0) * wasp2Percentage / 100 * linePercentage / 100),
-            wasp2Plates: Math.floor((this.weightedPeakDayTimes.find((x) => x.type == "plates" && x.protocol == element.id)?.samples || 0) * wasp2Percentage / 100 * linePercentage / 100),
-            wasp2Slides: Math.floor((this.weightedPeakDayTimes.find((x) => x.type == "slides" && x.protocol == element.id)?.samples || 0) * wasp2Percentage / 100 * linePercentage / 100),
-          });
-        });
-      }
     }
   }
 });

@@ -44,7 +44,7 @@
 </div>
 
 <q-page-sticky position="top-right" :offset="[18, 18]">
-  <q-btn fab color="primary" @click="calcola">CALCOLA</q-btn>
+  <q-btn fab color="primary" @click="calcola">SAVE</q-btn>
 </q-page-sticky>
 
 </template>

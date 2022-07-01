@@ -13,20 +13,11 @@
 </style>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue';
+import { defineComponent } from 'vue';
 import appStorage from '@/store';
 export default defineComponent({
   name: 'WaspChart',
-  props: {
-    lineId: {
-        type: Object as PropType<string>,
-        required: true
-    },
-    wasp: {
-        type: Object as PropType<number>,
-        required: true
-    }
-  },
+  props: ["wasp", "lineId"],
   setup(props) {
     const {
       primaryProtocols,
