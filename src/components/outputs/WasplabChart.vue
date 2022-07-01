@@ -58,13 +58,13 @@ export default defineComponent({
         let broths = (line?.protocols.find((x) => x.id == protocol.id)?.wasp1Broths || 0) + (line?.protocols.find((x) => x.id == protocol.id)?.wasp2Broths || 0);
         const brothsTime = broths * (protocol.volumes[i] || 0) / 100 * settings.value.broths.timeInSeconds;
         waspTimesData[i] += platesTime + slidesTime + brothsTime;
-        if(waspTimesData[i] > 3600) {
+        if(waspTimesData[i] > 3600 * (line?.numberOfWasp || 1)) {
           let next = i+1;
           if(next > waspTimesData.length - 1) {
             next = 0;
           }
-          waspTimesData[next] += waspTimesData[i] - 3600;
-          waspTimesData[i] = 3600;
+          waspTimesData[next] += waspTimesData[i] - (3600 * (line?.numberOfWasp || 1));
+          waspTimesData[i] = 3600 * (line?.numberOfWasp || 1);
         }
       }
     });
@@ -174,20 +174,22 @@ export default defineComponent({
       if(loadingPlates) {
         for(let i = 0; i < loadingPlates.plates.length; i++) {
           const tempDate = new Date(Date.UTC(2017, 0, 1, i, 0, 0, 0)); // just a Sunday
-          const airEndDate = new Date(tempDate.getTime() + maxAirReadingTimes * 60 * 60 * 1000);
+          const airEndDate = new Date(tempDate.getTime() + (maxAirReadingTimes - 1) * 60 * 60 * 1000);
           unloadingAirPlatesPerProtocol[unloadingAirPlatesPerProtocol.length - 1].positivePlates[airEndDate.getHours()] = Math.ceil(loadingPlates.plates[i] * airFactor * (1 - protocol.negativityRate / 100));
           unloadingAirPlatesPerProtocol[unloadingAirPlatesPerProtocol.length - 1].negativePlates[airEndDate.getHours()] = Math.ceil(loadingPlates.plates[i] * airFactor * (protocol.negativityRate / 100));
+
           protocolAirReadingTimes.forEach(rt => {
-            const airEndDate = new Date(tempDate.getTime() + rt * 60 * 60 * 1000);
-            recordingAirPlatesPerProtocol[recordingAirPlatesPerProtocol.length - 1].plates[airEndDate.getHours()] = Math.ceil(loadingPlates.plates[i] * airFactor);
+            const airEndDate = new Date(tempDate.getTime() + (rt - 1) * 60 * 60 * 1000);
+            recordingAirPlatesPerProtocol[recordingAirPlatesPerProtocol.length - 1].plates[airEndDate.getHours()] += Math.ceil(loadingPlates.plates[i] * airFactor);
           });
           
-          const co2EndDate = new Date(tempDate.getTime() + maxCO2ReadingTimes * 60 * 60 * 1000);
+          const co2EndDate = new Date(tempDate.getTime() + (maxCO2ReadingTimes - 1) * 60 * 60 * 1000);
           unloadingCO2PlatesPerProtocol[unloadingCO2PlatesPerProtocol.length - 1].positivePlates[co2EndDate.getHours()] = Math.ceil(loadingPlates.plates[i] * co2Factor * (1 - protocol.negativityRate / 100));
           unloadingCO2PlatesPerProtocol[unloadingCO2PlatesPerProtocol.length - 1].negativePlates[co2EndDate.getHours()] = Math.ceil(loadingPlates.plates[i] * co2Factor * (protocol.negativityRate / 100));
+
           protocolCO2ReadingTimes.forEach(rt => {
-            const co2EndDate = new Date(tempDate.getTime() + rt * 60 * 60 * 1000);
-            recordingCO2PlatesPerProtocol[recordingCO2PlatesPerProtocol.length - 1].plates[co2EndDate.getHours()] = Math.ceil(loadingPlates.plates[i] * co2Factor);
+            const co2EndDate = new Date(tempDate.getTime() + (rt - 1) * 60 * 60 * 1000);
+            recordingCO2PlatesPerProtocol[recordingCO2PlatesPerProtocol.length - 1].plates[co2EndDate.getHours()] += Math.ceil(loadingPlates.plates[i] * co2Factor);
           });
         }
       }
@@ -248,25 +250,65 @@ export default defineComponent({
       recordingChartData[i] = Number((recordingChartData[i] * 100).toFixed(2));
     }
 
+    for(let i = 0; i < unloadingPositiveChartData.length - 1; i++) {
+      const tempDate = new Date(Date.UTC(2017, 0, 1, i, 0, 0, 0)); // just a Sunday
+      const nextDate = new Date(tempDate.getTime() + 1 * 60 * 60 * 1000);
+      let next = nextDate.getHours() - 1;
+      if(unloadingPositiveChartData[i] >= 100) {
+        unloadingPositiveChartData[next] += unloadingPositiveChartData[i] - 100;
+        unloadingPositiveChartData[i] = 100;
+        loadingChartData[next] += loadingChartData[i];
+        loadingChartData[i] = 0;
+        recordingChartData[next] += recordingChartData[i];
+        recordingChartData[i] = 0;
+        unloadingNegativeChartData[next] += unloadingNegativeChartData[i];
+        unloadingNegativeChartData[i] = 0
+      } 
+      if(unloadingPositiveChartData[i] + loadingChartData[i] >= 100) {
+        unloadingPositiveChartData[next] += 0;
+        loadingChartData[next] += loadingChartData[i] - (100 - unloadingPositiveChartData[i]);
+        loadingChartData[i] = 100 - unloadingPositiveChartData[i];
+        recordingChartData[next] += recordingChartData[i];
+        recordingChartData[i] = 0;
+        unloadingNegativeChartData[next] += unloadingNegativeChartData[i];
+        unloadingNegativeChartData[i] = 0;
+      } 
+      if(unloadingPositiveChartData[i] + loadingChartData[i] + recordingChartData[i] >= 100) {
+        unloadingPositiveChartData[next] += 0;
+        loadingChartData[next] += 0;
+        recordingChartData[next] += recordingChartData[i] - (100 - (unloadingPositiveChartData[i] + loadingChartData[i]));
+        recordingChartData[i] = 100 - (unloadingPositiveChartData[i] + loadingChartData[i]);
+        unloadingNegativeChartData[next] += unloadingNegativeChartData[i];
+        unloadingNegativeChartData[i] = 0;
+      } 
+      if(unloadingPositiveChartData[i] + loadingChartData[i] + recordingChartData[i] + unloadingNegativeChartData[i] >= 100) {
+        unloadingPositiveChartData[next] += 0;
+        loadingChartData[next] += 0;
+        recordingChartData[next] += 0;
+        unloadingNegativeChartData[next] += unloadingNegativeChartData[i] - (100 - (unloadingPositiveChartData[i] + loadingChartData[i] + recordingChartData[i]));
+        unloadingNegativeChartData[i] = 100 - (unloadingPositiveChartData[i] + loadingChartData[i] + recordingChartData[i]);
+      }
+    }
+
     const series = [
       {
         name: 'Unloading positive plates',
-        data: unloadingPositiveChartData,
+        data: unloadingPositiveChartData.map((x) => Number(x.toFixed(2))),
         color: "#022A55"
       },
       {
         name: 'Loading',
-        data: loadingChartData,
+        data: loadingChartData.map((x) => Number(x.toFixed(2))),
         color: "#7794FB"
       }, 
       {
         name: 'Recording',
-        data: recordingChartData,
+        data: recordingChartData.map((x) => Number(x.toFixed(2))),
         color: "#bede19"
       }, 
       {
         name: 'Unloading negative plates',
-        data: unloadingNegativeChartData,
+        data: unloadingNegativeChartData.map((x) => Number(x.toFixed(2))),
         color: "#A9A9A9"
       }
     ];
@@ -286,7 +328,7 @@ export default defineComponent({
           categories: chartCategories
         },
         yaxis: {
-          //max: 100
+          max: 100
         },
       };
 
