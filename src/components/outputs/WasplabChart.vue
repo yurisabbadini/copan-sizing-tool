@@ -57,7 +57,11 @@ export default defineComponent({
 
         let broths = (line?.protocols.find((x) => x.id == protocol.id)?.wasp1Broths || 0) + (line?.protocols.find((x) => x.id == protocol.id)?.wasp2Broths || 0);
         const brothsTime = broths * (protocol.volumes[i] || 0) / 100 * settings.value.broths.timeInSeconds;
-        waspTimesData[i] += platesTime + slidesTime + brothsTime;
+
+        const radianPlates = Math.ceil(plates * (protocol.radianPercentage / 100)); 
+        const radianTime = line?.radian ? radianPlates * (protocol.volumes[i] || 0) / 100 * settings.value.radian.timeInSeconds : 0;
+
+        waspTimesData[i] += platesTime + slidesTime + brothsTime + radianTime;
         if(waspTimesData[i] > 3600 * (line?.numberOfWasp || 1)) {
           let next = i+1;
           if(next > waspTimesData.length - 1) {

@@ -61,7 +61,10 @@ export default defineComponent({
         }
         const brothsTime = broths * (protocol.volumes[i] || 0) / 100 * settings.value.broths.timeInSeconds;
 
-        chartData[i] += platesTime + slidesTime + brothsTime;
+        const radianPlates = Math.ceil(plates * (protocol.radianPercentage / 100)); 
+        const radianTime = line?.radian ? radianPlates * (protocol.volumes[i] || 0) / 100 * settings.value.radian.timeInSeconds : 0;
+
+        chartData[i] += platesTime + slidesTime + brothsTime + radianTime;
         if(chartData[i] > 3600) {
           let next = i+1;
           if(next > chartData.length - 1) {
