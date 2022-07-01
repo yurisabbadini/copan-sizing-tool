@@ -739,7 +739,6 @@ export function getWeightedDaysTimesInSeconds(
         }
     });
 
-    console.log(weightedDaysTimesInSeconds);
     return {
         weightedDaysTimesInSeconds,
         weightedDaysTimesInSecondsPerProtocol

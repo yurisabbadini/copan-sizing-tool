@@ -32,6 +32,7 @@ export default defineComponent({
     } = appStorage();
 
     const line = lines.value.find((x) => x.id == props.lineId);
+    const numberOfIncubators = (line?.numberOfCO2Incubator || 0) + (line?.numberOfO2Incubator || 0);
 
     const platesPerProtocolVolumes: {
       plates: number;
@@ -97,20 +98,18 @@ export default defineComponent({
     const plateAvgTime = totalPlatesTime / totalPlates;
     
     const platesFromWasp: number[] = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
-    const platesFromWaspPerProtocol: 
+    const loadingPlatesPerProtocol: 
     {
       protocol: PrimaryProtocol,
       plates: number[],
     }[] = [];
-    const loadingChartData: number[] = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
 
     for(let i = 0; i < waspTimesData.length; i++) {
       platesFromWasp[i] = Math.ceil(waspTimesData[i] * factor / plateAvgTime);
-      loadingChartData[i] = Number((Math.ceil(waspTimesData[i] * factor / plateAvgTime) / settings.value.incubator.loadingPlatesPerHour).toFixed(2));
     }
 
     primaryProtocols.value.forEach(protocol => {
-      platesFromWaspPerProtocol.push({
+      loadingPlatesPerProtocol.push({
         protocol: protocol,
         plates: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
       });
@@ -118,35 +117,158 @@ export default defineComponent({
         const totalPlates = platesPerProtocolVolumes.map((x) => x.plates).reduce((a,b) => a+b);
         const protocolPlates = (platesPerProtocolVolumes.find((x) => x.protocol?.id == protocol.id)?.plates || 0);
         const protocolFactor = protocolPlates == 0 ? 0 : protocolPlates / totalPlates;
-        platesFromWaspPerProtocol[platesFromWaspPerProtocol.length - 1].plates[i] = Math.ceil(platesFromWasp[i] * protocolFactor);
+        loadingPlatesPerProtocol[loadingPlatesPerProtocol.length - 1].plates[i] = Math.ceil(platesFromWasp[i] * protocolFactor);
       }
     });
 
-    console.log("platesFromWasp", platesFromWasp);
-    console.log("platesPerProtocolVolumes", platesPerProtocolVolumes);
-    console.log("platesFromWaspPerProtocol", platesFromWaspPerProtocol);
+    const unloadingAirPlatesPerProtocol: 
+    {
+      protocol: PrimaryProtocol,
+      positivePlates: number[],
+      negativePlates: number[],
+    }[] = [];
+    const unloadingCO2PlatesPerProtocol: 
+    {
+      protocol: PrimaryProtocol,
+      positivePlates: number[],
+      negativePlates: number[],
+    }[] = [];
+
+    const recordingAirPlatesPerProtocol: 
+    {
+      protocol: PrimaryProtocol,
+      plates: number[],
+    }[] = [];
+    const recordingCO2PlatesPerProtocol: 
+    {
+      protocol: PrimaryProtocol,
+      plates: number[],
+    }[] = [];
+
+    primaryProtocols.value.forEach(protocol => {
+      const airFactor = protocol.wasplabData.air.platesPerSample / (protocol.wasplabData.air.platesPerSample + protocol.wasplabData.co2.platesPerSample);
+      const co2Factor = protocol.wasplabData.co2.platesPerSample / (protocol.wasplabData.air.platesPerSample + protocol.wasplabData.co2.platesPerSample);
+      const loadingPlates = loadingPlatesPerProtocol.find((x) => x.protocol.id == protocol.id);
+      const protocolAirReadingTimes = protocol.wasplabData.air.readHours?.split(",").map((x => Number(x))) || [];
+      const maxAirReadingTimes = Math.max(...protocolAirReadingTimes);
+      const protocolCO2ReadingTimes = protocol.wasplabData.co2.readHours.split(",").map((x => Number(x))) || [];
+      const maxCO2ReadingTimes = Math.max(...protocolCO2ReadingTimes);
+      unloadingAirPlatesPerProtocol.push({
+        protocol: protocol,
+        positivePlates: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        negativePlates: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      });
+      unloadingCO2PlatesPerProtocol.push({
+        protocol: protocol,
+        positivePlates: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        negativePlates: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      });
+      recordingAirPlatesPerProtocol.push({
+        protocol: protocol,
+        plates: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+      });
+      recordingCO2PlatesPerProtocol.push({
+        protocol: protocol,
+        plates: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+      });
+      if(loadingPlates) {
+        for(let i = 0; i < loadingPlates.plates.length; i++) {
+          const tempDate = new Date(Date.UTC(2017, 0, 1, i, 0, 0, 0)); // just a Sunday
+          const airEndDate = new Date(tempDate.getTime() + maxAirReadingTimes * 60 * 60 * 1000);
+          unloadingAirPlatesPerProtocol[unloadingAirPlatesPerProtocol.length - 1].positivePlates[airEndDate.getHours()] = Math.ceil(loadingPlates.plates[i] * airFactor * (1 - protocol.negativityRate / 100));
+          unloadingAirPlatesPerProtocol[unloadingAirPlatesPerProtocol.length - 1].negativePlates[airEndDate.getHours()] = Math.ceil(loadingPlates.plates[i] * airFactor * (protocol.negativityRate / 100));
+          protocolAirReadingTimes.forEach(rt => {
+            const airEndDate = new Date(tempDate.getTime() + rt * 60 * 60 * 1000);
+            recordingAirPlatesPerProtocol[recordingAirPlatesPerProtocol.length - 1].plates[airEndDate.getHours()] = Math.ceil(loadingPlates.plates[i] * airFactor);
+          });
+          
+          const co2EndDate = new Date(tempDate.getTime() + maxCO2ReadingTimes * 60 * 60 * 1000);
+          unloadingCO2PlatesPerProtocol[unloadingCO2PlatesPerProtocol.length - 1].positivePlates[co2EndDate.getHours()] = Math.ceil(loadingPlates.plates[i] * co2Factor * (1 - protocol.negativityRate / 100));
+          unloadingCO2PlatesPerProtocol[unloadingCO2PlatesPerProtocol.length - 1].negativePlates[co2EndDate.getHours()] = Math.ceil(loadingPlates.plates[i] * co2Factor * (protocol.negativityRate / 100));
+          protocolCO2ReadingTimes.forEach(rt => {
+            const co2EndDate = new Date(tempDate.getTime() + rt * 60 * 60 * 1000);
+            recordingCO2PlatesPerProtocol[recordingCO2PlatesPerProtocol.length - 1].plates[co2EndDate.getHours()] = Math.ceil(loadingPlates.plates[i] * co2Factor);
+          });
+        }
+      }
+    });
+
+    const unloadingPositive = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+    unloadingAirPlatesPerProtocol.forEach(element => {
+      for(let i = 0;  i < unloadingPositive.length; i++) {
+        unloadingPositive[i] += element.positivePlates[i];
+      }
+    });
+    unloadingCO2PlatesPerProtocol.forEach(element => {
+      for(let i = 0;  i < unloadingPositive.length; i++) {
+        unloadingPositive[i] += element.positivePlates[i];
+      }
+    });
+
+    const unloadingNegative = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+    unloadingAirPlatesPerProtocol.forEach(element => {
+      for(let i = 0;  i < unloadingPositive.length; i++) {
+        unloadingNegative[i] += element.negativePlates[i];
+      }
+    });
+    unloadingCO2PlatesPerProtocol.forEach(element => {
+      for(let i = 0;  i < unloadingPositive.length; i++) {
+        unloadingNegative[i] += element.negativePlates[i];
+      }
+    });
+
+    const recordingPlates = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+    recordingAirPlatesPerProtocol.forEach(element => {
+      for(let i = 0;  i < recordingPlates.length; i++) {
+        recordingPlates[i] += element.plates[i];
+      }
+    });
+    recordingCO2PlatesPerProtocol.forEach(element => {
+      for(let i = 0;  i < recordingPlates.length; i++) {
+        recordingPlates[i] += element.plates[i];
+      }
+    });
+
+    const loadingChartData: number[] = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+    const unloadingPositiveChartData: number[] = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+    const unloadingNegativeChartData: number[] = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+    const recordingChartData: number[] = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+
+    for(let i = 0; i < waspTimesData.length; i++) {
+      loadingChartData[i] = Number(Math.ceil(waspTimesData[i] * factor / plateAvgTime) / settings.value.incubator.loadingPlatesPerHour);
+      loadingChartData[i] = Number((loadingChartData[i] * 100).toFixed(2));
+
+      unloadingPositiveChartData[i] = Number((unloadingPositive[i] / (numberOfIncubators >= 1 ? settings.value.incubator.unloadingMultiplePlatesPerHour : settings.value.incubator.unloadingSinglePlatesPerHour)));
+      unloadingPositiveChartData[i] = Number((unloadingPositiveChartData[i] * 100).toFixed(2));
+
+      unloadingNegativeChartData[i] = Number((unloadingNegative[i] / (numberOfIncubators >= 1 ? settings.value.incubator.unloadingMultiplePlatesPerHour : settings.value.incubator.unloadingSinglePlatesPerHour)));
+      unloadingNegativeChartData[i] = Number((unloadingNegativeChartData[i] * 100).toFixed(2));
+
+      recordingChartData[i] = Number((recordingPlates[i] / settings.value.incubator.recordingPlatesPerHour));
+      recordingChartData[i] = Number((recordingChartData[i] * 100).toFixed(2));
+    }
 
     const series = [
-      /*{
+      {
         name: 'Unloading positive plates',
-        data: unloadingPositiveData.map((x) => Number((x / 3600 * 100).toFixed(2))),
+        data: unloadingPositiveChartData,
         color: "#022A55"
-      }, */
+      },
       {
         name: 'Loading',
         data: loadingChartData,
         color: "#7794FB"
       }, 
-      /*{
+      {
         name: 'Recording',
-        data: recordingData.map((x) => Number((x / 3600 * 100).toFixed(2))),
+        data: recordingChartData,
         color: "#bede19"
       }, 
       {
         name: 'Unloading negative plates',
-        data: unloadingNegativeData.map((x) => Number((x / 3600 * 100).toFixed(2))),
+        data: unloadingNegativeChartData,
         color: "#A9A9A9"
-      }*/
+      }
     ];
 
     const chartCategories: string[] = [];
