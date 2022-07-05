@@ -77,23 +77,23 @@ const state = reactive({
       samplesPerDay: [
         {
           dayOfWeek: 1,
-          samples: 250
+          samples: 0
         },
         {
           dayOfWeek: 2,
-          samples: 200
+          samples: 0
         },
         {
           dayOfWeek: 3,
-          samples: 230
+          samples: 0
         },
         {
           dayOfWeek: 4,
-          samples: 180
+          samples: 0
         },
         {
           dayOfWeek: 5,
-          samples: 100
+          samples: 0
         },
         {
           dayOfWeek: 6,
@@ -106,9 +106,9 @@ const state = reactive({
       ] as SamplePerDay[],
       growthTrends: {
         startYear: new Date().getFullYear(),
-        endYear: new Date().getFullYear() + 3,
-        yearOfReference: new Date().getFullYear() + 3,
-        growthTrends: [5, 5, 10]
+        endYear: new Date().getFullYear(),
+        yearOfReference: new Date().getFullYear(),
+        growthTrends: [0, 0, 0]
       } as GrowthTrends,
       fteHours: {
         wasp: {
@@ -132,112 +132,13 @@ const state = reactive({
           end: 18
         }
       },
-      primaryProtocols: [
-        {
-          id: "1",
-          name: "urine",
-          hasWasp: true,
-          hasWasplab: true,
-          pictureT0: true,
-          samplesPerDayAvg: 100,
-          waspData: {
-            streakingPattern: "1",
-            platesPerSample: 2,
-            brothsPerSample: 1,
-            slidesPerSample: 0
-          },
-          wasplabData: {
-            air: {
-              platesPerSample: 2,
-              readHours: "16,40"
-            },
-            co2: {
-              platesPerSample: 0,
-              readHours: ""
-            }
-          },
-          hasBrothsPercentage: false,
-          astPercentage: 0,
-          astIdPercentage: 0,
-          idPercentage: 0,
-          radianPercentage: 0,
-          negativityRate: 80,
-          totalPercentage: 0,
-          hasPurityPlates: false,
-          volumes: [0,0,0,0,0,0,0,0,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        },
-        {
-          id: "2",
-          name: "gola",
-          hasWasp: true,
-          hasWasplab: true,
-          pictureT0: true,
-          samplesPerDayAvg: 60,
-          waspData: {
-            streakingPattern: "2",
-            platesPerSample: 1,
-            brothsPerSample: 0,
-            slidesPerSample: 1
-          },
-          wasplabData: {
-            air: {
-              platesPerSample: 0,
-              readHours: ""
-            },
-            co2: {
-              platesPerSample: 1,
-              readHours: "20,40,60"
-            }
-          },
-          hasBrothsPercentage: false,
-          astPercentage: 0,
-          astIdPercentage: 0,
-          idPercentage: 0,
-          radianPercentage: 0,
-          negativityRate: 80,
-          totalPercentage: 0,
-          hasPurityPlates: false,
-          volumes: [0,0,0,0,0,0,0,0,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        },
-        {
-          id: "3",
-          name: "feci",
-          hasWasp: true,
-          hasWasplab: true,
-          pictureT0: true,
-          samplesPerDayAvg: 10,
-          waspData: {
-            streakingPattern: "3",
-            platesPerSample: 3,
-            brothsPerSample: 0,
-            slidesPerSample: 0
-          },
-          wasplabData: {
-            air: {
-              platesPerSample: 1,
-              readHours: "24,48"
-            },
-            co2: {
-              platesPerSample: 2,
-              readHours: "16,40"
-            }
-          },
-          hasBrothsPercentage: false,
-          astPercentage: 0,
-          astIdPercentage: 0,
-          idPercentage: 0,
-          radianPercentage: 0,
-          totalPercentage: 0,
-          negativityRate: 80,
-          hasPurityPlates: false,
-          volumes: [0,0,0,0,0,0,0,0,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        }
-      ] as PrimaryProtocol[],
+      primaryProtocols: [] as PrimaryProtocol[],
       secondaryProtocols: [] as SecondaryProtocol[],
       weightedDayTimes: [] as WeightedDayTimes[],
       weightedDayTimesPerProtocol: [] as WeightedDayTimes[],
       dailyData: [] as DailyData[],
       lines: [] as LineConfig[],
+      colibriTime: 0 as number,
       configuratorAdditionalItems: {
         colibri: 0,
         flo: 0,

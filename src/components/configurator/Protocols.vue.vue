@@ -55,8 +55,8 @@
           <q-td key="co2Recording" :props="props">
             {{ props.row.co2Recording }}
           </q-td>
-          <q-td key="co2Unloading" :props="props">
-            {{ props.row.co2Unloading }}
+          <q-td key="o2Unloading" :props="props">
+            {{ props.row.o2Unloading }}
           </q-td>
           <q-td key="co2Unloading" :props="props">
             {{ props.row.co2Unloading }}
@@ -156,7 +156,7 @@ export default defineComponent({
       },
       { 
         name: "o2Unloading",
-        label: 'CO2 unloading',
+        label: 'Air unloading',
         align: 'left',
         field: (row: LineConfigProtocol) => row.o2Unloading,
       },
@@ -164,7 +164,7 @@ export default defineComponent({
         name: "co2Unloading",
         label: 'CO2 unloading',
         align: 'left',
-        field: (row: LineConfigProtocol) => row.o2Unloading,
+        field: (row: LineConfigProtocol) => row.co2Unloading,
       }
     ];
 

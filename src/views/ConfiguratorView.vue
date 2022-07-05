@@ -63,12 +63,12 @@ export default defineComponent({
           protocol.samples = Number(linePercentage.toFixed(2));
           protocol.wasp1Percentage = wasp1Percentage;
           protocol.wasp2Percentage = wasp2Percentage;
-          protocol.co2Loading = Math.ceil((this.weightedPeakDayTimes.find((x) => x.type == "loading_co2" && x.protocol == protocol.id)?.samples || 0) * wasp1Percentage / 100 * linePercentage / 100);
-          protocol.co2Recording = Math.ceil((this.weightedPeakDayTimes.find((x) => x.type == "recording_co2" && x.protocol == protocol.id)?.samples || 0) * wasp1Percentage / 100 * linePercentage / 100);
-          protocol.co2Unloading = Math.ceil((this.weightedPeakDayTimes.find((x) => x.type == "unloading_co2" && x.protocol == protocol.id)?.samples || 0) * wasp1Percentage / 100 * linePercentage / 100);
-          protocol.o2Loading = Math.ceil((this.weightedPeakDayTimes.find((x) => x.type == "loading_air" && x.protocol == protocol.id)?.samples || 0) * wasp1Percentage / 100 * linePercentage / 100);
-          protocol.o2Recording = Math.ceil((this.weightedPeakDayTimes.find((x) => x.type == "recording_air" && x.protocol == protocol.id)?.samples || 0) * wasp1Percentage / 100 * linePercentage / 100);
-          protocol.o2Unloading = Math.ceil((this.weightedPeakDayTimes.find((x) => x.type == "unloading_air" && x.protocol == protocol.id)?.samples || 0) * wasp1Percentage / 100 * linePercentage / 100);
+          protocol.co2Loading = Math.ceil((this.weightedPeakDayTimes.find((x) => x.type == "loading_co2" && x.protocol == protocol.id)?.samples || 0) * linePercentage / 100);
+          protocol.co2Recording = Math.ceil((this.weightedPeakDayTimes.find((x) => x.type == "recording_co2" && x.protocol == protocol.id)?.samples || 0) * linePercentage / 100);
+          protocol.co2Unloading = Math.ceil((this.weightedPeakDayTimes.find((x) => x.type == "unloading_co2" && x.protocol == protocol.id)?.samples || 0) * linePercentage / 100);
+          protocol.o2Loading = Math.ceil((this.weightedPeakDayTimes.find((x) => x.type == "loading_air" && x.protocol == protocol.id)?.samples || 0) * linePercentage / 100);
+          protocol.o2Recording = Math.ceil((this.weightedPeakDayTimes.find((x) => x.type == "recording_air" && x.protocol == protocol.id)?.samples || 0) * linePercentage / 100);
+          protocol.o2Unloading = Math.ceil((this.weightedPeakDayTimes.find((x) => x.type == "unloading_air" && x.protocol == protocol.id)?.samples || 0) * linePercentage / 100);
           protocol.wasp1Broths = Math.ceil((this.weightedPeakDayTimes.find((x) => x.type == "broths" && x.protocol == protocol.id)?.samples || 0) * wasp1Percentage / 100 * linePercentage / 100);
           protocol.wasp1Plates = Math.ceil((this.weightedPeakDayTimes.find((x) => x.type == "plates" && x.protocol == protocol.id)?.samples || 0) * wasp1Percentage / 100 * linePercentage / 100);
           protocol.wasp1Slides = Math.ceil((this.weightedPeakDayTimes.find((x) => x.type == "slides" && x.protocol == protocol.id)?.samples || 0) * wasp1Percentage / 100 * linePercentage / 100);
