@@ -21,12 +21,12 @@
     </div>
     <div class="row">
       <div class="col">
-        <WasplabChart :lineId="line.id" />
+        <WasplabChart :lineId="line.id" :title="line.name"/>
       </div>
     </div>
   </div>
 </div>
-<ColibriChart />
+<ColibriChart v-if="configuratorAdditionalItems.colibri > 0" />
 </template>
 
 <script lang="ts">
@@ -50,12 +50,14 @@ export default defineComponent({
   },
   setup() {
     const {
-      lines
+      lines,
+      configuratorAdditionalItems
     } = appStorage();
 
 
     return {
-      lines
+      lines,
+      configuratorAdditionalItems
     }
   }
 });

@@ -21,14 +21,14 @@
             <q-select
               dense
               v-model.number="props.row.numberOfO2Incubator"
-              :options="[1, 2, 3]"
+              :options="getAvailableIncubators(props.row.id)"
             ></q-select>
           </q-td>
           <q-td key="numberOfCO2Incubator" :props="props">
             <q-select
               dense
               v-model.number="props.row.numberOfCO2Incubator"
-              :options="[1, 2, 3]"
+              :options="getAvailableIncubators(props.row.id)"
             ></q-select>
           </q-td>
           <q-td key="collaborativeStation" :props="props">
@@ -190,7 +190,19 @@ export default defineComponent({
       if(indexToRemove > -1) {
         this.lines.splice(indexToRemove, 1);
       }
+    },
+    getAvailableIncubators(lineId: string) {
+      const res: number[] = [0];
+      const line = this.lines.find((x) => x.id == lineId);
+      if(line) {
+        
+        for(let i = 1; i <= 3 - (line.numberOfO2Incubator + line.numberOfCO2Incubator); i++) {
+          res.push(i);
+        }
+        return res;
+      }
+      return [1, 2, 3];
     }
-  }
+  },
 });
 </script>

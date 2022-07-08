@@ -41,7 +41,6 @@ export default defineComponent({
       for(let i = 0; i < protocol.volumes.length; i++) {
         const plates = (lines.value.map((x) => x.protocols.find((x) => x.id == protocol.id)?.wasp1Plates || 0).reduce((a, b) => a + b)) + (lines.value.map((x) => x.protocols.find((x) => x.id == protocol.id)?.wasp2Plates || 0).reduce((a, b) => a + b));
         const platesTime = plates * (protocol.volumes[i] || 0) / 100 * (settings.value.plates.streakingPatterns.find((x) => x.pattern == protocol.waspData.streakingPattern)?.timeInSeconds || 0);
-        console.log(plates);
 
         let slides = (lines.value.map((x) => x.protocols.find((x) => x.id == protocol.id)?.wasp1Slides || 0).reduce((a, b) => a + b)) + (lines.value.map((x) => x.protocols.find((x) => x.id == protocol.id)?.wasp2Slides || 0).reduce((a, b) => a + b));
         let slideTimeSettings = settings.value.slides.streakingPatterns.find((x) => x.pattern == "slide_and_other")?.timeInSeconds || 0;
@@ -53,7 +52,7 @@ export default defineComponent({
         let broths = (lines.value.map((x) => x.protocols.find((x) => x.id == protocol.id)?.wasp1Broths || 0).reduce((a, b) => a + b)) + (lines.value.map((x) => x.protocols.find((x) => x.id == protocol.id)?.wasp2Broths || 0).reduce((a, b) => a + b));
         const brothsTime = broths * (protocol.volumes[i] || 0) / 100 * settings.value.broths.timeInSeconds;
 
-        const radianPlates = Math.ceil(plates * (protocol.radianPercentage / 100)); 
+        const radianPlates = plates * (protocol.radianPercentage / 100); 
         const radianTime = lines.value.some((x) => x.radian) ? radianPlates * (protocol.volumes[i] || 0) / 100 * settings.value.radian.timeInSeconds : 0;
 
         waspTimesData[i] += platesTime + slidesTime + brothsTime + radianTime;
@@ -78,9 +77,9 @@ export default defineComponent({
       });
       for(let i = 0; i < platesPerProtocolVolumes[platesPerProtocolVolumes.length - 1].platesPerHour.length; i++) {
         const plates = (lines.value.map((x) => x.protocols.find((x) => x.id == protocol.id)?.wasp1Plates || 0).reduce((a, b) => a + b)) + (lines.value.map((x) => x.protocols.find((x) => x.id == protocol.id)?.wasp2Plates || 0).reduce((a, b) => a + b));
-        platesPerProtocolVolumes[platesPerProtocolVolumes.length - 1].platesPerHour[i] += Math.ceil(plates * (protocol.volumes[i] || 0) / 100);
+        platesPerProtocolVolumes[platesPerProtocolVolumes.length - 1].platesPerHour[i] += plates * (protocol.volumes[i] || 0) / 100;
         platesPerProtocolVolumes[platesPerProtocolVolumes.length - 1].platesTimePerHour[i] += plates * (protocol.volumes[i] || 0) / 100 * (settings.value.plates.streakingPatterns.find((x) => x.pattern == protocol.waspData.streakingPattern)?.timeInSeconds || 0);
-        platesPerProtocolVolumes[platesPerProtocolVolumes.length - 1].plates += Math.ceil(plates * (protocol.volumes[i] || 0) / 100);
+        platesPerProtocolVolumes[platesPerProtocolVolumes.length - 1].plates += plates * (protocol.volumes[i] || 0) / 100;
         platesPerProtocolVolumes[platesPerProtocolVolumes.length - 1].totalPlatesTime += plates * (protocol.volumes[i] || 0) / 100 * (settings.value.plates.streakingPatterns.find((x) => x.pattern == protocol.waspData.streakingPattern)?.timeInSeconds || 0);
       }
     });
@@ -103,7 +102,7 @@ export default defineComponent({
     }[] = [];
 
     for(let i = 0; i < waspTimesData.length; i++) {
-      platesFromWasp[i] = Math.ceil(waspTimesData[i] * factor / plateAvgTime);
+      platesFromWasp[i] = waspTimesData[i] * factor / plateAvgTime;
     }
 
     primaryProtocols.value.forEach(protocol => {
@@ -115,7 +114,7 @@ export default defineComponent({
         const totalPlates = platesPerProtocolVolumes.map((x) => x.plates).reduce((a,b) => a+b);
         const protocolPlates = (platesPerProtocolVolumes.find((x) => x.protocol?.id == protocol.id)?.plates || 0);
         const protocolFactor = protocolPlates == 0 ? 0 : protocolPlates / totalPlates;
-        loadingPlatesPerProtocol[loadingPlatesPerProtocol.length - 1].plates[i] = Math.ceil(platesFromWasp[i] * protocolFactor);
+        loadingPlatesPerProtocol[loadingPlatesPerProtocol.length - 1].plates[i] = platesFromWasp[i] * protocolFactor;
       }
     });
 
@@ -173,21 +172,21 @@ export default defineComponent({
         for(let i = 0; i < loadingPlates.plates.length; i++) {
           const tempDate = new Date(Date.UTC(2017, 0, 1, i, 0, 0, 0)); // just a Sunday
           const airEndDate = new Date(tempDate.getTime() + (maxAirReadingTimes - 1) * 60 * 60 * 1000);
-          unloadingAirPlatesPerProtocol[unloadingAirPlatesPerProtocol.length - 1].positivePlates[airEndDate.getHours()] = Math.ceil(loadingPlates.plates[i] * airFactor * (1 - protocol.negativityRate / 100));
-          unloadingAirPlatesPerProtocol[unloadingAirPlatesPerProtocol.length - 1].negativePlates[airEndDate.getHours()] = Math.ceil(loadingPlates.plates[i] * airFactor * (protocol.negativityRate / 100));
+          unloadingAirPlatesPerProtocol[unloadingAirPlatesPerProtocol.length - 1].positivePlates[airEndDate.getHours()] = loadingPlates.plates[i] * airFactor * (1 - protocol.negativityRate / 100);
+          unloadingAirPlatesPerProtocol[unloadingAirPlatesPerProtocol.length - 1].negativePlates[airEndDate.getHours()] = loadingPlates.plates[i] * airFactor * (protocol.negativityRate / 100);
 
           protocolAirReadingTimes.forEach(rt => {
             const airEndDate = new Date(tempDate.getTime() + (rt - 1) * 60 * 60 * 1000);
-            recordingAirPlatesPerProtocol[recordingAirPlatesPerProtocol.length - 1].plates[airEndDate.getHours()] += Math.ceil(loadingPlates.plates[i] * airFactor);
+            recordingAirPlatesPerProtocol[recordingAirPlatesPerProtocol.length - 1].plates[airEndDate.getHours()] += loadingPlates.plates[i] * airFactor;
           });
           
           const co2EndDate = new Date(tempDate.getTime() + (maxCO2ReadingTimes - 1) * 60 * 60 * 1000);
-          unloadingCO2PlatesPerProtocol[unloadingCO2PlatesPerProtocol.length - 1].positivePlates[co2EndDate.getHours()] = Math.ceil(loadingPlates.plates[i] * co2Factor * (1 - protocol.negativityRate / 100));
-          unloadingCO2PlatesPerProtocol[unloadingCO2PlatesPerProtocol.length - 1].negativePlates[co2EndDate.getHours()] = Math.ceil(loadingPlates.plates[i] * co2Factor * (protocol.negativityRate / 100));
+          unloadingCO2PlatesPerProtocol[unloadingCO2PlatesPerProtocol.length - 1].positivePlates[co2EndDate.getHours()] = loadingPlates.plates[i] * co2Factor * (1 - protocol.negativityRate / 100);
+          unloadingCO2PlatesPerProtocol[unloadingCO2PlatesPerProtocol.length - 1].negativePlates[co2EndDate.getHours()] = loadingPlates.plates[i] * co2Factor * (protocol.negativityRate / 100);
 
           protocolCO2ReadingTimes.forEach(rt => {
             const co2EndDate = new Date(tempDate.getTime() + (rt - 1) * 60 * 60 * 1000);
-            recordingCO2PlatesPerProtocol[recordingCO2PlatesPerProtocol.length - 1].plates[co2EndDate.getHours()] += Math.ceil(loadingPlates.plates[i] * co2Factor);
+            recordingCO2PlatesPerProtocol[recordingCO2PlatesPerProtocol.length - 1].plates[co2EndDate.getHours()] += loadingPlates.plates[i] * co2Factor;
           });
         }
       }
@@ -235,7 +234,7 @@ export default defineComponent({
     const recordingChartData: number[] = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
 
     for(let i = 0; i < waspTimesData.length; i++) {
-      loadingChartData[i] = Number(Math.ceil(waspTimesData[i] * factor / plateAvgTime) / settings.value.incubator.loadingPlatesPerHour);
+      loadingChartData[i] = Number((waspTimesData[i] * factor / plateAvgTime) / settings.value.incubator.loadingPlatesPerHour);
       loadingChartData[i] = Number((loadingChartData[i] * 100).toFixed(2));
 
       unloadingPositiveChartData[i] = Number((unloadingPositive[i] / (numberOfIncubators >= 1 ? settings.value.incubator.unloadingMultiplePlatesPerHour : settings.value.incubator.unloadingSinglePlatesPerHour)));

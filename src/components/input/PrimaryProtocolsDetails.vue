@@ -170,7 +170,7 @@ export default defineComponent({
           platesO2: 0,
           recordingCO2: "",
           recordingO2: "",
-          samples: Math.ceil(protocol.samplesPerDayAvg * factor)
+          samples: protocol.samplesPerDayAvg * factor
         });
       }
     },
@@ -204,8 +204,10 @@ export default defineComponent({
             } else if(protocol.from == "Radian") {
               factor = this.primaryProtocols[protocolIndex].radianPercentage / 100;
             }
+          } else if(protocol.from == "Purity plates") { 
+            factor = (this.primaryProtocols[protocolIndex].astPercentage + this.primaryProtocols[protocolIndex].astIdPercentage + this.primaryProtocols[protocolIndex].radianPercentage) / 100;
           }
-          protocol.samples = Math.ceil(this.primaryProtocols[protocolIndex].samplesPerDayAvg * factor)
+          protocol.samples = this.primaryProtocols[protocolIndex].samplesPerDayAvg * factor
         });
       }
     },

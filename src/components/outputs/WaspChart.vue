@@ -1,5 +1,6 @@
 <template>
   <q-card class="q-pa-sm q-mt-sm">
+    <q-item-label class="q-mb-sm" overline>WASP {{ wasp }}</q-item-label>
     <apexchart
       type="bar"
       height="350"
@@ -52,7 +53,7 @@ export default defineComponent({
         }
         const brothsTime = broths * (protocol.volumes[i] || 0) / 100 * settings.value.broths.timeInSeconds;
 
-        const radianPlates = Math.ceil(plates * (protocol.radianPercentage / 100)); 
+        const radianPlates = plates * (protocol.radianPercentage / 100); 
         const radianTime = line?.radian ? radianPlates * (protocol.volumes[i] || 0) / 100 * settings.value.radian.timeInSeconds : 0;
 
         chartData[i] += platesTime + slidesTime + brothsTime + radianTime;

@@ -157,7 +157,7 @@ export function getWeightedDaysTimesInSeconds(
             const dayWeight = params.samplesPerDay.find((x) => x.dayOfWeek == dayOfWeek)?.samples || 0;
 
             const plates = (protocol.waspData.platesPerSample) * ((protocol.samplesPerDayAvg / totalSamples) * dayWeight);
-            const totalPlates = Math.ceil(plates);
+            const totalPlates = plates;
             const plateTime =
                 params.settings.plates.streakingPatterns.find(
                     (x) => x.pattern == protocol.waspData.streakingPattern
@@ -167,7 +167,7 @@ export function getWeightedDaysTimesInSeconds(
             const slides =
                 protocol.waspData.slidesPerSample *
                 ((protocol.samplesPerDayAvg / totalSamples) * dayWeight);
-            const totalSlides = Math.ceil(slides);
+            const totalSlides = slides;
             let slideTime = params.settings.slides.streakingPatterns.find((x) => x.pattern == "slide_and_other")?.timeInSeconds || 0;
             if (protocol.waspData.platesPerSample == 0) {
                 slideTime = params.settings.slides.streakingPatterns.find((x) => x.pattern == "slide_only")?.timeInSeconds || 0;
@@ -177,14 +177,14 @@ export function getWeightedDaysTimesInSeconds(
             const broths =
                 protocol.waspData.brothsPerSample *
                 ((protocol.samplesPerDayAvg / totalSamples) * dayWeight);
-            const totalBroths = Math.ceil(broths);
+            const totalBroths = broths;
             const brothsTime = params.settings.broths.timeInSeconds;
             const totalBrothsTime = totalBroths * brothsTime;
 
             const loadingAirPlates =
                 (protocol.wasplabData.air?.platesPerSample || 0) *
                 ((protocol.samplesPerDayAvg / totalSamples) * dayWeight);
-            const totalLoadingAirPlates = Math.ceil(loadingAirPlates);
+            const totalLoadingAirPlates = loadingAirPlates;
             const loadingAirPlatesSpeed = params.settings.incubator.loadingPlatesPerHour;
             const totalLoadingAirPlatesTime =
                 (totalLoadingAirPlates / loadingAirPlatesSpeed) * 3600;
@@ -192,7 +192,7 @@ export function getWeightedDaysTimesInSeconds(
             const loadingCO2Plates =
                 (protocol.wasplabData.co2?.platesPerSample || 0) *
                 ((protocol.samplesPerDayAvg / totalSamples) * dayWeight);
-            const totalLoadingCO2Plates = Math.ceil(loadingCO2Plates);
+            const totalLoadingCO2Plates = loadingCO2Plates;
             const loadingCO2PlatesSpeed = params.settings.incubator.loadingPlatesPerHour;
             const totalLoadingCO2PlatesTime =
                 (totalLoadingCO2Plates / loadingCO2PlatesSpeed) * 3600;
@@ -200,7 +200,7 @@ export function getWeightedDaysTimesInSeconds(
             const recordingAirPlates =
                 (protocol.wasplabData.air?.platesPerSample || 0) *
                 (((protocol.samplesPerDayAvg) / totalSamples) * dayWeight);
-            const totalRecordingAirPlates = Math.ceil(recordingAirPlates + (platesOverflowAir.find((x) => x.dayOfWeek == dayOfWeek)?.samples || 0));
+            const totalRecordingAirPlates = recordingAirPlates + (platesOverflowAir.find((x) => x.dayOfWeek == dayOfWeek)?.samples || 0);
             const recordingAirPlatesSpeed = params.settings.incubator.recordingPlatesPerHour;
             const totalRecordingAirPlatesTime =
                 (totalRecordingAirPlates / recordingAirPlatesSpeed) * 3600;
@@ -208,24 +208,24 @@ export function getWeightedDaysTimesInSeconds(
             const recordingCO2Plates =
                 ((protocol.wasplabData.co2?.platesPerSample || 0)) *
                 (((protocol.samplesPerDayAvg) / totalSamples) * dayWeight);
-            const totalRecordingCO2Plates = Math.ceil(recordingCO2Plates + (platesOverflowCO2.find((x) => x.dayOfWeek == dayOfWeek)?.samples || 0));
+            const totalRecordingCO2Plates = recordingCO2Plates + (platesOverflowCO2.find((x) => x.dayOfWeek == dayOfWeek)?.samples || 0);
             const recordingCO2PlatesSpeed = params.settings.incubator.recordingPlatesPerHour;
             const totalRecordingCO2PlatesTime =
                 (totalRecordingCO2Plates / recordingCO2PlatesSpeed) * 3600;
 
-            let unloadingSpeed = params.settings.incubator.unloadingMultiplePlatesPerHour;
-            if (params.settings.incubator.singleIncubator == true) {
-                unloadingSpeed = params.settings.incubator.unloadingSinglePlatesPerHour;
-            }
+            const unloadingSpeed = params.settings.incubator.unloadingMultiplePlatesPerHour;
+            // if (params.settings.incubator.singleIncubator == true) {
+            //     unloadingSpeed = params.settings.incubator.unloadingSinglePlatesPerHour;
+            // }
 
             const unloadingAirPlates = platesUnloadingAir.find((x) => x.dayOfWeek == dayOfWeek)?.samples || 0;
-            const totalUnloadingAirPlates = Math.ceil(unloadingAirPlates);
+            const totalUnloadingAirPlates = unloadingAirPlates;
             const unloadingAirPlatesSpeed = unloadingSpeed;
             const totalUnloadingAirPlatesTime =
                 (totalUnloadingAirPlates / unloadingAirPlatesSpeed) * 3600;
 
             const unloadingCO2Plates = platesUnloadingCO2.find((x) => x.dayOfWeek == dayOfWeek)?.samples || 0;
-            const totalUnloadingCO2Plates = Math.ceil(unloadingCO2Plates);
+            const totalUnloadingCO2Plates = unloadingCO2Plates;
             const unloadingCO2PlatesSpeed = unloadingSpeed;
             const totalUnloadingCO2PlatesTime =
                 (totalUnloadingCO2Plates / unloadingCO2PlatesSpeed) * 3600;
@@ -550,14 +550,14 @@ export function getWeightedDaysTimesInSeconds(
             const dayWeight = params.samplesPerDay.find((x) => x.dayOfWeek == dayOfWeek)?.samples || 0;
 
             const plates = (protocol.plates) * ((protocol.samples / totalSamples) * dayWeight);
-            const totalPlates = Math.ceil(plates);
+            const totalPlates = plates;
             const plateTime = streakingPattern;
             const totalPlatesTime = totalPlates * plateTime;
 
             const loadingAirPlates =
             (protocol.platesO2 || 0) *
             ((protocol.samples / totalSamples) * dayWeight);
-            const totalLoadingAirPlates = Math.ceil(loadingAirPlates);
+            const totalLoadingAirPlates = loadingAirPlates;
             const loadingAirPlatesSpeed = params.settings.incubator.loadingPlatesPerHour;
             const totalLoadingAirPlatesTime =
                 (totalLoadingAirPlates / loadingAirPlatesSpeed) * 3600;
@@ -565,7 +565,7 @@ export function getWeightedDaysTimesInSeconds(
             const loadingCO2Plates =
                 (protocol.platesCO2 || 0) *
                 ((protocol.samples / totalSamples) * dayWeight);
-            const totalLoadingCO2Plates = Math.ceil(loadingCO2Plates);
+            const totalLoadingCO2Plates = loadingCO2Plates;
             const loadingCO2PlatesSpeed = params.settings.incubator.loadingPlatesPerHour;
             const totalLoadingCO2PlatesTime =
                 (totalLoadingCO2Plates / loadingCO2PlatesSpeed) * 3600;
@@ -573,7 +573,7 @@ export function getWeightedDaysTimesInSeconds(
             const recordingAirPlates =
                 (protocol.platesO2 || 0) *
                 (((protocol.samples) / totalSamples) * dayWeight);
-            const totalRecordingAirPlates = Math.ceil(recordingAirPlates + (platesOverflowAir.find((x) => x.dayOfWeek == dayOfWeek)?.samples || 0));
+            const totalRecordingAirPlates = recordingAirPlates + (platesOverflowAir.find((x) => x.dayOfWeek == dayOfWeek)?.samples || 0);
             const recordingAirPlatesSpeed = params.settings.incubator.recordingPlatesPerHour;
             const totalRecordingAirPlatesTime =
                 (totalRecordingAirPlates / recordingAirPlatesSpeed) * 3600;
@@ -581,7 +581,7 @@ export function getWeightedDaysTimesInSeconds(
             const recordingCO2Plates =
                 ((protocol.platesCO2 || 0)) *
                 (((protocol.samples) / totalSamples) * dayWeight);
-            const totalRecordingCO2Plates = Math.ceil(recordingCO2Plates + (platesOverflowCO2.find((x) => x.dayOfWeek == dayOfWeek)?.samples || 0));
+            const totalRecordingCO2Plates = recordingCO2Plates + (platesOverflowCO2.find((x) => x.dayOfWeek == dayOfWeek)?.samples || 0);
             const recordingCO2PlatesSpeed = params.settings.incubator.recordingPlatesPerHour;
             const totalRecordingCO2PlatesTime =
                 (totalRecordingCO2Plates / recordingCO2PlatesSpeed) * 3600;
@@ -592,13 +592,13 @@ export function getWeightedDaysTimesInSeconds(
             }
 
             const unloadingAirPlates = platesUnloadingAir.find((x) => x.dayOfWeek == dayOfWeek)?.samples || 0;
-            const totalUnloadingAirPlates = Math.ceil(unloadingAirPlates);
+            const totalUnloadingAirPlates = unloadingAirPlates;
             const unloadingAirPlatesSpeed = unloadingSpeed;
             const totalUnloadingAirPlatesTime =
                 (totalUnloadingAirPlates / unloadingAirPlatesSpeed) * 3600;
 
             const unloadingCO2Plates = platesUnloadingCO2.find((x) => x.dayOfWeek == dayOfWeek)?.samples || 0;
-            const totalUnloadingCO2Plates = Math.ceil(unloadingCO2Plates);
+            const totalUnloadingCO2Plates = unloadingCO2Plates;
             const unloadingCO2PlatesSpeed = unloadingSpeed;
             const totalUnloadingCO2PlatesTime =
             (totalUnloadingCO2Plates / unloadingCO2PlatesSpeed) * 3600;

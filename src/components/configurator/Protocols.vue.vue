@@ -20,13 +20,13 @@
             </q-popup-edit>
           </q-td>
           <q-td key="wasp1Plates" :props="props">
-            {{ props.row.wasp1Plates }}
+            {{ props.row.wasp1Plates.toFixed(0) }}
           </q-td>
           <q-td key="wasp1Slides" :props="props">
-            {{ props.row.wasp1Slides }}
+            {{ props.row.wasp1Slides.toFixed(0) }}
           </q-td>
           <q-td key="wasp1Broths" :props="props">
-            {{ props.row.wasp1Broths }}
+            {{ props.row.wasp1Broths.toFixed(0) }}
           </q-td>
           <q-td key="wasp2Percentage" :props="props" style="background-color:rgba(0, 0, 0, 0.05)">
             {{ props.row.wasp2Percentage }} %
@@ -35,31 +35,31 @@
             </q-popup-edit>
           </q-td>
           <q-td key="wasp2Plates" :props="props">
-            {{ props.row.wasp2Plates }}
+            {{ props.row.wasp2Plates.toFixed(0) }}
           </q-td>
           <q-td key="wasp2Slides" :props="props">
-            {{ props.row.wasp2Slides }}
+            {{ props.row.wasp2Slides.toFixed(0) }}
           </q-td>
           <q-td key="wasp2Broths" :props="props">
-            {{ props.row.wasp2Broths }}
+            {{ props.row.wasp2Broths.toFixed(0) }}
           </q-td>
           <q-td key="o2Loading" :props="props">
-            {{ props.row.o2Loading }}
+            {{ props.row.o2Loading.toFixed(0) }}
           </q-td>
           <q-td key="co2Loading" :props="props">
-            {{ props.row.co2Loading }}
+            {{ props.row.co2Loading.toFixed(0) }}
           </q-td>
           <q-td key="o2Recording" :props="props">
-            {{ props.row.o2Recording }}
+            {{ props.row.o2Recording.toFixed(0) }}
           </q-td>
           <q-td key="co2Recording" :props="props">
-            {{ props.row.co2Recording }}
+            {{ props.row.co2Recording.toFixed(0) }}
           </q-td>
           <q-td key="o2Unloading" :props="props">
-            {{ props.row.o2Unloading }}
+            {{ props.row.o2Unloading.toFixed(0) }}
           </q-td>
           <q-td key="co2Unloading" :props="props">
-            {{ props.row.co2Unloading }}
+            {{ props.row.co2Unloading.toFixed(0) }}
           </q-td>
         </q-tr>
       </template>

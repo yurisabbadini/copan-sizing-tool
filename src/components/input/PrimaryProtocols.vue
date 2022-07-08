@@ -33,6 +33,9 @@
             ></q-select>
           </q-td>
           <q-td key="waspData_platesPerSample" :props="props">
+            <q-badge :color="(props.row.wasplabData.air.platesPerSample + props.row.wasplabData.co2.platesPerSample) != props.row.waspData.platesPerSample ? 'negative' : 'positive'">
+              {{ (props.row.wasplabData.air.platesPerSample + props.row.wasplabData.co2.platesPerSample) }}
+            </q-badge> / 
             {{ props.row.waspData.platesPerSample }}
             <q-popup-edit v-model.number="props.row.waspData.platesPerSample" auto-save v-slot="scope">
               <q-input v-model.number="scope.value" dense autofocus @keyup.enter="scope.set" />
