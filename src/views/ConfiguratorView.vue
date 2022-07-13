@@ -90,6 +90,8 @@ export default defineComponent({
         let totalWasplabLoadingCO2Time = 0;
         let totalWasplabRecordingCO2Time = 0;
         let totalWasplabUnloadingCO2Time = 0;
+        let totalO2LoadingUnloading = 0;
+        let totalCO2LoadingUnloading = 0;
         const protocols = line.protocols;
         protocols.forEach(protocol => {
           const wasp1ProtocolTime = this.weightedDayTimesPerProtocol.filter((x) => x.protocol == protocol.id && x.dayOfWeek == this.peakDay?.dayOfWeek && (x.type == "plates" || x.type == "slides" || x.type == "broths")).map((x) => x.timeInSeconds).reduce((a, b) => a + b) * (protocol.samples / 100) * (protocol.wasp1Percentage / 100) || 0;
@@ -104,6 +106,8 @@ export default defineComponent({
           totalWasplabLoadingO2Time += wasplabProtocolTimeLoadingO2;
           totalWasplabRecordingO2Time += wasplabProtocolTimeRecordingO2;
           totalWasplabUnloadingO2Time += wasplabProtocolTimeUnloadingO2;
+          totalO2LoadingUnloading += this.weightedDayTimesPerProtocol.filter((x) => x.protocol == protocol.id && x.dayOfWeek == this.peakDay?.dayOfWeek && x.type == "loading_air").map((x) => x.samples).reduce((a, b) => a + b) * protocol.samples / 100;
+          totalCO2LoadingUnloading += this.weightedDayTimesPerProtocol.filter((x) => x.protocol == protocol.id && x.dayOfWeek == this.peakDay?.dayOfWeek && x.type == "loading_co2").map((x) => x.samples).reduce((a, b) => a + b) * protocol.samples / 100;
 
           const incubatorCO2Factor = line.numberOfCO2Incubator > 0 ? line.numberOfCO2Incubator : 1;
           const wasplabProtocolTimeLoadingCO2 = this.weightedDayTimesPerProtocol.filter((x) => x.protocol == protocol.id && x.dayOfWeek == this.peakDay?.dayOfWeek && x.type == "loading_co2").map((x) => x.timeInSeconds).reduce((a, b) => a + b) * protocol.samples / incubatorCO2Factor / 100 || 0;
@@ -112,9 +116,22 @@ export default defineComponent({
           totalWasplabLoadingCO2Time += wasplabProtocolTimeLoadingCO2;
           totalWasplabRecordingCO2Time += wasplabProtocolTimeRecordingCO2;
           totalWasplabUnloadingCO2Time += wasplabProtocolTimeUnloadingCO2;
+          totalO2LoadingUnloading += this.weightedDayTimesPerProtocol.filter((x) => x.protocol == protocol.id && x.dayOfWeek == this.peakDay?.dayOfWeek && x.type == "unloading_air").map((x) => x.samples).reduce((a, b) => a + b) * protocol.samples / 100;
+          totalCO2LoadingUnloading += this.weightedDayTimesPerProtocol.filter((x) => x.protocol == protocol.id && x.dayOfWeek == this.peakDay?.dayOfWeek && x.type == "unloading_co2").map((x) => x.samples).reduce((a, b) => a + b) * protocol.samples / 100;
         });
         line.waspOccupancyRate = Math.max(...[totalWasp1Time / 3600 / (this.fteHours.wasp.end - this.fteHours.wasp.start) * 100, totalWasp2Time / 3600 / (this.fteHours.wasp.end - this.fteHours.wasp.start) * 100]);
         line.wasplabOccupancyRate = (Math.max(...[totalWasp1Time, totalWasp2Time, totalWasplabLoadingO2Time, totalWasplabLoadingCO2Time]) + Math.max(...[totalWasplabRecordingO2Time, totalWasplabRecordingCO2Time]) + totalWasplabUnloadingO2Time + totalWasplabUnloadingCO2Time) / 3600 / 24 * 100;
+
+        if(line.numberOfO2Incubator > 0 && totalO2LoadingUnloading / line.numberOfO2Incubator > 850) {
+          line.O2IncubatorIsSingle = false;
+        } else {
+          line.O2IncubatorIsSingle = true;
+        }
+        if(line.numberOfCO2Incubator >  0 && totalCO2LoadingUnloading / line.numberOfCO2Incubator > 850) {
+          line.CO2IncubatorIsSingle = false;
+        } else {
+          line.CO2IncubatorIsSingle = true;
+        }
       });
     },
     calcola() {

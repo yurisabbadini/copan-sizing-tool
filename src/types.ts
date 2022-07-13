@@ -200,7 +200,9 @@ export type LineConfig = {
 	name: string;
 	numberOfWasp: number;
 	numberOfO2Incubator: number;
+	O2IncubatorIsSingle: boolean;
 	numberOfCO2Incubator: number;
+	CO2IncubatorIsSingle: boolean;
 	collaborativeStation: boolean;
 	radian: boolean;
 	phenomatrix: boolean;

@@ -20,16 +20,26 @@
           <q-td key="numberOfO2Incubator" :props="props">
             <q-select
               dense
+              bottom-slots 
               v-model.number="props.row.numberOfO2Incubator"
               :options="getAvailableIncubators(props.row.id)"
-            ></q-select>
+            >
+              <template v-slot:hint>
+                {{ props.row.O2IncubatorIsSingle ? "single" : "double "}}
+              </template>
+            </q-select>
           </q-td>
           <q-td key="numberOfCO2Incubator" :props="props">
             <q-select
               dense
+              bottom-slots 
               v-model.number="props.row.numberOfCO2Incubator"
               :options="getAvailableIncubators(props.row.id)"
-            ></q-select>
+            >
+              <template v-slot:hint>
+                {{ props.row.CO2IncubatorIsSingle ? "single" : "double "}}
+              </template>
+            </q-select>
           </q-td>
           <q-td key="collaborativeStation" :props="props">
             <q-checkbox dense v-model="props.row.collaborativeStation"/>
@@ -151,6 +161,8 @@ export default defineComponent({
       this.lines.push({
         id: uuid(),
         collaborativeStation: false,
+        O2IncubatorIsSingle: true,
+        CO2IncubatorIsSingle: true,
         name: "wasplab " + (this.lines.length + 1),
         numberOfCO2Incubator: 0,
         numberOfO2Incubator: 0,
