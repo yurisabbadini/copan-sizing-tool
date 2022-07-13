@@ -8,10 +8,10 @@
             {{ props.row.numberOfWasp }}
           </q-td>
           <q-td key="numberOfO2Incubator" :props="props">
-            {{ props.row.numberOfO2Incubator }}
+            {{ props.row.numberOfO2Incubator }}<br/><span class="text-caption">{{ props.row.O2IncubatorIsSingle ? "single" : "double" }}</span>
           </q-td>
           <q-td key="numberOfCO2Incubator" :props="props">
-            {{ props.row.numberOfCO2Incubator }}
+            {{ props.row.numberOfCO2Incubator }}<br/><span class="text-caption">{{ props.row.CO2IncubatorIsSingle ? "single" : "double" }}</span>
           </q-td>
           <q-td key="collaborativeStation" :props="props">
             <q-checkbox readonly dense v-model="props.row.collaborativeStation" disable />
