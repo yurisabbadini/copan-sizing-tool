@@ -3,7 +3,7 @@
     <q-item-label class="q-mb-sm" overline>Broths</q-item-label>
     <div class="row q-gutter-xs">
         <div class="col">
-        <q-input
+        <q-input square dark bg-color="input" 
             dense
             filled
             type="number"

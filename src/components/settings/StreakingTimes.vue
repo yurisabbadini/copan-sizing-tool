@@ -5,7 +5,7 @@
           <div class="text-h5 q-mt-sm q-mb-xs">{{ title }}</div>
           <div class="row q-gutter-xs">
             <div class="col">
-              <q-input
+              <q-input square dark bg-color="input" 
                   dense
                   filled
                   type="number"
@@ -19,7 +19,7 @@
               />
             </div>
             <div class="col">
-              <q-input
+              <q-input square dark bg-color="input" 
                   dense
                   filled
                   type="number"

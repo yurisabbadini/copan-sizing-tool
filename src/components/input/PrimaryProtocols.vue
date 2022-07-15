@@ -5,77 +5,135 @@
       <template v-slot:body="props">
       <q-tr :props="props">
           <q-td key="name" :props="props">
-            {{ props.row.name }}
-            <q-popup-edit v-model="props.row.name" auto-save v-slot="scope">
-              <q-input v-model="scope.value" dense autofocus @keyup.enter="scope.set" />
-            </q-popup-edit>
+            <q-input square dark bg-color="input" 
+                dense
+                filled
+                type="text"
+                v-model="props.row.name"
+                lazy-rules
+                :rules="[
+                val => val !== null && val !== '' || 'Please type a valid value'
+                ]"
+            />
           </q-td>
           <q-td key="wasp" :props="props">
-            <q-checkbox dense v-model="props.row.hasWasp"/>
+            <q-checkbox style="margin-top: -18px" color="input"  dense v-model="props.row.hasWasp"/>
           </q-td>
           <q-td key="waspLab" :props="props">
-            <q-checkbox dense v-model="props.row.hasWasplab"/>
+            <q-checkbox style="margin-top: -18px" color="input"  dense v-model="props.row.hasWasplab"/>
           </q-td>
           <q-td key="pictureT0" :props="props">
-            <q-checkbox dense v-model="props.row.pictureT0"/>
+            <q-checkbox style="margin-top: -18px" color="input"  dense v-model="props.row.pictureT0"/>
           </q-td>
           <q-td key="samplesPerDayAvg" :props="props">
-            {{ props.row.samplesPerDayAvg }}
-            <q-popup-edit v-model.number="props.row.samplesPerDayAvg" auto-save v-slot="scope">
-              <q-input v-model.number="scope.value" dense autofocus @keyup.enter="scope.set" />
-            </q-popup-edit>
+            <q-input square dark bg-color="input" 
+                dense
+                filled 
+                type="text"
+                v-model.number="props.row.samplesPerDayAvg"
+                lazy-rules
+                :rules="[
+                val => val !== null && val !== '' || 'Please type a valid value'
+                ]"
+            />
           </q-td>
           <q-td key="waspData_streakingPattern" :props="props">
-            <q-select
+            <q-select square filled dark bg-color="input" color="white" style="margin-top: -18px" 
               dense
               v-model="props.row.waspData.streakingPattern"
               :options="['1','2','3','4']"
             ></q-select>
           </q-td>
           <q-td key="waspData_platesPerSample" :props="props">
-            <q-badge :color="(props.row.wasplabData.air.platesPerSample + props.row.wasplabData.co2.platesPerSample) != props.row.waspData.platesPerSample ? 'negative' : 'positive'">
-              {{ (props.row.wasplabData.air.platesPerSample + props.row.wasplabData.co2.platesPerSample) }}
-            </q-badge> / 
-            {{ props.row.waspData.platesPerSample }}
-            <q-popup-edit v-model.number="props.row.waspData.platesPerSample" auto-save v-slot="scope">
-              <q-input v-model.number="scope.value" dense autofocus @keyup.enter="scope.set" />
-            </q-popup-edit>
+            <q-input square dark bg-color="input" 
+                dense
+                filled 
+                type="number"
+                v-model.number="props.row.waspData.platesPerSample"
+                lazy-rules
+                :rules="[
+                val => val !== null && val !== '' || 'Please type a valid value'
+                ]"
+            >
+              <template v-slot:prepend>
+                <q-badge :color="(props.row.wasplabData.air.platesPerSample + props.row.wasplabData.co2.platesPerSample) != props.row.waspData.platesPerSample ? 'negative' : 'positive'">
+                {{ (props.row.wasplabData.air.platesPerSample + props.row.wasplabData.co2.platesPerSample) }}
+                </q-badge> /
+              </template>
+            </q-input>
+            
           </q-td>
           <q-td key="waspData_slidesPerSample" :props="props">
-            {{ props.row.waspData.slidesPerSample }}
-            <q-popup-edit v-model.number="props.row.waspData.slidesPerSample" auto-save v-slot="scope">
-              <q-input v-model.number="scope.value" dense autofocus @keyup.enter="scope.set" />
-            </q-popup-edit>
+            <q-input square dark bg-color="input" 
+                dense
+                filled 
+                type="number"
+                v-model.number="props.row.waspData.slidesPerSample"
+                lazy-rules
+                :rules="[
+                val => val !== null && val !== '' || 'Please type a valid value'
+                ]"
+            />
           </q-td>
           <q-td key="waspData_brothsPerSample" :props="props">
-            {{ props.row.waspData.brothsPerSample }}
-            <q-popup-edit v-model.number="props.row.waspData.brothsPerSample" auto-save v-slot="scope">
-              <q-input v-model.number="scope.value" dense autofocus @keyup.enter="scope.set" />
-            </q-popup-edit>
+            <q-input square dark bg-color="input" 
+                dense
+                filled 
+                type="number"
+                v-model.number="props.row.waspData.brothsPerSample"
+                lazy-rules
+                :rules="[
+                val => val !== null && val !== '' || 'Please type a valid value'
+                ]"
+            />
           </q-td>
           <q-td key="wasplabData_air_platesPerSample" :props="props">
-            {{ props.row.wasplabData.air.platesPerSample }}
-            <q-popup-edit v-model.number="props.row.wasplabData.air.platesPerSample" auto-save v-slot="scope">
-              <q-input v-model.number="scope.value" dense autofocus @keyup.enter="scope.set" />
-            </q-popup-edit>
+            <q-input square dark bg-color="input" 
+                dense
+                filled 
+                type="number"
+                v-model.number="props.row.wasplabData.air.platesPerSample"
+                lazy-rules
+                :rules="[
+                val => val !== null && val !== '' || 'Please type a valid value'
+                ]"
+            />
           </q-td>
           <q-td key="wasplabData_air_readHours" :props="props">
-            {{ props.row.wasplabData.air.readHours }}
-            <q-popup-edit v-model="props.row.wasplabData.air.readHours" auto-save v-slot="scope">
-              <q-input v-model="scope.value" dense autofocus @keyup.enter="scope.set" />
-            </q-popup-edit>
+            <q-input square dark bg-color="input" 
+                dense
+                filled 
+                type="text"
+                v-model="props.row.wasplabData.air.readHours"
+                lazy-rules
+                :rules="[
+                val => val !== null && val !== '' || 'Please type a valid value'
+                ]"
+            />
           </q-td>
           <q-td key="wasplabData_co2_platesPerSample" :props="props">
-            {{ props.row.wasplabData.co2.platesPerSample }}
-            <q-popup-edit v-model.number="props.row.wasplabData.co2.platesPerSample" auto-save v-slot="scope">
-              <q-input v-model.number="scope.value" dense autofocus @keyup.enter="scope.set" />
-            </q-popup-edit>
+            <q-input square dark bg-color="input" 
+                dense
+                filled 
+                type="number"
+                v-model.number="props.row.wasplabData.co2.platesPerSample"
+                lazy-rules
+                :rules="[
+                val => val !== null && val !== '' || 'Please type a valid value'
+                ]"
+            />
           </q-td>
           <q-td key="wasplabData_co2_readHours" :props="props">
-            {{ props.row.wasplabData.co2.readHours }}
-            <q-popup-edit v-model="props.row.wasplabData.co2.readHours" auto-save v-slot="scope">
-              <q-input v-model="scope.value" dense autofocus @keyup.enter="scope.set" />
-            </q-popup-edit>
+            <q-input square dark bg-color="input" 
+                dense
+                filled 
+                type="text"
+                v-model="props.row.wasplabData.co2.readHours"
+                lazy-rules
+                :rules="[
+                val => val !== null && val !== '' || 'Please type a valid value'
+                ]"
+            />
           </q-td>
           <q-td key="actions" :props="props">
             <q-btn flat round color="red" icon="remove_circleoutline" size="xs" @click="removeProtocol(props.row.id)"/>
@@ -83,7 +141,7 @@
         </q-tr>
       </template>
     </q-table>
-    <q-btn class="q-mt-md" label="Add" type="button" color="secondary" size="sm" @click="addProtocol"/>
+    <q-btn class="margin-top: -18px" label="Add" type="button" color="secondary" size="sm" @click="addProtocol"/>
   </q-card>
 </template>
 
@@ -105,36 +163,42 @@ export default defineComponent({
         label: 'Name',
         align: 'left',
         field: (row: PrimaryProtocol) => row.name,
+        style: "width: 160px"
       },
       { 
         name: "wasp",
         label: 'WASP',
         align: 'left',
         field: (row: PrimaryProtocol) =>row.hasWasp,
+        style: "width: 10px"
       },
       { 
         name: "waspLab",
         label: 'WASPLAB',
         align: 'left',
         field: (row: PrimaryProtocol) =>row.hasWasplab,
+        style: "width: 10px"
       },
       { 
         name: "pictureT0",
         label: 'Picture t0',
         align: 'left',
         field: (row: PrimaryProtocol) =>row.pictureT0,
+        style: "width: 10px"
       },
       { 
         name: "samplesPerDayAvg",
         label: 'Samples per day',
         align: 'left',
         field: (row: PrimaryProtocol) =>row.samplesPerDayAvg,
+        style: "width: 10px"
       },
       { 
         name: "waspData_streakingPattern",
         label: 'WASP streaking pattern',
         align: 'left',
         field: (row: PrimaryProtocol) =>row.waspData.streakingPattern,
+        style: "width: 10px"
       },
       {
         name: "waspData_platesPerSample",
@@ -147,18 +211,21 @@ export default defineComponent({
         label: 'WASP slides',
         align: 'left',
         field: (row: PrimaryProtocol) =>row.waspData.slidesPerSample,
+        style: "width: 10px"
       },
       {
         name: "waspData_brothsPerSample",
         label: 'WASP broths',
         align: 'left',
         field: (row: PrimaryProtocol) =>row.waspData.brothsPerSample,
+        style: "width: 10px"
       },
       {
         name: "wasplabData_air_platesPerSample",
         label: 'WASPLAB air plates',
         align: 'left',
         field: (row: PrimaryProtocol) =>row.wasplabData.air.platesPerSample,
+        style: "width: 10px"
       },
       {
         name: "wasplabData_air_readHours",
@@ -171,6 +238,7 @@ export default defineComponent({
         label: 'WASPLAB CO2 plates',
         align: 'left',
         field: (row: PrimaryProtocol) =>row.wasplabData.co2.platesPerSample,
+        style: "width: 10px"
       },
       {
         name: "wasplabData_co2_readHours",
@@ -183,6 +251,7 @@ export default defineComponent({
         label: '',
         align: 'left',
         field: (row: PrimaryProtocol) =>row.id,
+        style: "width: 10px"
       },
     ];
 

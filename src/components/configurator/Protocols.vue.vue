@@ -5,61 +5,85 @@
       <template v-slot:body="props">
       <q-tr :props="props">
           <q-td key="name" :props="props">
-            {{ props.row.name }}
+            <div style="margin-top: -18px">{{ props.row.name }}</div>
           </q-td>
           <q-td key="samples" :props="props" style="background-color:rgba(0, 0, 0, 0.05)">
-            {{ props.row.samples }} %
-            <q-popup-edit v-model.number="props.row.samples" auto-save v-slot="scope">
-              <q-input v-model.number="scope.value" dense autofocus @keyup.enter="scope.set" />
-            </q-popup-edit>
+            <q-input square dark bg-color="input" 
+                dense
+                filled 
+                type="number"
+                v-model.number="props.row.samples"
+                lazy-rules
+                :rules="[
+                  val => val !== null && val !== '' || 'Please type a valid value'
+                ]"
+            >
+              <template v-slot:append> %</template>
+            </q-input>
           </q-td>
           <q-td key="wasp1Percentage" :props="props" style="background-color:rgba(0, 0, 0, 0.05)">
-            {{ props.row.wasp1Percentage }} %
-            <q-popup-edit v-model.number="props.row.wasp1Percentage" auto-save v-slot="scope">
-              <q-input v-model.number="scope.value" dense autofocus @keyup.enter="scope.set" />
-            </q-popup-edit>
+            <q-input square dark bg-color="input" 
+                dense
+                filled 
+                type="number"
+                v-model.number="props.row.wasp1Percentage"
+                lazy-rules
+                :rules="[
+                  val => val !== null && val !== '' || 'Please type a valid value'
+                ]"
+            >
+              <template v-slot:append> %</template>
+            </q-input>
           </q-td>
           <q-td key="wasp1Plates" :props="props">
-            {{ props.row.wasp1Plates.toFixed(0) }}
+            <div style="margin-top: -18px">{{ props.row.wasp1Plates.toFixed(0) }}</div>
           </q-td>
           <q-td key="wasp1Slides" :props="props">
-            {{ props.row.wasp1Slides.toFixed(0) }}
+            <div style="margin-top: -18px">{{ props.row.wasp1Slides.toFixed(0) }}</div>
           </q-td>
           <q-td key="wasp1Broths" :props="props">
-            {{ props.row.wasp1Broths.toFixed(0) }}
+            <div style="margin-top: -18px">{{ props.row.wasp1Broths.toFixed(0) }}</div>
           </q-td>
           <q-td key="wasp2Percentage" :props="props" style="background-color:rgba(0, 0, 0, 0.05)">
-            {{ props.row.wasp2Percentage }} %
-            <q-popup-edit v-model.number="props.row.wasp2Percentage" auto-save v-slot="scope">
-              <q-input v-model.number="scope.value" dense autofocus @keyup.enter="scope.set" />
-            </q-popup-edit>
+            <q-input square dark bg-color="input" 
+                dense
+                filled 
+                type="number"
+                v-model.number="props.row.wasp2Percentage"
+                lazy-rules
+                :rules="[
+                  val => val !== null && val !== '' || 'Please type a valid value'
+                ]"
+            >
+              <template v-slot:append> %</template>
+            </q-input>
           </q-td>
           <q-td key="wasp2Plates" :props="props">
-            {{ props.row.wasp2Plates.toFixed(0) }}
+            <div style="margin-top: -18px">{{ props.row.wasp2Plates.toFixed(0) }}</div>
           </q-td>
           <q-td key="wasp2Slides" :props="props">
-            {{ props.row.wasp2Slides.toFixed(0) }}
+            <div style="margin-top: -18px">{{ props.row.wasp2Slides.toFixed(0) }}</div>
           </q-td>
           <q-td key="wasp2Broths" :props="props">
-            {{ props.row.wasp2Broths.toFixed(0) }}
+            <div style="margin-top: -18px">{{ props.row.wasp2Broths.toFixed(0) }}</div>
           </q-td>
           <q-td key="o2Loading" :props="props">
-            {{ props.row.o2Loading.toFixed(0) }}
+            <div style="margin-top: -18px">{{ props.row.o2Loading.toFixed(0) }}</div>
           </q-td>
           <q-td key="co2Loading" :props="props">
-            {{ props.row.co2Loading.toFixed(0) }}
+            <div style="margin-top: -18px">{{ props.row.co2Loading.toFixed(0) }}</div>
           </q-td>
           <q-td key="o2Recording" :props="props">
-            {{ props.row.o2Recording.toFixed(0) }}
+            <div style="margin-top: -18px">{{ props.row.o2Recording.toFixed(0) }}</div>
           </q-td>
           <q-td key="co2Recording" :props="props">
-            {{ props.row.co2Recording.toFixed(0) }}
+            <div style="margin-top: -18px">{{ props.row.co2Recording.toFixed(0) }}</div>
           </q-td>
           <q-td key="o2Unloading" :props="props">
-            {{ props.row.o2Unloading.toFixed(0) }}
+            <div style="margin-top: -18px">{{ props.row.o2Unloading.toFixed(0) }}</div>
           </q-td>
           <q-td key="co2Unloading" :props="props">
-            {{ props.row.co2Unloading.toFixed(0) }}
+            <div style="margin-top: -18px">{{ props.row.co2Unloading.toFixed(0) }}</div>
           </q-td>
         </q-tr>
       </template>

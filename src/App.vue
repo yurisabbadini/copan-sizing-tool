@@ -88,3 +88,12 @@ export default defineComponent({
   }
 });
 </script>
+
+<style>
+.text-input {
+  color: rgba(2, 24, 85, 0.7) !important;
+}
+.bg-input {
+  background: rgba(2, 24, 85, 0.7) !important;
+}
+</style>

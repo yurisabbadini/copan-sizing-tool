@@ -3,7 +3,7 @@
     <q-item-label class="q-mb-sm" overline>Samples per day</q-item-label>
     <div class="row q-gutter-xs">
         <div class="col">
-            <q-input
+            <q-input square dark bg-color="input" 
                 dense
                 filled
                 type="number"
@@ -17,7 +17,7 @@
             />
         </div>
         <div class="col">
-            <q-input
+            <q-input square dark bg-color="input" 
                 dense
                 filled
                 type="number"
@@ -31,7 +31,7 @@
             />
         </div>
         <div class="col">
-            <q-input
+            <q-input square dark bg-color="input" 
                 dense
                 filled
                 type="number"
@@ -45,7 +45,7 @@
             />
         </div>
         <div class="col">
-            <q-input
+            <q-input square dark bg-color="input" 
                 dense
                 filled
                 type="number"
@@ -59,7 +59,7 @@
             />
         </div>
         <div class="col">
-            <q-input
+            <q-input square dark bg-color="input" 
                 dense
                 filled
                 type="number"
@@ -73,7 +73,7 @@
             />
         </div>
         <div class="col">
-            <q-input
+            <q-input square dark bg-color="input" 
                 dense
                 filled
                 type="number"
@@ -87,7 +87,7 @@
             />
         </div>
         <div class="col">
-            <q-input
+            <q-input square dark bg-color="input" 
                 dense
                 filled
                 type="number"

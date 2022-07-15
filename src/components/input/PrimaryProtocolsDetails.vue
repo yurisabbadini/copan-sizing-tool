@@ -5,48 +5,84 @@
       <template v-slot:body="props">
       <q-tr :props="props">
           <q-td key="name" :props="props">
-            {{ props.row.name }}
+            <div style="margin-top: -18px">{{ props.row.name }}</div>
           </q-td>
           <q-td key="negativityRate" :props="props">
-            {{ props.row.negativityRate }}
-            <q-popup-edit v-model.number="props.row.negativityRate" auto-save v-slot="scope">
-              <q-input v-model.number="scope.value" dense autofocus @keyup.enter="scope.set" />
-            </q-popup-edit>
+            <q-input square dark bg-color="input" 
+                dense
+                filled 
+                type="number"
+                v-model.number="props.row.negativityRate"
+                lazy-rules
+                :rules="[
+                val => val !== null && val !== '' || 'Please type a valid value'
+                ]"
+            />
           </q-td>
           <q-td key="idPercentage" :props="props">
-            {{ props.row.idPercentage }}
-            <q-popup-edit v-model.number="props.row.idPercentage" auto-save v-slot="scope">
-              <q-input v-model.number="scope.value" dense autofocus @keyup.enter="scope.set" @update:model-value="setProtocolIDPercentage({ id: props.row.id, value: Number($event || 0) })" />
-            </q-popup-edit>
+            <q-input square dark bg-color="input" 
+                dense
+                filled 
+                type="number"
+                v-model.number="props.row.idPercentage"
+                @update:model-value="setProtocolIDPercentage({ id: props.row.id, value: Number($event || 0) })"
+                lazy-rules
+                :rules="[
+                val => val !== null && val !== '' || 'Please type a valid value'
+                ]"
+            />
           </q-td>
           <q-td key="astPercentage" :props="props">
-            {{ props.row.astPercentage }}
-            <q-popup-edit v-model.number="props.row.astPercentage" auto-save v-slot="scope">
-              <q-input v-model.number="scope.value" dense autofocus @keyup.enter="scope.set" @update:model-value="setProtocolASTPercentage({ id: props.row.id, value: Number($event || 0) })" />
-            </q-popup-edit>
+            <q-input square dark bg-color="input" 
+                dense
+                filled 
+                type="number"
+                v-model.number="props.row.astPercentage"
+                @update:model-value="setProtocolASTPercentage({ id: props.row.id, value: Number($event || 0) })"
+                lazy-rules
+                :rules="[
+                val => val !== null && val !== '' || 'Please type a valid value'
+                ]"
+            />
           </q-td>
           <q-td key="astIdPercentage" :props="props">
-            {{ props.row.astIdPercentage }}
-            <q-popup-edit v-model.number="props.row.astIdPercentage" auto-save v-slot="scope">
-              <q-input v-model.number="scope.value" dense autofocus @keyup.enter="scope.set" @update:model-value="setProtocolASTIDPercentage({ id: props.row.id, value: Number($event || 0) })" />
-            </q-popup-edit>
+            <q-input square dark bg-color="input" 
+                dense
+                filled 
+                type="number"
+                v-model.number="props.row.astIdPercentage"
+                @update:model-value="setProtocolASTIDPercentage({ id: props.row.id, value: Number($event || 0) })"
+                lazy-rules
+                :rules="[
+                val => val !== null && val !== '' || 'Please type a valid value'
+                ]"
+            />
           </q-td>
           <q-td key="radianPercentage" :props="props">
-            {{ props.row.radianPercentage }}
-            <q-popup-edit v-model.number="props.row.radianPercentage" auto-save v-slot="scope">
-              <q-input v-model.number="scope.value" dense autofocus @keyup.enter="scope.set" @update:model-value="setProtocolRadianPercentage({ id: props.row.id, value: Number($event || 0) })" />
-            </q-popup-edit>
+            <q-input square dark bg-color="input" 
+                dense
+                filled 
+                type="number"
+                v-model.number="props.row.radianPercentage"
+                @update:model-value="setProtocolRadianPercentage({ id: props.row.id, value: Number($event || 0) })"
+                lazy-rules
+                :rules="[
+                val => val !== null && val !== '' || 'Please type a valid value'
+                ]"
+            />
           </q-td>
           <q-td key="totalPercentage" :props="props">
-            <q-badge :color="props.row.totalPercentage != 100 ? 'negative' : 'positive'">
-              {{ props.row.totalPercentage }}
-            </q-badge>
+            <div style="margin-top: -18px">
+              <q-badge :color="props.row.totalPercentage != 100 ? 'negative' : 'positive'">
+                {{ props.row.totalPercentage }}
+              </q-badge>
+            </div>
           </q-td>
           <q-td key="hasPurityPlates" :props="props">
-            <q-checkbox dense v-model="props.row.hasPurityPlates" @update:model-value="setProtocolPurityPlates({ id: props.row.id, value: $event })"/>
+            <q-checkbox style="margin-top: -18px" dense v-model="props.row.hasPurityPlates" @update:model-value="setProtocolPurityPlates({ id: props.row.id, value: $event })"/>
           </q-td>
           <q-td key="hasBrothsPercentage" :props="props">
-            <q-checkbox dense v-model="props.row.hasBrothsPercentage" @update:model-value="setProtocolBroth({ id: props.row.id, value: $event })"/>
+            <q-checkbox style="margin-top: -18px" dense v-model="props.row.hasBrothsPercentage" @update:model-value="setProtocolBroth({ id: props.row.id, value: $event })"/>
           </q-td>
         </q-tr>
       </template>

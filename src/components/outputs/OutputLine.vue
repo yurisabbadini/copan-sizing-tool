@@ -14,13 +14,13 @@
             {{ props.row.numberOfCO2Incubator }}<br/><span class="text-caption">{{ props.row.CO2IncubatorIsSingle ? "single" : "double" }}</span>
           </q-td>
           <q-td key="collaborativeStation" :props="props">
-            <q-checkbox readonly dense v-model="props.row.collaborativeStation" disable />
+            <q-checkbox color="input"  readonly dense v-model="props.row.collaborativeStation" disable />
           </q-td>
           <q-td key="radian" :props="props">
-            <q-checkbox readonly dense v-model="props.row.radian" disable />
+            <q-checkbox color="input"  readonly dense v-model="props.row.radian" disable />
           </q-td>
           <q-td key="phenomatrix" :props="props">
-            <q-checkbox readonly dense v-model="props.row.phenomatrix" disable />
+            <q-checkbox color="input"  readonly dense v-model="props.row.phenomatrix" disable />
           </q-td>
           <q-td key="waspOccupancyRate" :props="props">
             {{ props.row.waspOccupancyRate.toFixed(2) }} %

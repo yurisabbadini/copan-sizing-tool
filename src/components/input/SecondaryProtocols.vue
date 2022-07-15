@@ -5,43 +5,73 @@
       <template v-slot:body="props">
       <q-tr :props="props">
           <q-td key="name" :props="props">
-            {{ props.row.name }}
+            <div style="margin-top: -18px">{{ props.row.name }}</div>
           </q-td>
           <q-td key="from" :props="props">
-            {{ props.row.from }}
+            <div style="margin-top: -18px">{{ props.row.from }}</div>
           </q-td>
           <q-td key="samples" :props="props">
-            {{ props.row.samples }}
+            <div style="margin-top: -18px">{{ props.row.samples }}</div>
           </q-td>
           <q-td key="plates" :props="props">
-            {{ props.row.plates }}
-            <q-popup-edit v-model.number="props.row.plates" auto-save v-slot="scope">
-              <q-input v-model.number="scope.value" dense autofocus @keyup.enter="scope.set" />
-            </q-popup-edit>
+            <q-input square dark bg-color="input" 
+                dense
+                filled 
+                type="number"
+                v-model.number="props.row.plates"
+                lazy-rules
+                :rules="[
+                val => val !== null && val !== '' || 'Please type a valid value'
+                ]"
+            />
           </q-td>
           <q-td key="platesO2" :props="props">
-            {{ props.row.platesO2 }}
-            <q-popup-edit v-model.number="props.row.platesO2" auto-save v-slot="scope">
-              <q-input v-model.number="scope.value" dense autofocus @keyup.enter="scope.set" />
-            </q-popup-edit>
+            <q-input square dark bg-color="input" 
+                dense
+                filled 
+                type="number"
+                v-model.number="props.row.platesO2"
+                lazy-rules
+                :rules="[
+                val => val !== null && val !== '' || 'Please type a valid value'
+                ]"
+            />
           </q-td>
           <q-td key="recordingO2" :props="props">
-            {{ props.row.recordingO2 }}
-            <q-popup-edit v-model="props.row.recordingO2" auto-save v-slot="scope">
-              <q-input v-model="scope.value" dense autofocus @keyup.enter="scope.set" />
-            </q-popup-edit>
+            <q-input square dark bg-color="input" 
+                dense
+                filled 
+                type="text"
+                v-model="props.row.recordingO2"
+                lazy-rules
+                :rules="[
+                val => val !== null && val !== '' || 'Please type a valid value'
+                ]"
+            />
           </q-td>
           <q-td key="platesCO2" :props="props">
-            {{ props.row.platesCO2 }}
-            <q-popup-edit v-model.number="props.row.platesCO2" auto-save v-slot="scope">
-              <q-input v-model.number="scope.value" dense autofocus @keyup.enter="scope.set" />
-            </q-popup-edit>
+            <q-input square dark bg-color="input" 
+                dense
+                filled 
+                type="number"
+                v-model.number="props.row.platesCO2"
+                lazy-rules
+                :rules="[
+                val => val !== null && val !== '' || 'Please type a valid value'
+                ]"
+            />
           </q-td>
           <q-td key="recordingCO2" :props="props">
-            {{ props.row.recordingCO2 }}
-            <q-popup-edit v-model="props.row.recordingCO2" auto-save v-slot="scope">
-              <q-input v-model="scope.value" dense autofocus @keyup.enter="scope.set" />
-            </q-popup-edit>
+            <q-input square dark bg-color="input" 
+                dense
+                filled 
+                type="text"
+                v-model="props.row.recordingCO2"
+                lazy-rules
+                :rules="[
+                val => val !== null && val !== '' || 'Please type a valid value'
+                ]"
+            />
           </q-td>
         </q-tr>
       </template>

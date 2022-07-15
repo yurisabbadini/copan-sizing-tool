@@ -11,16 +11,21 @@
     <template v-slot:body="props">
         <q-tr :props="props">
         <q-td key="name" :props="props">
-            {{ props.row.name }}
+            {{ props.row.name }}<br/>
             <q-badge :color="totalVolumes.find((x) => x.id == props.row.id)?.totalVolume != 100 ? 'negative' : 'positive'">
               {{ totalVolumes.find((x) => x.id == props.row.id)?.totalVolume || 0 }}
             </q-badge>
         </q-td>
         <q-td v-for="(column, index) in tableColumns.filter((x) => x.name != 'name')" :key="column.name" :props="props">
-            {{ props.row.volumes[index] }}
-            <q-popup-edit v-model="props.row.volumes[index]" auto-save v-slot="scope">
-            <q-input v-model="scope.value" dense autofocus @keyup.enter="scope.set" :label="props.row.name + ' - ' + column.label" />
-            </q-popup-edit>
+            <q-input square dark bg-color="input" 
+                dense
+                borderless 
+                v-model.number="props.row.volumes[index]"
+                lazy-rules
+                :rules="[
+                val => val !== null && val !== '' || 'Please type a valid value'
+                ]"
+            />
         </q-td>
         </q-tr>
     </template>

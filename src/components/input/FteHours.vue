@@ -4,7 +4,7 @@
     <div class="row q-gutter-xs">
         <div class="col">
             <q-item-label class="q-mb-sm text-caption">WASP</q-item-label>
-            <q-input
+            <q-input square dark bg-color="input" 
                 dense
                 filled
                 type="number"
@@ -15,7 +15,7 @@
                 val => val !== null && val !== '' || 'Please type a valid numeric value'
                 ]"
             />
-            <q-input
+            <q-input square dark bg-color="input" 
                 dense
                 filled
                 type="number"
@@ -29,7 +29,7 @@
         </div>
         <div class="col">
             <q-item-label class="q-mb-sm text-caption">Manual streaking</q-item-label>
-            <q-input
+            <q-input square dark bg-color="input" 
                 dense
                 filled
                 type="number"
@@ -40,7 +40,7 @@
                 val => val !== null && val !== '' || 'Please type a valid numeric value'
                 ]"
             />
-            <q-input
+            <q-input square dark bg-color="input" 
                 dense
                 filled
                 type="number"
@@ -54,7 +54,7 @@
         </div>
         <div class="col">
             <q-item-label class="q-mb-sm text-caption">Screening</q-item-label>
-            <q-input
+            <q-input square dark bg-color="input" 
                 dense
                 filled
                 type="number"
@@ -65,7 +65,7 @@
                 val => val !== null && val !== '' || 'Please type a valid numeric value'
                 ]"
             />
-            <q-input
+            <q-input square dark bg-color="input" 
                 dense
                 filled
                 type="number"
@@ -79,7 +79,7 @@
         </div>
         <div class="col">
             <q-item-label class="q-mb-sm text-caption">Reading</q-item-label>
-            <q-input
+            <q-input square dark bg-color="input" 
                 dense
                 filled
                 type="number"
@@ -90,7 +90,7 @@
                 val => val !== null && val !== '' || 'Please type a valid numeric value'
                 ]"
             />
-            <q-input
+            <q-input square dark bg-color="input" 
                 dense
                 filled
                 type="number"
@@ -104,7 +104,7 @@
         </div>
         <div class="col">
             <q-item-label class="q-mb-sm text-caption">Colibrì</q-item-label>
-            <q-input
+            <q-input square dark bg-color="input" 
                 dense
                 filled
                 type="number"
@@ -115,7 +115,7 @@
                 val => val !== null && val !== '' || 'Please type a valid numeric value'
                 ]"
             />
-            <q-input
+            <q-input square dark bg-color="input" 
                 dense
                 filled
                 type="number"
